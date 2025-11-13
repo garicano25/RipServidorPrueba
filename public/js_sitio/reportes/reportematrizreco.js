@@ -103,12 +103,9 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
     e.preventDefault();
 
     const proyecto_id = proyecto.id;
-    const reporteregistro_id = typeof reporteregistro_id !== 'undefined' ? reporteregistro_id : 0;
+    const _token = '{{ csrf_token() }}'; // ✅ Token directo
 
-    // ✅ Token CSRF directo (Laravel lo genera en Blade)
-    const _token = '{{ csrf_token() }}';
-
-    // Recolectar datos de la tabla
+    // Recolectar los datos de la tabla
     const dataGuardar = [];
     $('#tabla_matrizreco tbody tr').each(function () {
         const row = datatable_reporte_melreco.row(this).data();
@@ -142,7 +139,7 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
         return;
     }
 
-    // Confirmación
+    // Confirmar guardado
     const confirmacion = await Swal.fire({
         title: '¿Desea guardar las recomendaciones?',
         text: 'Se almacenarán las selecciones realizadas para cada área y categoría.',
@@ -159,9 +156,8 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
             url: '/guardarMatrizRecomendaciones',
             method: 'POST',
             data: {
-                _token: _token, // ✅ Incluido manualmente
-                proyecto_id,
-                reporteregistro_id,
+                _token: _token,
+                proyecto_id: proyecto_id,
                 data: dataGuardar
             },
             beforeSend: function () {
@@ -179,7 +175,7 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
                 confirmButtonText: 'Aceptar'
             });
 
-            // 🔄 Recargar DataTable
+            // 🔄 Recargar tabla sin perder estado
             if ($.fn.DataTable.isDataTable('#tabla_matrizreco')) {
                 $('#tabla_matrizreco').DataTable().ajax.reload(null, false);
             }
