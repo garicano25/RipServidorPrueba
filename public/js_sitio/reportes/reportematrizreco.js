@@ -102,11 +102,10 @@ function tabla_matrizreco(proyecto_id, reporteregistro_id, areas_poe) {
 $('#btn_guardar_recomendaciones').on('click', async function (e) {
     e.preventDefault();
 
-    const proyecto_id = proyecto.id;
-    const _token = '{{ csrf_token() }}'; // ✅ Token directo
-
-    // Recolectar los datos de la tabla
+    const proyecto_id = proyecto.id; 
     const dataGuardar = [];
+
+    // 🔹 Recolectar las recomendaciones desde la tabla
     $('#tabla_matrizreco tbody tr').each(function () {
         const row = datatable_reporte_melreco.row(this).data();
         if (!row) return;
@@ -129,20 +128,21 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
         });
     });
 
+    // Validar datos
     if (dataGuardar.length === 0) {
         await Swal.fire({
             title: 'Advertencia',
-            text: 'No hay registros de recomendaciones para guardar.',
+            text: 'No hay recomendaciones seleccionadas para guardar.',
             icon: 'warning',
             confirmButtonText: 'Entendido'
         });
         return;
     }
 
-    // Confirmar guardado
+    // Confirmación con SweetAlert2
     const confirmacion = await Swal.fire({
         title: '¿Desea guardar las recomendaciones?',
-        text: 'Se almacenarán las selecciones realizadas para cada área y categoría.',
+        text: 'Se almacenarán las selecciones realizadas en cada área y categoría.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, guardar',
@@ -156,7 +156,7 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
             url: '/guardarMatrizRecomendaciones',
             method: 'POST',
             data: {
-                _token: _token,
+                _token: $('meta[name="csrf-token"]').attr('content'),
                 proyecto_id: proyecto_id,
                 data: dataGuardar
             },
@@ -175,7 +175,6 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
                 confirmButtonText: 'Aceptar'
             });
 
-            // 🔄 Recargar tabla sin perder estado
             if ($.fn.DataTable.isDataTable('#tabla_matrizreco')) {
                 $('#tabla_matrizreco').DataTable().ajax.reload(null, false);
             }
@@ -183,7 +182,7 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
         } else {
             await Swal.fire({
                 title: 'Error',
-                text: res.mensaje || 'No se pudieron guardar las recomendaciones.',
+                text: res.mensaje || 'Ocurrió un problema al guardar las recomendaciones.',
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
