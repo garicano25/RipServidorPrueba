@@ -57,7 +57,7 @@ function tabla_matrizreco(proyecto_id, reporteregistro_id, areas_poe) {
 				{ data: "recomendaciones", defaultContent: "-", orderable: true },
 			],
 			lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-            rowsGroup: [1,2], 
+            rowsGroup: [1,2,3], 
             order: [[ 0, "ASC" ]],
 			ordering: false,
 			processing: true,
