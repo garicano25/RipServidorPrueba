@@ -699,13 +699,16 @@ class reportesController extends Controller
 
 
 
+
+
+
     // public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     // {
     //     try {
     //         $numero_registro = 0;
     //         $data = [];
+    //         $idAgente = 15; 
 
-    //         // 🔹 Si no viene un registro_id válido, obtener el más reciente
     //         if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
     //             $registro = DB::table('reportequimicosgrupos')
     //                 ->where('proyecto_id', $proyecto_id)
@@ -724,12 +727,16 @@ class reportesController extends Controller
     //             }
     //         }
 
-    //         // 🔹 Obtener el nombre del departamento
     //         $departamento = DB::table('departamentos_meldraft')
     //             ->where('proyecto_id', $proyecto_id)
     //             ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-    //         // 🔹 Consulta idéntica a la que usa la tabla 5.5 (ajustada para solo devolver campos necesarios)
+    //         $recomendaciones = DB::table('reporterecomendaciones')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->where('agente_id', $idAgente)
+    //             ->select('id', 'reporterecomendaciones_descripcion')
+    //             ->get();
+
     //         $areas = DB::select("
     //         SELECT
     //             reportearea.proyecto_id,
@@ -761,11 +768,26 @@ class reportesController extends Controller
     //             reportecategoria.reportecategoria_nombre ASC
     //     ");
 
-    //         // 🔹 Recorrer resultados como en la tabla 5.5
     //         foreach ($areas as $value) {
-    //             // Solo incluir las áreas activas y con porcentaje > 0
     //             if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
     //                 $numero_registro++;
+
+    //                 $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
+    //                 foreach ($recomendaciones as $r) {
+    //                     $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
+    //                     $bloque_recomendaciones .= '
+    //                     <div class="recomendacion-bloque mb-2">
+    //                         <div class="switch">
+    //                             <label>
+    //                                 <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '">
+    //                                 <span class="lever switch-col-light-blue"></span>
+    //                             </label>
+    //                         </div>
+    //                         <textarea class="form-control" rows="5" readonly>' . $descripcion . '</textarea>
+    //                     </div>
+    //                 ';
+    //                 }
+    //                 $bloque_recomendaciones .= '</div>';
 
     //                 $data[] = [
     //                     'numero_registro' => $numero_registro,
@@ -774,7 +796,7 @@ class reportesController extends Controller
     //                     'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
     //                     'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
     //                     'nombre_agente' => 'Químico',
-    //                     'recomendaciones' => '-' // (Placeholder, se llenará después)
+    //                     'recomendaciones' => $bloque_recomendaciones
     //                 ];
     //             }
     //         }
@@ -795,14 +817,12 @@ class reportesController extends Controller
     // }
 
 
-
-
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
-            $idAgente = 15; // Agente químico
+            $idAgente = 15; // Químico
 
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
@@ -828,22 +848,22 @@ class reportesController extends Controller
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Recomendaciones del agente químico
+            // 🔹 Recomendaciones base del agente químico
             $recomendaciones = DB::table('reporterecomendaciones')
                 ->where('proyecto_id', $proyecto_id)
                 ->where('agente_id', $idAgente)
                 ->select('id', 'reporterecomendaciones_descripcion')
                 ->get();
 
-            // 🔹 Consulta igual a la de la tabla 5.5
+            // 🔹 Consulta igual a tabla 5.5 (solo activas)
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
-                reportearea.id,
+                reportearea.id AS area_id,
                 reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
                 reportearea.reportearea_nombre AS reportequimicosarea_nombre,
                 reportearea.reportearea_porcientooperacion,
-                reporteareacategoria.reportecategoria_id AS reportequimicoscategoria_id,
+                reporteareacategoria.reportecategoria_id AS categoria_id,
                 reportecategoria.reportecategoria_orden AS reportequimicoscategoria_orden,
                 reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
                 reporteareacategoria.reporteareacategoria_actividades AS reportequimicosareacategoria_actividades,
@@ -867,20 +887,38 @@ class reportesController extends Controller
                 reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Armar filas como en tabla 5.5
+            // 🔹 Recorremos solo las áreas activas
             foreach ($areas as $value) {
-                if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
+                if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo === 'activo') {
                     $numero_registro++;
 
-                    // 🔸 Armar el HTML del bloque de recomendaciones (diseño igual al que mostraste)
+                    // 🔸 Obtener las recomendaciones guardadas previamente
+                    $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
+                        ->where('proyecto_id', $proyecto_id)
+                        ->where('reporteregistro_id', $reporteregistro_id)
+                        ->where('area_id', $value->area_id)
+                        ->where('categoria_id', $value->categoria_id)
+                        ->first();
+
+                    $seleccionadas = [];
+                    if ($recomendaciones_guardadas && $recomendaciones_guardadas->recomendaciones_json) {
+                        $seleccionadas = collect(json_decode($recomendaciones_guardadas->recomendaciones_json, true))
+                            ->filter(fn($r) => isset($r['seleccionado']) && $r['seleccionado'])
+                            ->pluck('id')
+                            ->toArray();
+                    }
+
+                    // 🔸 Generar bloque de recomendaciones (switch + textarea)
                     $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
                     foreach ($recomendaciones as $r) {
                         $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
+                        $isChecked = in_array($r->id, $seleccionadas) ? 'checked' : '';
+
                         $bloque_recomendaciones .= '
                         <div class="recomendacion-bloque mb-2">
                             <div class="switch">
                                 <label>
-                                    <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '">
+                                    <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '" ' . $isChecked . '>
                                     <span class="lever switch-col-light-blue"></span>
                                 </label>
                             </div>
@@ -892,6 +930,8 @@ class reportesController extends Controller
 
                     $data[] = [
                         'numero_registro' => $numero_registro,
+                        'area_id' => $value->area_id,
+                        'categoria_id' => $value->categoria_id,
                         'DEPARTAMENTO_MEL' => $departamento,
                         'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
                         'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
@@ -905,7 +945,7 @@ class reportesController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $data,
-                'mensaje' => 'Datos de matriz de recomendaciones cargados correctamente.'
+                'mensaje' => 'Datos de matriz de recomendaciones activas cargados correctamente.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -917,7 +957,39 @@ class reportesController extends Controller
         }
     }
 
+    public function guardarMatrizRecomendaciones(Request $request)
+    {
+        try {
+            $data = $request->input('data'); // arreglo [{area_id, categoria_id, recomendaciones: [{id, seleccionado}]}]
+            $proyecto_id = $request->input('proyecto_id');
+            $reporteregistro_id = $request->input('reporteregistro_id');
+            $agente_id = 15;
 
+            foreach ($data as $fila) {
+                DB::table('matrizrecomendaciones')->updateOrInsert(
+                    [
+                        'proyecto_id' => $proyecto_id,
+                        'reporteregistro_id' => $reporteregistro_id,
+                        'area_id' => $fila['area_id'],
+                        'categoria_id' => $fila['categoria_id'],
+                        'agente_id' => $agente_id
+                    ],
+                    [
+                        'recomendaciones_json' => json_encode($fila['recomendaciones']),
+                        'updated_at' => now(),
+                    ]
+                );
+            }
+
+            return response()->json(['success' => true, 'mensaje' => 'Recomendaciones guardadas correctamente.']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'mensaje' => 'Error al guardar recomendaciones: ' . $e->getMessage(),
+                'linea' => $e->getLine()
+            ]);
+        }
+    }
 
     /**
      * Display the specified resource.

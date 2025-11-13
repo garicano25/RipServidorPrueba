@@ -1103,6 +1103,8 @@ Route::get('reportematrizrecovista/{proyecto_id}', ['as' => 'reportes.reportemat
 
 Route::get('matrizrecomendaciones/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['as' => 'reportes.matrizrecomendaciones', 'uses' => 'reportes\reportesController@matrizrecomendaciones']);
 
+Route::post('guardarMatrizRecomendaciones', ['as' => 'reportes.guardarMatrizRecomendaciones', 'uses' => 'reportes\reportesController@guardarMatrizRecomendaciones']);
+
 
 Route::get('reportepoevistapsico/{proyecto_id}', ['as' => 'reportes.reportepoevistapsico', 'uses' => 'reportes\reportesController@reportepoevistapsico']);
 

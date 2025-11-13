@@ -100,234 +100,47 @@ function tabla_matrizreco(proyecto_id, reporteregistro_id, areas_poe) {
 
 
 
-$('#botonguardar_reporte_matriz').on('click', async function (e) {
-    e.preventDefault();
+$('#btn_guardar_recomendaciones').on('click', function() {
+    const dataGuardar = [];
 
-    const departamento = $('#DEPARTAMENTO_MEL').val();
-    const proyecto_id = proyecto.id; 
+    $('#tabla_matrizreco tbody tr').each(function() {
+        const row = datatable_reporte_melreco.row(this).data();
+        const area_id = row.area_id;           
+        const categoria_id = row.categoria_id;
 
-    if (!departamento) {
-        await Swal.fire({
-            title: 'Advertencia',
-            text: 'Debe seleccionar un departamento antes de guardar.',
-            icon: 'warning',
-            confirmButtonText: 'Entendido'
+        const recomendaciones = [];
+        $(this).find('.recomendacion_checkbox').each(function() {
+            recomendaciones.push({
+                id: $(this).data('id'),
+                seleccionado: $(this).is(':checked')
+            });
         });
-        return;
-    }
 
-    const confirmacion = await Swal.fire({
-        title: '¿Desea guardar el departamento?',
-        text: 'Se guardará la selección para este proyecto.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, guardar',
-        cancelButtonText: 'Cancelar'
+        dataGuardar.push({
+            area_id,
+            categoria_id,
+            recomendaciones
+        });
     });
 
-    if (!confirmacion.isConfirmed) return;
-
-    try {
-        const res = await $.ajax({
-            url: '/guardarmeldraft',
-            method: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                proyecto_id: proyecto_id,
-                DEPARTAMENTO_MEL: departamento
-            },
-            beforeSend: function () {
-                $('#botonguardar_reporte_matriz')
-                    .prop('disabled', true)
-                    .html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
-            }
-        });
-
-        if (res.success) {
-            await Swal.fire({
-                title: 'Éxito',
-                text: res.message || 'Departamento guardado correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            });
-
-            if ($.fn.DataTable.isDataTable('#tabla_matrizreco')) {
-                $('#tabla_matrizreco').DataTable().ajax.reload(null, false);
-            }
-
-        } else {
-            await Swal.fire({
-                title: 'Error',
-                text: res.message || 'Error al guardar el departamento.',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        await Swal.fire({
-            title: 'Error',
-            text: 'Error de conexión al guardar el departamento.',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-        });
-    } finally {
-        $('#botonguardar_reporte_matriz')
-            .prop('disabled', false)
-            .html('Guardar <i class="fa fa-save"></i>');
-    }
-});
-
-
-
-
-
-$(document).on('click', '#btnExportarExcel', function (e) {
-    e.preventDefault();
-
     $.ajax({
-        url: '/verificarmeldraft/' + proyecto.id,
-        method: 'GET',
-        success: function (respuesta) {
-            if (respuesta.success) {
-                Swal.fire({
-                    title: "¿Desea generar la Matriz de Exposición Laboral?",
-                    text: "Se exportará el archivo Excel con los datos actuales del proyecto.",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonColor: "#28a745",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Sí, descargar",
-                    cancelButtonText: "Cancelar",
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#btnExportarExcel').prop('disabled', true);
-
-                        Swal.fire({
-                            title: "Generando reporte...",
-                            text: "Espere un momento mientras se prepara el documento.",
-                            icon: "info",
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        let url = '/exportarMeldraft/' + proyecto.id;
-
-                        $.ajax({
-                            url: url,
-                            method: 'GET',
-                            xhrFields: {
-                                responseType: 'blob'
-                            },
-                            success: function (data, status, xhr) {
-                                const contentType = xhr.getResponseHeader('Content-Type') || '';
-
-                                // Si devuelve JSON (error), lo mostramos con SweetAlert
-                                if (contentType.includes('application/json') || contentType.includes('text/json')) {
-                                    const reader = new FileReader();
-                                    reader.onload = function () {
-                                        try {
-                                            const response = JSON.parse(reader.result);
-                                            Swal.fire({
-                                                title: "Atención",
-                                                text: response.message || "No se puede generar el reporte.",
-                                                icon: "warning"
-                                            });
-                                        } catch (e) {
-                                            Swal.fire({
-                                                title: "Error",
-                                                text: "Respuesta inválida del servidor.",
-                                                icon: "error"
-                                            });
-                                        }
-                                        $('#btnExportarExcel').prop('disabled', false);
-                                    };
-                                    reader.readAsText(data);
-                                    return;
-                                }
-
-                                // ✅ Si todo va bien: descargar archivo directamente
-                                const a = document.createElement('a');
-                                const urlDescarga = window.URL.createObjectURL(data);
-                                a.href = urlDescarga;
-                                a.download = `Matriz de Exposición Laboral.xlsx`;
-                                document.body.appendChild(a);
-                                a.click();
-                                a.remove();
-                                window.URL.revokeObjectURL(urlDescarga);
-
-                                Swal.fire({
-                                    title: "Éxito",
-                                    text: "El archivo 'Matriz de Exposición Laboral.xlsx' se descargó correctamente.",
-                                    icon: "success",
-                                    confirmButtonText: "Cerrar"
-                                });
-
-                                $('#btnExportarExcel').prop('disabled', false);
-                            },
-                            error: function (xhr) {
-                                const reader = new FileReader();
-                                reader.onload = function () {
-                                    try {
-                                        const response = JSON.parse(reader.result);
-                                        Swal.fire({
-                                            title: "Atención",
-                                            text: response.message || "Error desconocido del servidor.",
-                                            icon: "warning"
-                                        });
-                                    } catch (e) {
-                                        Swal.fire({
-                                            title: "Error",
-                                            text: "No se pudo interpretar la respuesta del servidor.",
-                                            icon: "error"
-                                        });
-                                    }
-                                    $('#btnExportarExcel').prop('disabled', false);
-                                };
-
-                                if (xhr.response) {
-                                    reader.readAsText(xhr.response);
-                                } else {
-                                    Swal.fire({
-                                        title: "Error",
-                                        text: "No se recibió respuesta del servidor.",
-                                        icon: "error"
-                                    });
-                                    $('#btnExportarExcel').prop('disabled', false);
-                                }
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Cancelado",
-                            text: "No se generó el documento.",
-                            icon: "info",
-                            timer: 1000,
-                            showConfirmButton: false
-                        });
-                    }
-                });
+        url: '/guardarMatrizRecomendaciones',
+        type: 'POST',
+        data: {
+            proyecto_id: proyecto.id,
+            reporteregistro_id: reporteregistro_id,
+            data: dataGuardar
+        },
+        success: function(res) {
+            if (res.success) {
+                Swal.fire('Éxito', res.mensaje, 'success');
+            } else {
+                Swal.fire('Error', res.mensaje, 'error');
             }
         },
-        error: function (xhr) {
-            let mensaje = "No se pudo verificar la información.";
-
-            try {
-                const response = JSON.parse(xhr.responseText);
-                if (response.message) {
-                    mensaje = response.message;
-                }
-            } catch (e) {}
-
-            Swal.fire({
-                title: "Atención",
-                text: mensaje,
-                icon: "warning"
-            });
+        error: function(err) {
+            console.error(err);
+            Swal.fire('Error', 'No se pudo guardar las recomendaciones', 'error');
         }
     });
 });

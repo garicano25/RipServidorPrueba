@@ -45,7 +45,6 @@
                 class="col-12 text-center">
                 {!! csrf_field() !!}
 
-
                 <div class="text-center mt-3">
                     <button type="submit"
                         class="btn btn-danger waves-effect waves-light botoninforme"
@@ -57,7 +56,7 @@
                         class="btn btn-default waves-effect"
                         style="margin-left: 15px;"
                         data-toggle="tooltip" title="Generar matriz"
-                        id="btnExportarExcel">
+                        id="btnexportarmelrecomendaciones">
                         <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>
                         Generar matriz
                     </button>
@@ -97,7 +96,7 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportematrizreco.js?v=1.1"></script>
+<script src="/js_sitio/reportes/reportematrizreco.js?v=1.2"></script>
 <!-- <script src="/js_sitio/reportes/reportemeldraft.js?v=1.6"></script> -->
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
