@@ -826,6 +826,18 @@ class reportesController extends Controller
             $data = [];
             $idAgente = 15; // Químico
 
+            // 🔹 Cargar proyecto y recsensorial (necesarios para el reemplazo dinámico)
+            $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
+            $recsensorial = $proyecto ? $proyecto->recsensorial : null;
+
+            if (!$proyecto || !$recsensorial) {
+                return response()->json([
+                    'success' => false,
+                    'mensaje' => 'No se encontró información del proyecto o reconocimiento sensorial.',
+                    'data' => []
+                ]);
+            }
+
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
                 $registro = DB::table('reportequimicosgrupos')
@@ -906,14 +918,18 @@ class reportesController extends Controller
                                         $r['seleccionado'] == 1);
                             })
                             ->pluck('id')
-                            ->map(fn($id) => (string)$id) // Fuerza a string para in_array seguro
+                            ->map(fn($id) => (string)$id)
                             ->toArray();
                     }
 
                     // 🔸 Generar bloque HTML de recomendaciones
                     $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
                     foreach ($recomendaciones as $r) {
-                        $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
+                        $descripcionOriginal = $r->reporterecomendaciones_descripcion ?? '';
+                        // 🔸 Reemplazo dinámico con datos del proyecto y recsensorial
+                        $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $descripcionOriginal);
+                        $descripcion = htmlspecialchars($descripcionTexto);
+
                         $isChecked = in_array((string)$r->id, $seleccionadas) ? 'checked' : '';
 
                         $bloque_recomendaciones .= '
@@ -961,7 +977,6 @@ class reportesController extends Controller
             ]);
         }
     }
-
 
 
 
