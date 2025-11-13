@@ -734,8 +734,6 @@ class reportesController extends Controller
                 ra.reportearea_instalacion AS reportequimicosarea_instalacion,
                 ra.reportearea_nombre AS reportequimicosarea_nombre,
                 rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
-                rq.reportequimicosevaluacion_ficha,
-                rq.reportequimicosevaluacion_recomendaciones AS recomendaciones
             FROM reportequimicosevaluacion rq
             LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
             LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
@@ -753,9 +751,8 @@ class reportesController extends Controller
                     'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
                     'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
                     'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
-                    'reportequimicosevaluacion_ficha' => $value->reportequimicosevaluacion_ficha ?? '-',
                     'nombre_agente' => 'Químico', // ← 🔹 Valor fijo solicitado
-                    'recomendaciones' => $value->recomendaciones ?? '-'
+                    'recomendaciones' => '-'
                 ];
             }
 
