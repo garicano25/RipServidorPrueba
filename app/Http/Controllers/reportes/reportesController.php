@@ -795,12 +795,14 @@ class reportesController extends Controller
     // }
 
 
+
+
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
-            $idAgente = 15; // Químico
+            $idAgente = 15; // Agente químico
 
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
@@ -821,18 +823,19 @@ class reportesController extends Controller
                 }
             }
 
-            // 🔹 Obtener el departamento MEL
+            // 🔹 Departamento MEL
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Obtener las recomendaciones del agente químico
+            // 🔹 Recomendaciones del agente químico
             $recomendaciones = DB::table('reporterecomendaciones')
                 ->where('proyecto_id', $proyecto_id)
                 ->where('agente_id', $idAgente)
+                ->select('id', 'reporterecomendaciones_descripcion')
                 ->get();
 
-            // 🔹 Consulta base igual a la tabla 5.5
+            // 🔹 Consulta igual a la de la tabla 5.5
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
@@ -864,26 +867,28 @@ class reportesController extends Controller
                 reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Recorremos áreas y armamos el DataTable
+            // 🔹 Armar filas como en tabla 5.5
             foreach ($areas as $value) {
                 if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
                     $numero_registro++;
 
-                    // 🔸 Armar bloque HTML con switch + textarea para recomendaciones
-                    $bloque_recomendaciones = '';
-                    foreach ($recomendaciones as $rec) {
+                    // 🔸 Armar el HTML del bloque de recomendaciones (diseño igual al que mostraste)
+                    $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
+                    foreach ($recomendaciones as $r) {
+                        $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
                         $bloque_recomendaciones .= '
-                        <div class="form-check form-switch mb-1">
-                            <input class="form-check-input switch-recomendacion" type="checkbox" id="rec_' . $numero_registro . '_' . $rec->id . '" data-id="' . $rec->id . '">
-                            <label class="form-check-label" for="rec_' . $numero_registro . '_' . $rec->id . '">' . htmlspecialchars($rec->reporterecomendaciones_descripcion) . '</label>
+                        <div class="recomendacion-bloque mb-2">
+                            <div class="switch">
+                                <label>
+                                    <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '">
+                                    <span class="lever switch-col-light-blue"></span>
+                                </label>
+                            </div>
+                            <textarea class="form-control" rows="5" readonly>' . $descripcion . '</textarea>
                         </div>
                     ';
                     }
-
-                    // Opcionalmente podrías agregar un textarea al final
-                    $bloque_recomendaciones .= '
-                    <textarea class="form-control mt-2" rows="2" placeholder="Observaciones adicionales..."></textarea>
-                ';
+                    $bloque_recomendaciones .= '</div>';
 
                     $data[] = [
                         'numero_registro' => $numero_registro,
