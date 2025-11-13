@@ -704,9 +704,6 @@ class reportesController extends Controller
         try {
             $numero_registro = 0;
             $data = [];
-            $instalacion = 'XXX';
-            $area = 'XXX';
-            $area2 = 'XXX';
 
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
@@ -727,12 +724,12 @@ class reportesController extends Controller
                 }
             }
 
-            // 🔹 Obtener departamento MEL
+            // 🔹 Obtener el nombre del departamento
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Consulta principal (idéntica base de 5.5)
+            // 🔹 Consulta idéntica a la que usa la tabla 5.5 (ajustada para solo devolver campos necesarios)
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
@@ -741,7 +738,9 @@ class reportesController extends Controller
                 reportearea.reportearea_nombre AS reportequimicosarea_nombre,
                 reportearea.reportearea_porcientooperacion,
                 reporteareacategoria.reportecategoria_id AS reportequimicoscategoria_id,
+                reportecategoria.reportecategoria_orden AS reportequimicoscategoria_orden,
                 reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                reporteareacategoria.reporteareacategoria_actividades AS reportequimicosareacategoria_actividades,
                 IFNULL((
                     SELECT
                         IF(reportequimicosareacategoria.reportequimicoscategoria_id, 'activo', '') AS checked
@@ -755,15 +754,17 @@ class reportesController extends Controller
             LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
             WHERE reportearea.proyecto_id = $proyecto_id
-            ORDER BY 
+            ORDER BY
                 reportearea.reportearea_instalacion ASC,
                 reportearea.reportearea_nombre ASC,
-                reportecategoria.reportecategoria_orden ASC
+                reportecategoria.reportecategoria_orden ASC,
+                reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Formatear resultados
+            // 🔹 Recorrer resultados como en la tabla 5.5
             foreach ($areas as $value) {
-                if ($value->reportequimicosarea_porcientooperacion > 0 && $value->activo) {
+                // Solo incluir las áreas activas y con porcentaje > 0
+                if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
                     $numero_registro++;
 
                     $data[] = [
@@ -773,7 +774,7 @@ class reportesController extends Controller
                         'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
                         'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
                         'nombre_agente' => 'Químico',
-                        'recomendaciones' => '-' // Se llenará después
+                        'recomendaciones' => '-' // (Placeholder, se llenará después)
                     ];
                 }
             }
@@ -792,6 +793,7 @@ class reportesController extends Controller
             ]);
         }
     }
+
 
 
 
