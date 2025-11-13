@@ -822,9 +822,8 @@ class reportesController extends Controller
         try {
             $numero_registro = 0;
             $data = [];
-            $idAgente = 15; // Químico
+            $idAgente = 15; 
 
-            // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
                 $registro = DB::table('reportequimicosgrupos')
                     ->where('proyecto_id', $proyecto_id)
@@ -832,30 +831,19 @@ class reportesController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->first();
 
-                if ($registro) {
-                    $reporteregistro_id = $registro->registro_id;
-                } else {
-                    return response()->json([
-                        'data' => [],
-                        'success' => false,
-                        'mensaje' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos.'
-                    ]);
-                }
+                $reporteregistro_id = $registro->registro_id ?? 0;
             }
 
-            // 🔹 Departamento MEL
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Recomendaciones base del agente químico
             $recomendaciones = DB::table('reporterecomendaciones')
                 ->where('proyecto_id', $proyecto_id)
                 ->where('agente_id', $idAgente)
                 ->select('id', 'reporterecomendaciones_descripcion')
                 ->get();
 
-            // 🔹 Consulta igual a tabla 5.5 (solo activas)
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
@@ -887,44 +875,44 @@ class reportesController extends Controller
                 reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Recorremos solo las áreas activas
             foreach ($areas as $value) {
                 if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo === 'activo') {
                     $numero_registro++;
 
-                    // 🔸 Obtener las recomendaciones guardadas previamente
                     $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
                         ->where('proyecto_id', $proyecto_id)
-                        ->where('reporteregistro_id', $reporteregistro_id)
                         ->where('area_id', $value->area_id)
                         ->where('categoria_id', $value->categoria_id)
                         ->first();
 
                     $seleccionadas = [];
                     if ($recomendaciones_guardadas && $recomendaciones_guardadas->recomendaciones_json) {
-                        $seleccionadas = collect(json_decode($recomendaciones_guardadas->recomendaciones_json, true))
-                            ->filter(fn($r) => isset($r['seleccionado']) && $r['seleccionado'])
-                            ->pluck('id')
-                            ->toArray();
+                        $decoded = json_decode($recomendaciones_guardadas->recomendaciones_json, true);
+                        foreach ($decoded as $item) {
+                            if (
+                                (isset($item['seleccionado']) && $item['seleccionado'] === true) ||
+                                (isset($item['isChecked']) && $item['isChecked'] === true)
+                            ) {
+                                $seleccionadas[] = $item['id'] ?? $item['id_recomendacion'] ?? null;
+                            }
+                        }
                     }
 
-                    // 🔸 Generar bloque de recomendaciones (switch + textarea)
                     $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
                     foreach ($recomendaciones as $r) {
                         $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
                         $isChecked = in_array($r->id, $seleccionadas) ? 'checked' : '';
 
                         $bloque_recomendaciones .= '
-                        <div class="recomendacion-bloque mb-2">
-                            <div class="switch">
-                                <label>
-                                    <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '" ' . $isChecked . '>
-                                    <span class="lever switch-col-light-blue"></span>
-                                </label>
-                            </div>
-                            <textarea class="form-control" rows="5" readonly>' . $descripcion . '</textarea>
+                    <div class="recomendacion-bloque mb-2">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '" ' . $isChecked . '>
+                                <span class="lever switch-col-light-blue"></span>
+                            </label>
                         </div>
-                    ';
+                        <textarea class="form-control" rows="5" readonly>' . $descripcion . '</textarea>
+                    </div>';
                     }
                     $bloque_recomendaciones .= '</div>';
 
@@ -945,9 +933,10 @@ class reportesController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $data,
-                'mensaje' => 'Datos de matriz de recomendaciones activas cargados correctamente.'
+                'mensaje' => 'Datos de matriz de recomendaciones cargados correctamente.'
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error en matrizrecomendaciones: ' . $e->getMessage() . ' Línea ' . $e->getLine());
             return response()->json([
                 'success' => false,
                 'mensaje' => 'Error al consultar matriz de recomendaciones: ' . $e->getMessage(),
@@ -956,6 +945,7 @@ class reportesController extends Controller
             ]);
         }
     }
+
 
 
     public function guardarMatrizRecomendaciones(Request $request)
