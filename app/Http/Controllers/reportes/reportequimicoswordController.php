@@ -834,98 +834,36 @@ class reportequimicoswordController extends Controller
             }
 
 
-            // $plantillaword->setValue('DEFINICIONES', $definiciones);
+            $plantillaword->setValue('DEFINICIONES', $definiciones);
 
-            $plantillaword->setValue('DEFINICIONES', sanitizeText($definiciones));
 
             // OBJETIVO GENERAL
             //================================================================================
 
 
-            // $plantillaword->setValue('OBJETIVO_GENERAL', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_objetivogeneral));
-
-
-            $plantillaword->setValue('OBJETIVO_GENERAL',sanitizeText( $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_objetivogeneral
-                    )
-                )
-            );
+            $plantillaword->setValue('OBJETIVO_GENERAL', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_objetivogeneral));
 
 
             // OBJETIVOS ESPECIFICOS
             //================================================================================
 
 
-            // $plantillaword->setValue('OBJETIVOS_ESPECIFICOS', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_objetivoespecifico));
-
-            $plantillaword->setValue(
-                'OBJETIVOS_ESPECIFICOS',
-                sanitizeText(
-                    $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_objetivoespecifico
-                    )
-                )
-            );
+            $plantillaword->setValue('OBJETIVOS_ESPECIFICOS', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_objetivoespecifico));
 
 
             // METODOLOGIA
             //================================================================================
 
 
-            // $plantillaword->setValue('METODOLOGIA_4_1', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_metodologia_4_1));
+            $plantillaword->setValue('METODOLOGIA_4_1', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_metodologia_4_1));
+            $plantillaword->setValue('METODOLOGIA_4_2', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_metodologia_4_2));
 
-            $plantillaword->setValue(
-                'METODOLOGIA_4_1',
-                sanitizeText(
-                    $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_metodologia_4_1
-                    )
-                )
-            );
-
-
-            // $plantillaword->setValue('METODOLOGIA_4_2', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_metodologia_4_2));
-
-
-            $plantillaword->setValue(
-                'METODOLOGIA_4_2',
-                sanitizeText(
-                    $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_metodologia_4_2
-                    )
-                )
-            );
 
             // UBICACION
             //================================================================================
 
 
-            // $plantillaword->setValue('UBICACION_TEXTO', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_ubicacioninstalacion));
-
-            $plantillaword->setValue(
-                'UBICACION_TEXTO',
-                sanitizeText(
-                    $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_ubicacioninstalacion
-                    )
-                )
-            );
-
+            $plantillaword->setValue('UBICACION_TEXTO', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_ubicacioninstalacion));
 
 
             // Imagen FOTO
@@ -944,26 +882,13 @@ class reportequimicoswordController extends Controller
             {
                 $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-
+                
 
             // PROCESO INSTALACION
             //================================================================================
 
 
-            // $plantillaword->setValue('PROCESO_INSTALACION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_procesoinstalacion));
-
-            $plantillaword->setValue(
-                'PROCESO_INSTALACION',
-                sanitizeText(
-                    $this->datosproyectoreemplazartexto(
-                        $proyecto,
-                        $recsensorial,
-                        $quimicos,
-                        $reporte->reportequimicos_procesoinstalacion
-                    )
-                )
-            );
-
+            $plantillaword->setValue('PROCESO_INSTALACION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $reporte->reportequimicos_procesoinstalacion));
             // $plantillaword->setValue('PROCESO_INSTALACION', str_replace("\n\n", "<w:br/><w:br/>", str_replace("\n\n", "<w:br/><w:br/>", str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $reporte->reportequimicos_procesoinstalacion))));
 
 
@@ -1213,6 +1138,18 @@ class reportequimicoswordController extends Controller
                 {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
+
+
+                // if($instalacion != $value->reportequimicosarea_instalacion)
+                // {
+                //     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_instalacion, $texto);
+                //     $instalacion = $value->reportequimicosarea_instalacion;
+                // }
+                // else
+                // {
+                //     $table->addCell($ancho_col_2, $continua_fila);
+                // }
+
 
                 if($area != $value->reportequimicosarea_nombre)
                 {
