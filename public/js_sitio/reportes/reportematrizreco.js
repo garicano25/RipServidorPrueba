@@ -53,7 +53,6 @@ function tabla_matrizreco(proyecto_id, reporteregistro_id, areas_poe) {
 				{ data: "reportequimicosarea_instalacion", defaultContent: "-", orderable: false },
 				{ data: "reportequimicosarea_nombre", defaultContent: "-", orderable: true },
 				{ data: "reportequimicoscategoria_nombre", defaultContent: "-", orderable: false },
-				{ data: "reportequimicosevaluacion_ficha", defaultContent: "-", orderable: true },
                 { data: "nombre_agente", defaultContent: "-", orderable: true },
 				{ data: "recomendaciones", defaultContent: "-", orderable: true },
 			],
