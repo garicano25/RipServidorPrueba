@@ -888,7 +888,33 @@ class reportesController extends Controller
     }
 
 
+    public function datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $texto)
+    {
+        $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
+        $texto = str_replace('QUIMICOS_NOMBRE', $quimicos_nombre, $texto);
+        $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
+        } else {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
+
+            $texto = str_replace('PEMEX Exploración y Producción', $recsensorial->recsensorial_empresa, $texto);
+        }
+
+        return $texto;
+    }
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
@@ -992,7 +1018,7 @@ class reportesController extends Controller
                     foreach ($recomendaciones as $r) {
                         $descripcionOriginal = $r->reporterecomendaciones_descripcion ?? '';
 
-                        $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $descripcionOriginal);
+                        $descripcionTexto = $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $descripcionOriginal);
 
                         $descripcion = htmlspecialchars($descripcionTexto);
                         $isChecked = in_array((string)$r->id, $seleccionadas) ? 'checked' : '';
