@@ -698,12 +698,15 @@ class reportesController extends Controller
 
 
 
+
+
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
 
+            // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
                 $registro = DB::table('reportequimicosgrupos')
                     ->where('proyecto_id', $proyecto_id)
@@ -722,10 +725,12 @@ class reportesController extends Controller
                 }
             }
 
+            // 🔹 Obtener departamento MEL
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
+            // 🔹 Consulta base de áreas y categorías
             $areas = DB::select("
             SELECT
                 rq.id,
@@ -733,7 +738,7 @@ class reportesController extends Controller
                 rq.registro_id,
                 ra.reportearea_instalacion AS reportequimicosarea_instalacion,
                 ra.reportearea_nombre AS reportequimicosarea_nombre,
-                rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                rc.reportecategoria_nombre AS reportequimicoscategoria_nombre
             FROM reportequimicosevaluacion rq
             LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
             LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
@@ -751,8 +756,8 @@ class reportesController extends Controller
                     'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
                     'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
                     'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
-                    'nombre_agente' => 'Químico', // ← 🔹 Valor fijo solicitado
-                    'recomendaciones' => '-'
+                    'nombre_agente' => 'Químico', // Valor fijo solicitado
+                    'recomendaciones' => '-' // 🔹 Placeholder (vendrá luego de otra fuente)
                 ];
             }
 
@@ -770,6 +775,8 @@ class reportesController extends Controller
             ]);
         }
     }
+
+
 
 
 
