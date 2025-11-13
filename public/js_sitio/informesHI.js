@@ -132,6 +132,7 @@ function seleccionar_proyectos(ProyectoID) {
 	//DESBLOQUEAMOS LOS BOTONES Y SELECT PARA LOS REPORTES
 	$('#btnPoeProyecto').prop('disabled', true);
 	$('#btnMatriz').prop('disabled', true);
+	$('#btnmatrizreco').prop('disabled', true);
 
 	$('#select_tiporeportes').prop('disabled', true);
 
@@ -221,6 +222,9 @@ var proyecto_id =  $('#informes_reco').val();
 					break;
 				case 24:
 				$('#estructura_reporte').load('/reportemeldraftvista/'+proyecto_id);
+					break;
+				case 25:
+				$('#estructura_reporte').load('/reportematrizrecovista/'+proyecto_id);
 				break;
 				default:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte</p>');
@@ -261,6 +265,15 @@ $('#btnMatriz').on('click', function (e) {
 
 })
 
+$('#btnmatrizreco').on('click', function (e) {
+	e.preventDefault();
+	
+	$('#select_tiporeportes').val('');
+
+	mostrar_reporte(25)
+
+})
+
 
 function consultarEstatusProyecto(ID_PROYECTO) {
 
@@ -276,6 +289,7 @@ function consultarEstatusProyecto(ID_PROYECTO) {
 				
 				$('#btnPoeProyecto').prop('disabled', false);
 				$('#btnMatriz').prop('disabled', false);
+				$('#btnmatrizreco').prop('disabled', false);
 				$('#select_tiporeportes').prop('disabled', true);
 				$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Complete la tabla de POE para poder generar los reportes.</p>');
 
@@ -283,13 +297,15 @@ function consultarEstatusProyecto(ID_PROYECTO) {
 
 				if (dato.info.POE_FINALIZADO == 1) {
 					$('#btnPoeProyecto').prop('disabled', false);
-				$('#btnMatriz').prop('disabled', false);
+					$('#btnMatriz').prop('disabled', false);
+					$('#btnmatrizreco').prop('disabled', false);
 
 					$('#select_tiporeportes').prop('disabled', false);
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte.</p>');
 				} else {
 					$('#btnPoeProyecto').prop('disabled', false);
-				$('#btnMatriz').prop('disabled', false);
+					$('#btnMatriz').prop('disabled', false);
+					$('#btnmatrizreco').prop('disabled', false);
 
 					$('#select_tiporeportes').prop('disabled', true);
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Complete la tabla de POE para poder generar los reportes.</p>');
@@ -300,7 +316,8 @@ function consultarEstatusProyecto(ID_PROYECTO) {
         },
         beforeSend: function() {
 			$('#btnPoeProyecto').prop('disabled', true);
-           $('#btnMatriz').prop('disabled', true);
+            $('#btnMatriz').prop('disabled', true);
+			$('#btnmatrizreco').prop('disabled', true);
 			
 			$('#select_tiporeportes').prop('disabled', true);
 

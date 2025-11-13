@@ -1059,7 +1059,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/informesHI.js?v=5.4"></script>
+    <script src="/js_sitio/informesHI.js?v=5.5"></script>
     @endif
 
     @if(request()->is('usuario'))

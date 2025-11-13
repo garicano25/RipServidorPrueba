@@ -1166,6 +1166,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 
 						$('#select_tiporeportes').prop('disabled', false)
 						$('#btnMatriz').prop('disabled', false)
+						$('#btnmatrizreco').prop('disabled', false)
 
 						
 						swal({
@@ -1204,12 +1205,13 @@ $('#btnFinalizarPoe').on('click', function (e) {
 
 							$('#select_tiporeportes').prop('disabled', false)
 							$('#btnMatriz').prop('disabled', false)
+							$('#btnmatrizreco').prop('disabled', false)
 
 
 							swal({
 								title: "POE bloqueada existosamente",
 								text: "La lista de reportes ha sido activada.",
-								type: "success", // warning, error, success, info
+								type: "success", 
 								buttons: {
 									visible: false, // true , false
 								},
@@ -1225,6 +1227,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 
 							$('#select_tiporeportes').prop('disabled', true)
 							$('#btnMatriz').prop('disabled', true)
+							$('#btnmatrizreco').prop('disabled', true)
 
 							
 							swal({

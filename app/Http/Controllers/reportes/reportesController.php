@@ -281,329 +281,176 @@ class reportesController extends Controller
 
 
 
+    public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
+    {
+        try {
+            if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+                $registro = DB::table('reportequimicosgrupos')
+                    ->where('proyecto_id', $proyecto_id)
+                    ->select('registro_id')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
 
-//  public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
-//     {
-//         try {
-//             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
-//                 $registro = DB::table('reportequimicosgrupos')
-//                     ->where('proyecto_id', $proyecto_id)
-//                     ->select('registro_id')
-//                     ->orderBy('created_at', 'desc')
-//                     ->first();
-
-//                 if ($registro) {
-//                     $reporteregistro_id = $registro->registro_id;
-//                 } else {
-//                     return response()->json([
-//                         'data' => [],
-//                         'total' => 0,
-//                         'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
-//                     ]);
-//                 }
-//             }
-
-//             $departamento = DB::table('departamentos_meldraft')
-//                 ->where('proyecto_id', $proyecto_id)
-//                 ->value('DEPARTAMENTO_MEL');
-
-//             if (!$departamento) {
-//                 $departamento = "No tiene departamento guardado";
-//             }
-
-//             if (($areas_poe + 0) == 1) {
-//                 $puntos = DB::select('
-//                 SELECT
-//                     rq.id,
-//                     rq.proyecto_id,
-//                     rq.registro_id,
-//                     IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
-//                     IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
-//                     IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
-//                     IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
-//                     (
-//                         CASE
-//                             WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
-//                             ELSE cg.catgerencia_nombre
-//                         END
-//                     ) AS gerencia_activo,
-//                     ra.reportearea_instalacion AS reportequimicosarea_instalacion,
-//                     ra.reportearea_nombre AS reportequimicosarea_nombre,
-//                     rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
-//                     rq.reportequimicosevaluacion_nombre,
-//                     rq.reportequimicosevaluacion_anios,
-//                     rq.reportequimicosevaluacion_antiguedadgeneral,
-//                     rq.reportequimicosevaluacion_antiguedadcategoria,
-//                     rq.reportequimicosevaluacion_horariotrabajo,
-//                     rq.reportequimicosevaluacion_ficha,
-//                     rq.reportequimicosevaluacion_geo,
-//                     rq.reportequimicosevaluacion_total,
-//                     rq.reportequimicosevaluacion_punto,
-//                     IFNULL((
-//                         SELECT
-//                             REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-//                         FROM reportequimicosevaluacionparametro rp
-//                         WHERE rp.reportequimicosevaluacion_id = rq.id
-//                     ), "-") AS parametros
-//                 FROM reportequimicosevaluacion rq
-//                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
-//                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
-//                 LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
-//                 LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
-//                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
-//                 LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
-//                 LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
-//                 WHERE rq.proyecto_id = ' . $proyecto_id . '
-//                 AND rq.registro_id = ' . $reporteregistro_id . '
-//                 ORDER BY rq.reportequimicosevaluacion_punto ASC
-//             ');
-//             } else {
-//                 $puntos = DB::select('
-//                 SELECT
-//                     rq.id,
-//                     rq.proyecto_id,
-//                     rq.registro_id,
-//                     IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
-//                     IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
-//                     IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
-//                     IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
-//                     (
-//                         CASE
-//                             WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
-//                             ELSE cg.catgerencia_nombre
-//                         END
-//                     ) AS gerencia_activo,
-//                     ra.reportequimicosarea_instalacion,
-//                     ra.reportequimicosarea_nombre,
-//                     rc.reportequimicoscategoria_nombre,
-//                     rq.reportequimicosevaluacion_nombre,
-//                     rq.reportequimicosevaluacion_anios,
-//                     rq.reportequimicosevaluacion_antiguedadgeneral,
-//                     rq.reportequimicosevaluacion_antiguedadcategoria,
-//                     rq.reportequimicosevaluacion_horariotrabajo,
-//                     rq.reportequimicosevaluacion_ficha,
-//                     rq.reportequimicosevaluacion_geo,
-//                     rq.reportequimicosevaluacion_total,
-//                     rq.reportequimicosevaluacion_punto,
-//                     IFNULL((
-//                         SELECT
-//                             REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-//                         FROM reportequimicosevaluacionparametro rp
-//                         WHERE rp.reportequimicosevaluacion_id = rq.id
-//                     ), "-") AS parametros
-//                 FROM reportequimicosevaluacion rq
-//                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
-//                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
-//                 LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
-//                 LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
-//                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
-//                 LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
-//                 LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
-//                 WHERE rq.proyecto_id = ' . $proyecto_id . '
-//                 AND rq.registro_id = ' . $reporteregistro_id . '
-//                 ORDER BY rq.reportequimicosevaluacion_punto ASC
-//             ');
-//             }
-
-//             $numero_registro = 0;
-//             foreach ($puntos as $value) {
-//                 $numero_registro++;
-//                 $value->numero_registro = $numero_registro;
-//                 $value->DEPARTAMENTO_MEL = $departamento;
-//             }
-
-//             return response()->json([
-//                 'data' => $puntos,
-//                 'total' => count($puntos),
-//                 'msj' => 'Datos consultados correctamente'
-//             ]);
-//         } catch (Exception $e) {
-//             return response()->json([
-//                 'data' => [],
-//                 'total' => 0,
-//                 'msj' => 'Error: ' . $e->getMessage()
-//             ]);
-//         }
-//     }
-
-
-public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
-{
-    try {
-        if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
-            $registro = DB::table('reportequimicosgrupos')
-                ->where('proyecto_id', $proyecto_id)
-                ->select('registro_id')
-                ->orderBy('created_at', 'desc')
-                ->first();
-
-            if ($registro) {
-                $reporteregistro_id = $registro->registro_id;
-            } else {
-                return response()->json([
-                    'data' => [],
-                    'total' => 0,
-                    'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
-                ]);
+                if ($registro) {
+                    $reporteregistro_id = $registro->registro_id;
+                } else {
+                    return response()->json([
+                        'data' => [],
+                        'total' => 0,
+                        'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
+                    ]);
+                }
             }
+
+            $departamento = DB::table('departamentos_meldraft')
+                ->where('proyecto_id', $proyecto_id)
+                ->value('DEPARTAMENTO_MEL');
+
+            if (!$departamento) {
+                $departamento = "No tiene departamento guardado";
+            }
+
+            if (($areas_poe + 0) == 1) {
+                $puntos = DB::select('
+                    SELECT
+                        rq.id,
+                        rq.proyecto_id,
+                        rq.registro_id,
+                        IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+                        IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+                        IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+                        IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+                        (
+                            CASE
+                                WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+                                ELSE cg.catgerencia_nombre
+                            END
+                        ) AS gerencia_activo,
+                        ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+                        ra.reportearea_nombre AS reportequimicosarea_nombre,
+                        rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                        rq.reportequimicosevaluacion_nombre,
+                        rq.reportequimicosevaluacion_anios,
+                        rq.reportequimicosevaluacion_antiguedadgeneral,
+                        rq.reportequimicosevaluacion_antiguedadcategoria,
+                        rq.reportequimicosevaluacion_horariotrabajo,
+                        rq.reportequimicosevaluacion_ficha,
+                        rq.reportequimicosevaluacion_geo,
+                        rq.reportequimicosevaluacion_total,
+                        rq.reportequimicosevaluacion_punto,
+                        rp.reportequimicosevaluacionparametro_parametro AS tipo,
+                        rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+                        rp.reportequimicosevaluacionparametro_unidad AS unidad_vle,
+                        rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
+                    FROM reportequimicosevaluacion rq
+                    LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+                    LEFT JOIN catregion cr ON p.catregion_id = cr.id
+                    LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+                    LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+                    LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+                    LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+                    LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+                    LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+                    WHERE rq.proyecto_id = ' . $proyecto_id . '
+                    AND rq.registro_id = ' . $reporteregistro_id . '
+                    ORDER BY rq.reportequimicosevaluacion_punto ASC
+                ');
+            } else {
+                $puntos = DB::select('
+                    SELECT
+                        rq.id,
+                        rq.proyecto_id,
+                        rq.registro_id,
+                        IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+                        IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+                        IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+                        IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+                        (
+                            CASE
+                                WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+                                ELSE cg.catgerencia_nombre
+                            END
+                        ) AS gerencia_activo,
+                        ra.reportequimicosarea_instalacion,
+                        ra.reportequimicosarea_nombre,
+                        rc.reportequimicoscategoria_nombre,
+                        rq.reportequimicosevaluacion_nombre,
+                        rq.reportequimicosevaluacion_anios,
+                        rq.reportequimicosevaluacion_antiguedadgeneral,
+                        rq.reportequimicosevaluacion_antiguedadcategoria,
+                        rq.reportequimicosevaluacion_horariotrabajo,
+                        rq.reportequimicosevaluacion_ficha,
+                        rq.reportequimicosevaluacion_geo,
+                        rq.reportequimicosevaluacion_total,
+                        rq.reportequimicosevaluacion_punto,
+                        rp.reportequimicosevaluacionparametro_parametro AS tipo,
+                        rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+                        rp.reportequimicosevaluacionparametro_unidad AS unidad_vle,
+                        rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
+                    FROM reportequimicosevaluacion rq
+                    LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+                    LEFT JOIN catregion cr ON p.catregion_id = cr.id
+                    LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+                    LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+                    LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+                    LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
+                    LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
+                    LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+                    WHERE rq.proyecto_id = ' . $proyecto_id . '
+                    AND rq.registro_id = ' . $reporteregistro_id . '
+                    ORDER BY rq.reportequimicosevaluacion_punto ASC
+                ');
+            }
+
+            $numero_registro = 0;
+            foreach ($puntos as $value) {
+                $numero_registro++;
+                $value->numero_registro = $numero_registro;
+                $value->DEPARTAMENTO_MEL = $departamento;
+
+                // Evaluar cumplimiento
+                $value->cumplimiento = $this->evaluarCumplimiento(
+                    $value->resultado_concentracion,
+                    $value->referencia_vle
+                );
+            }
+
+            return response()->json([
+                'data' => $puntos,
+                'total' => count($puntos),
+                'msj' => 'Datos consultados correctamente'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => [],
+                'total' => 0,
+                'msj' => 'Error: ' . $e->getMessage()
+            ]);
         }
-
-        $departamento = DB::table('departamentos_meldraft')
-            ->where('proyecto_id', $proyecto_id)
-            ->value('DEPARTAMENTO_MEL');
-
-        if (!$departamento) {
-            $departamento = "No tiene departamento guardado";
-        }
-
-        if (($areas_poe + 0) == 1) {
-            $puntos = DB::select('
-                SELECT
-                    rq.id,
-                    rq.proyecto_id,
-                    rq.registro_id,
-                    IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
-                    IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
-                    IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
-                    IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
-                    (
-                        CASE
-                            WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
-                            ELSE cg.catgerencia_nombre
-                        END
-                    ) AS gerencia_activo,
-                    ra.reportearea_instalacion AS reportequimicosarea_instalacion,
-                    ra.reportearea_nombre AS reportequimicosarea_nombre,
-                    rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
-                    rq.reportequimicosevaluacion_nombre,
-                    rq.reportequimicosevaluacion_anios,
-                    rq.reportequimicosevaluacion_antiguedadgeneral,
-                    rq.reportequimicosevaluacion_antiguedadcategoria,
-                    rq.reportequimicosevaluacion_horariotrabajo,
-                    rq.reportequimicosevaluacion_ficha,
-                    rq.reportequimicosevaluacion_geo,
-                    rq.reportequimicosevaluacion_total,
-                    rq.reportequimicosevaluacion_punto,
-                    rp.reportequimicosevaluacionparametro_parametro AS tipo,
-                    rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
-                    rp.reportequimicosevaluacionparametro_unidad AS unidad_vle,
-                    rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
-                FROM reportequimicosevaluacion rq
-                LEFT JOIN proyecto p ON rq.proyecto_id = p.id
-                LEFT JOIN catregion cr ON p.catregion_id = cr.id
-                LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
-                LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
-                LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
-                LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
-                LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
-                LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
-                WHERE rq.proyecto_id = ' . $proyecto_id . '
-                AND rq.registro_id = ' . $reporteregistro_id . '
-                ORDER BY rq.reportequimicosevaluacion_punto ASC
-            ');
-        } else {
-            $puntos = DB::select('
-                SELECT
-                    rq.id,
-                    rq.proyecto_id,
-                    rq.registro_id,
-                    IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
-                    IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
-                    IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
-                    IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
-                    (
-                        CASE
-                            WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
-                            ELSE cg.catgerencia_nombre
-                        END
-                    ) AS gerencia_activo,
-                    ra.reportequimicosarea_instalacion,
-                    ra.reportequimicosarea_nombre,
-                    rc.reportequimicoscategoria_nombre,
-                    rq.reportequimicosevaluacion_nombre,
-                    rq.reportequimicosevaluacion_anios,
-                    rq.reportequimicosevaluacion_antiguedadgeneral,
-                    rq.reportequimicosevaluacion_antiguedadcategoria,
-                    rq.reportequimicosevaluacion_horariotrabajo,
-                    rq.reportequimicosevaluacion_ficha,
-                    rq.reportequimicosevaluacion_geo,
-                    rq.reportequimicosevaluacion_total,
-                    rq.reportequimicosevaluacion_punto,
-                    rp.reportequimicosevaluacionparametro_parametro AS tipo,
-                    rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
-                    rp.reportequimicosevaluacionparametro_unidad AS unidad_vle,
-                    rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
-                FROM reportequimicosevaluacion rq
-                LEFT JOIN proyecto p ON rq.proyecto_id = p.id
-                LEFT JOIN catregion cr ON p.catregion_id = cr.id
-                LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
-                LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
-                LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
-                LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
-                LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
-                LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
-                WHERE rq.proyecto_id = ' . $proyecto_id . '
-                AND rq.registro_id = ' . $reporteregistro_id . '
-                ORDER BY rq.reportequimicosevaluacion_punto ASC
-            ');
-        }
-
-        $numero_registro = 0;
-        foreach ($puntos as $value) {
-            $numero_registro++;
-            $value->numero_registro = $numero_registro;
-            $value->DEPARTAMENTO_MEL = $departamento;
-
-            // Evaluar cumplimiento
-            $value->cumplimiento = $this->evaluarCumplimiento(
-                $value->resultado_concentracion,
-                $value->referencia_vle
-            );
-        }
-
-        return response()->json([
-            'data' => $puntos,
-            'total' => count($puntos),
-            'msj' => 'Datos consultados correctamente'
-        ]);
-    } catch (Exception $e) {
-        return response()->json([
-            'data' => [],
-            'total' => 0,
-            'msj' => 'Error: ' . $e->getMessage()
-        ]);
     }
-}
 
-/**
- * Evalúa el cumplimiento normativo
- */
-private function evaluarCumplimiento($concentracion, $valorLimite)
-{
-    try {
-        if ($concentracion === null || $valorLimite === null) {
-            return "-";
+    private function evaluarCumplimiento($concentracion, $valorLimite)
+    {
+        try {
+            if ($concentracion === null || $valorLimite === null) {
+                return "-";
+            }
+
+            $concStr = trim($concentracion);
+            $limStr = trim($valorLimite);
+
+            $concVal = floatval(str_replace(['<', '>', '='], '', $concStr));
+            $limVal = floatval(str_replace(['<', '>', '='], '', $limStr));
+
+            if ($limVal == 0) return "No aplica";
+            if (str_contains($concStr, '<')) return "Cumple";
+            if (str_contains($concStr, '>')) return "No cumple";
+
+            return ($concVal <= $limVal) ? "Cumple" : "No cumple";
+        } catch (\Throwable $th) {
+            return "Indeterminado";
         }
-
-        $concStr = trim($concentracion);
-        $limStr = trim($valorLimite);
-
-        $concVal = floatval(str_replace(['<', '>', '='], '', $concStr));
-        $limVal = floatval(str_replace(['<', '>', '='], '', $limStr));
-
-        if ($limVal == 0) return "No aplica";
-        if (str_contains($concStr, '<')) return "Cumple";
-        if (str_contains($concStr, '>')) return "No cumple";
-
-        return ($concVal <= $limVal) ? "Cumple" : "No cumple";
-    } catch (\Throwable $th) {
-        return "Indeterminado";
     }
-}
-
-
-
-
 
     public function guardarmeldraft(Request $request)
     {
@@ -633,7 +480,6 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
         }
     }
 
-
     public function verificarmeldraft($proyecto_id)
     {
         $existe = DB::table('departamentos_meldraft')->where('proyecto_id', $proyecto_id)->exists();
@@ -648,16 +494,9 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
         ], 404);
     }
 
-
-
-
-
-
-
     public function exportarMeldraft($proyecto_id)
     {
         try {
-            // 🔹 Buscar último registro
             $registro = DB::table('reportequimicosgrupos')
                 ->where('proyecto_id', $proyecto_id)
                 ->select('registro_id')
@@ -670,12 +509,10 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
 
             $reporteregistro_id = $registro->registro_id;
 
-            // 🔹 Obtener departamento
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? "No tiene departamento guardado";
 
-            // 🔹 Consulta principal
             $puntos = DB::select("
             SELECT
                 rq.id,
@@ -707,7 +544,6 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
                 return response()->json(['success' => false, 'message' => 'No hay datos para exportar.']);
             }
 
-            // 🔹 Cargar plantilla
             $templatePath = storage_path('app/plantillas_reportes/proyecto_infomes/plantillla_meldraft.xlsx');
             if (!file_exists($templatePath)) {
                 return response()->json(['success' => false, 'message' => 'No se encontró la plantilla Excel.']);
@@ -719,7 +555,6 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
             $spreadsheet = $reader->load($templatePath);
             $sheet = $spreadsheet->getActiveSheet();
 
-            // 🔹 Colores encabezado
             $blueHeader = [
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
@@ -749,7 +584,6 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
             $sheet->getStyle('B3:K5')->applyFromArray($blueHeader);
             $sheet->getStyle('L3:O5')->applyFromArray($purpleHeader);
 
-            // 🔹 Bordes y alineación para los datos
             $borderStyle = [
                 'borders' => [
                     'allBorders' => [
@@ -833,6 +667,113 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
             ]);
         }
     }
+
+    
+    
+    //////////////// MATIRZ DE RECOMENDACIONES ////////////////
+
+    public function reportematrizrecovista($proyecto_id)
+    {
+        $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+
+        //===================================================
+
+
+        // $recsensorial = recsensorialModel::with(['catcontrato', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+        $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+
+        // Catalogos
+        $catregion = catregionModel::get();
+        $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
+        $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
+        $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+        $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->get();
+
+
+        // Vista
+        return view('reportes.parametros.reportematrizreco', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'estatus'));
+    }
+
+
+
+
+    public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
+    {
+        try {
+            $numero_registro = 0;
+            $data = [];
+
+            if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+                $registro = DB::table('reportequimicosgrupos')
+                    ->where('proyecto_id', $proyecto_id)
+                    ->select('registro_id')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                if ($registro) {
+                    $reporteregistro_id = $registro->registro_id;
+                } else {
+                    return response()->json([
+                        'data' => [],
+                        'success' => false,
+                        'mensaje' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos.'
+                    ]);
+                }
+            }
+
+            $departamento = DB::table('departamentos_meldraft')
+                ->where('proyecto_id', $proyecto_id)
+                ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
+
+            $areas = DB::select("
+            SELECT
+                rq.id,
+                rq.proyecto_id,
+                rq.registro_id,
+                ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+                ra.reportearea_nombre AS reportequimicosarea_nombre,
+                rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                rq.reportequimicosevaluacion_ficha,
+                rq.reportequimicosevaluacion_recomendaciones AS recomendaciones
+            FROM reportequimicosevaluacion rq
+            LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+            LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+            WHERE rq.proyecto_id = $proyecto_id
+              AND rq.registro_id = $reporteregistro_id
+            ORDER BY ra.reportearea_nombre ASC
+        ");
+
+            foreach ($areas as $value) {
+                $numero_registro++;
+
+                $data[] = [
+                    'numero_registro' => $numero_registro,
+                    'DEPARTAMENTO_MEL' => $departamento,
+                    'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
+                    'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
+                    'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
+                    'reportequimicosevaluacion_ficha' => $value->reportequimicosevaluacion_ficha ?? '-',
+                    'nombre_agente' => 'Químico', // ← 🔹 Valor fijo solicitado
+                    'recomendaciones' => $value->recomendaciones ?? '-'
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'mensaje' => 'Datos de matriz de recomendaciones cargados correctamente.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'mensaje' => 'Error al consultar matriz de recomendaciones: ' . $e->getMessage(),
+                'linea' => $e->getLine(),
+                'data' => []
+            ]);
+        }
+    }
+
 
 
     /**
