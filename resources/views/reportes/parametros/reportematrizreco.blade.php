@@ -48,7 +48,7 @@
                 <div class="text-center mt-3">
                     <button type="submit"
                         class="btn btn-danger waves-effect waves-light botoninforme"
-                        id="botonguardar_reporte_matriz">
+                        id="btn_guardar_recomendaciones">
                         Guardar <i class="fa fa-save"></i>
                     </button>
 
