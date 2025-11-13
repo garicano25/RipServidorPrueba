@@ -819,14 +819,83 @@ class reportesController extends Controller
 
 
 
+    public function quimicosnombre($proyecto_id, $reporteregistro_id)
+    {
+        $quimicos = DB::select('SELECT
+                                    reportequimicosgrupos.proyecto_id,
+                                    reportequimicosgrupos.registro_id,
+                                    reportequimicosgrupos.proveedor_id,
+                                    proveedor.proveedor_NombreComercial,
+                                    reportequimicosgrupos.catreportequimicospartidas_id,
+                                    catreportequimicospartidas.catreportequimicospartidas_numero,
+                                    catreportequimicospartidas.catreportequimicospartidas_descripcion,
+                                    reportequimicosgrupos.reportequimicosproyecto_id,
+                                    reportequimicosproyecto.reportequimicosproyecto_parametro 
+                                FROM
+                                    reportequimicosgrupos
+                                    LEFT JOIN proveedor ON reportequimicosgrupos.proveedor_id = proveedor.id
+                                    LEFT JOIN catreportequimicospartidas ON reportequimicosgrupos.catreportequimicospartidas_id = catreportequimicospartidas.id
+                                    LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
+                                WHERE
+                                    reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
+                                    AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
+                                ORDER BY
+                                    reportequimicosgrupos.catreportequimicospartidas_id ASC,
+                                    reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
+
+
+        if (count($quimicos) == 0) {
+            $quimicos = DB::select('SELECT
+                                        reportequimicosproyecto.id,
+                                        reportequimicosproyecto.proyecto_id,
+                                        reportequimicosproyecto.registro_id,
+                                        reportequimicosproyecto.reportequimicosproyecto_parametro 
+                                    FROM
+                                        reportequimicosproyecto 
+                                    WHERE
+                                        reportequimicosproyecto.proyecto_id = ' . $proyecto_id . ' 
+                                        AND reportequimicosproyecto.registro_id = ' . $reporteregistro_id . '
+                                    ORDER BY
+                                        reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
+
+
+            if (count($quimicos) == 0) {
+                $quimicos = DB::select('SELECT
+                                            reportequimicosproyecto.id,
+                                            reportequimicosproyecto.proyecto_id,
+                                            reportequimicosproyecto.registro_id,
+                                            reportequimicosproyecto.reportequimicosproyecto_parametro 
+                                        FROM
+                                            reportequimicosproyecto 
+                                        WHERE
+                                            reportequimicosproyecto.proyecto_id = ' . $proyecto_id . '
+                                        ORDER BY
+                                            reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
+            }
+        }
+
+
+        $quimicos_nombre = '';
+        foreach ($quimicos as $key => $value) {
+            if (($key + 0) > 0) {
+                $quimicos_nombre .= ', ' . $value->reportequimicosproyecto_parametro;
+            } else {
+                $quimicos_nombre .= $value->reportequimicosproyecto_parametro;
+            }
+        }
+
+        return $quimicos_nombre;
+    }
+
+
+
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
-            $idAgente = 15; // Químico
+            $idAgente = 15; 
 
-            // 🔹 Cargar proyecto y recsensorial (necesarios para el reemplazo dinámico)
             $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
             $recsensorial = $proyecto ? $proyecto->recsensorial : null;
 
@@ -838,7 +907,6 @@ class reportesController extends Controller
                 ]);
             }
 
-            // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
                 $registro = DB::table('reportequimicosgrupos')
                     ->where('proyecto_id', $proyecto_id)
@@ -849,19 +917,19 @@ class reportesController extends Controller
                 $reporteregistro_id = $registro->registro_id ?? 0;
             }
 
-            // 🔹 Departamento MEL
+            $quimicos_nombre = $this->quimicosnombre($proyecto_id, $reporteregistro_id);
+
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Recomendaciones base del agente químico
             $recomendaciones = DB::table('reporterecomendaciones')
                 ->where('proyecto_id', $proyecto_id)
                 ->where('agente_id', $idAgente)
                 ->select('id', 'reporterecomendaciones_descripcion')
                 ->get();
 
-            // 🔹 Consulta igual a tabla 5.5 (solo activas)
+       
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
@@ -893,12 +961,10 @@ class reportesController extends Controller
                 reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Recorremos solo las áreas activas
             foreach ($areas as $value) {
                 if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo === 'activo') {
                     $numero_registro++;
 
-                    // 🔸 Buscar recomendaciones guardadas previamente
                     $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
                         ->where('proyecto_id', $proyecto_id)
                         ->where('area_id', $value->area_id)
@@ -911,7 +977,6 @@ class reportesController extends Controller
 
                         $seleccionadas = collect($decoded)
                             ->filter(function ($r) {
-                                // Acepta true, "true", 1
                                 return isset($r['seleccionado']) &&
                                     ($r['seleccionado'] === true ||
                                         $r['seleccionado'] === 'true' ||
@@ -922,14 +987,14 @@ class reportesController extends Controller
                             ->toArray();
                     }
 
-                    // 🔸 Generar bloque HTML de recomendaciones
+                  
                     $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
                     foreach ($recomendaciones as $r) {
                         $descripcionOriginal = $r->reporterecomendaciones_descripcion ?? '';
-                        // 🔸 Reemplazo dinámico con datos del proyecto y recsensorial
-                        $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $descripcionOriginal);
-                        $descripcion = htmlspecialchars($descripcionTexto);
 
+                        $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $descripcionOriginal);
+
+                        $descripcion = htmlspecialchars($descripcionTexto);
                         $isChecked = in_array((string)$r->id, $seleccionadas) ? 'checked' : '';
 
                         $bloque_recomendaciones .= '
@@ -945,7 +1010,6 @@ class reportesController extends Controller
                     }
                     $bloque_recomendaciones .= '</div>';
 
-                    // 🔸 Agregar fila al arreglo principal
                     $data[] = [
                         'numero_registro' => $numero_registro,
                         'area_id' => $value->area_id,
@@ -960,7 +1024,6 @@ class reportesController extends Controller
                 }
             }
 
-            // 🔹 Respuesta final
             return response()->json([
                 'success' => true,
                 'data' => $data,
