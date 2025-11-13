@@ -957,10 +957,11 @@ class reportesController extends Controller
         }
     }
 
+
     public function guardarMatrizRecomendaciones(Request $request)
     {
         try {
-            $data = $request->input('data'); // arreglo [{area_id, categoria_id, recomendaciones: [{id, seleccionado}]}]
+            $data = $request->input('data');
             $proyecto_id = $request->input('proyecto_id');
             $reporteregistro_id = $request->input('reporteregistro_id');
             $agente_id = 15;
@@ -976,7 +977,7 @@ class reportesController extends Controller
                     ],
                     [
                         'recomendaciones_json' => json_encode($fila['recomendaciones']),
-                        'updated_at' => now(),
+                        'updated_at' => now()
                     ]
                 );
             }
@@ -990,6 +991,7 @@ class reportesController extends Controller
             ]);
         }
     }
+
 
     /**
      * Display the specified resource.

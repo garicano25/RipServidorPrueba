@@ -99,17 +99,26 @@ function tabla_matrizreco(proyecto_id, reporteregistro_id, areas_poe) {
 
 
 
+$('#btn_guardar_recomendaciones').on('click', async function (e) {
+    e.preventDefault();
 
-$('#btn_guardar_recomendaciones').on('click', function() {
+    const proyecto_id = proyecto.id;
+    const reporteregistro_id = typeof reporteregistro_id !== 'undefined' ? reporteregistro_id : 0;
+
+    // ✅ Token CSRF directo (Laravel lo genera en Blade)
+    const _token = '{{ csrf_token() }}';
+
+    // Recolectar datos de la tabla
     const dataGuardar = [];
-
-    $('#tabla_matrizreco tbody tr').each(function() {
+    $('#tabla_matrizreco tbody tr').each(function () {
         const row = datatable_reporte_melreco.row(this).data();
-        const area_id = row.area_id;           
+        if (!row) return;
+
+        const area_id = row.area_id;
         const categoria_id = row.categoria_id;
 
         const recomendaciones = [];
-        $(this).find('.recomendacion_checkbox').each(function() {
+        $(this).find('.recomendacion_checkbox').each(function () {
             recomendaciones.push({
                 id: $(this).data('id'),
                 seleccionado: $(this).is(':checked')
@@ -123,24 +132,78 @@ $('#btn_guardar_recomendaciones').on('click', function() {
         });
     });
 
-    $.ajax({
-        url: '/guardarMatrizRecomendaciones',
-        type: 'POST',
-        data: {
-            proyecto_id: proyecto.id,
-            reporteregistro_id: reporteregistro_id,
-            data: dataGuardar
-        },
-        success: function(res) {
-            if (res.success) {
-                Swal.fire('Éxito', res.mensaje, 'success');
-            } else {
-                Swal.fire('Error', res.mensaje, 'error');
-            }
-        },
-        error: function(err) {
-            console.error(err);
-            Swal.fire('Error', 'No se pudo guardar las recomendaciones', 'error');
-        }
+    if (dataGuardar.length === 0) {
+        await Swal.fire({
+            title: 'Advertencia',
+            text: 'No hay registros de recomendaciones para guardar.',
+            icon: 'warning',
+            confirmButtonText: 'Entendido'
+        });
+        return;
+    }
+
+    // Confirmación
+    const confirmacion = await Swal.fire({
+        title: '¿Desea guardar las recomendaciones?',
+        text: 'Se almacenarán las selecciones realizadas para cada área y categoría.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
     });
+
+    if (!confirmacion.isConfirmed) return;
+
+    try {
+        const res = await $.ajax({
+            url: '/guardarMatrizRecomendaciones',
+            method: 'POST',
+            data: {
+                _token: _token, // ✅ Incluido manualmente
+                proyecto_id,
+                reporteregistro_id,
+                data: dataGuardar
+            },
+            beforeSend: function () {
+                $('#btn_guardar_recomendaciones')
+                    .prop('disabled', true)
+                    .html('<i class="fa fa-spinner fa-spin"></i> Guardando...');
+            }
+        });
+
+        if (res.success) {
+            await Swal.fire({
+                title: 'Éxito',
+                text: res.mensaje || 'Recomendaciones guardadas correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+
+            // 🔄 Recargar DataTable
+            if ($.fn.DataTable.isDataTable('#tabla_matrizreco')) {
+                $('#tabla_matrizreco').DataTable().ajax.reload(null, false);
+            }
+
+        } else {
+            await Swal.fire({
+                title: 'Error',
+                text: res.mensaje || 'No se pudieron guardar las recomendaciones.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+
+    } catch (err) {
+        console.error(err);
+        await Swal.fire({
+            title: 'Error',
+            text: 'Error de conexión al guardar las recomendaciones.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    } finally {
+        $('#btn_guardar_recomendaciones')
+            .prop('disabled', false)
+            .html('Guardar <i class="fa fa-save"></i>');
+    }
 });
