@@ -699,11 +699,108 @@ class reportesController extends Controller
 
 
 
+    // public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
+    // {
+    //     try {
+    //         $numero_registro = 0;
+    //         $data = [];
+
+    //         // 🔹 Si no viene un registro_id válido, obtener el más reciente
+    //         if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+    //             $registro = DB::table('reportequimicosgrupos')
+    //                 ->where('proyecto_id', $proyecto_id)
+    //                 ->select('registro_id')
+    //                 ->orderBy('created_at', 'desc')
+    //                 ->first();
+
+    //             if ($registro) {
+    //                 $reporteregistro_id = $registro->registro_id;
+    //             } else {
+    //                 return response()->json([
+    //                     'data' => [],
+    //                     'success' => false,
+    //                     'mensaje' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos.'
+    //                 ]);
+    //             }
+    //         }
+
+    //         // 🔹 Obtener el nombre del departamento
+    //         $departamento = DB::table('departamentos_meldraft')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
+
+    //         // 🔹 Consulta idéntica a la que usa la tabla 5.5 (ajustada para solo devolver campos necesarios)
+    //         $areas = DB::select("
+    //         SELECT
+    //             reportearea.proyecto_id,
+    //             reportearea.id,
+    //             reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
+    //             reportearea.reportearea_nombre AS reportequimicosarea_nombre,
+    //             reportearea.reportearea_porcientooperacion,
+    //             reporteareacategoria.reportecategoria_id AS reportequimicoscategoria_id,
+    //             reportecategoria.reportecategoria_orden AS reportequimicoscategoria_orden,
+    //             reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+    //             reporteareacategoria.reporteareacategoria_actividades AS reportequimicosareacategoria_actividades,
+    //             IFNULL((
+    //                 SELECT
+    //                     IF(reportequimicosareacategoria.reportequimicoscategoria_id, 'activo', '') AS checked
+    //                 FROM reportequimicosareacategoria
+    //                 WHERE reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
+    //                   AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
+    //                   AND reportequimicosareacategoria.reportequimicosareacategoria_poe = $reporteregistro_id
+    //                 LIMIT 1
+    //             ), '') AS activo
+    //         FROM reportearea
+    //         LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
+    //         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
+    //         WHERE reportearea.proyecto_id = $proyecto_id
+    //         ORDER BY
+    //             reportearea.reportearea_instalacion ASC,
+    //             reportearea.reportearea_nombre ASC,
+    //             reportecategoria.reportecategoria_orden ASC,
+    //             reportecategoria.reportecategoria_nombre ASC
+    //     ");
+
+    //         // 🔹 Recorrer resultados como en la tabla 5.5
+    //         foreach ($areas as $value) {
+    //             // Solo incluir las áreas activas y con porcentaje > 0
+    //             if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
+    //                 $numero_registro++;
+
+    //                 $data[] = [
+    //                     'numero_registro' => $numero_registro,
+    //                     'DEPARTAMENTO_MEL' => $departamento,
+    //                     'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
+    //                     'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
+    //                     'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
+    //                     'nombre_agente' => 'Químico',
+    //                     'recomendaciones' => '-' // (Placeholder, se llenará después)
+    //                 ];
+    //             }
+    //         }
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => $data,
+    //             'mensaje' => 'Datos de matriz de recomendaciones cargados correctamente.'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'mensaje' => 'Error al consultar matriz de recomendaciones: ' . $e->getMessage(),
+    //             'linea' => $e->getLine(),
+    //             'data' => []
+    //         ]);
+    //     }
+    // }
+
+
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
+            $idAgente = 15; // Químico
 
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
@@ -724,12 +821,18 @@ class reportesController extends Controller
                 }
             }
 
-            // 🔹 Obtener el nombre del departamento
+            // 🔹 Obtener el departamento MEL
             $departamento = DB::table('departamentos_meldraft')
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Consulta idéntica a la que usa la tabla 5.5 (ajustada para solo devolver campos necesarios)
+            // 🔹 Obtener las recomendaciones del agente químico
+            $recomendaciones = DB::table('reporterecomendaciones')
+                ->where('proyecto_id', $proyecto_id)
+                ->where('agente_id', $idAgente)
+                ->get();
+
+            // 🔹 Consulta base igual a la tabla 5.5
             $areas = DB::select("
             SELECT
                 reportearea.proyecto_id,
@@ -761,11 +864,26 @@ class reportesController extends Controller
                 reportecategoria.reportecategoria_nombre ASC
         ");
 
-            // 🔹 Recorrer resultados como en la tabla 5.5
+            // 🔹 Recorremos áreas y armamos el DataTable
             foreach ($areas as $value) {
-                // Solo incluir las áreas activas y con porcentaje > 0
                 if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
                     $numero_registro++;
+
+                    // 🔸 Armar bloque HTML con switch + textarea para recomendaciones
+                    $bloque_recomendaciones = '';
+                    foreach ($recomendaciones as $rec) {
+                        $bloque_recomendaciones .= '
+                        <div class="form-check form-switch mb-1">
+                            <input class="form-check-input switch-recomendacion" type="checkbox" id="rec_' . $numero_registro . '_' . $rec->id . '" data-id="' . $rec->id . '">
+                            <label class="form-check-label" for="rec_' . $numero_registro . '_' . $rec->id . '">' . htmlspecialchars($rec->reporterecomendaciones_descripcion) . '</label>
+                        </div>
+                    ';
+                    }
+
+                    // Opcionalmente podrías agregar un textarea al final
+                    $bloque_recomendaciones .= '
+                    <textarea class="form-control mt-2" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                ';
 
                     $data[] = [
                         'numero_registro' => $numero_registro,
@@ -774,7 +892,7 @@ class reportesController extends Controller
                         'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
                         'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
                         'nombre_agente' => 'Químico',
-                        'recomendaciones' => '-' // (Placeholder, se llenará después)
+                        'recomendaciones' => $bloque_recomendaciones
                     ];
                 }
             }
@@ -793,7 +911,6 @@ class reportesController extends Controller
             ]);
         }
     }
-
 
 
 
