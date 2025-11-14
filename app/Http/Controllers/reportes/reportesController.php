@@ -407,7 +407,6 @@ class reportesController extends Controller
                 $value->numero_registro = $numero_registro;
                 $value->DEPARTAMENTO_MEL = $departamento;
 
-                // Evaluar cumplimiento
                 $value->cumplimiento = $this->evaluarCumplimiento(
                     $value->resultado_concentracion,
                     $value->referencia_vle
@@ -698,122 +697,6 @@ class reportesController extends Controller
 
 
 
-
-
-
-    // public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
-    // {
-    //     try {
-    //         $numero_registro = 0;
-    //         $data = [];
-    //         $idAgente = 15; 
-
-    //         if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
-    //             $registro = DB::table('reportequimicosgrupos')
-    //                 ->where('proyecto_id', $proyecto_id)
-    //                 ->select('registro_id')
-    //                 ->orderBy('created_at', 'desc')
-    //                 ->first();
-
-    //             if ($registro) {
-    //                 $reporteregistro_id = $registro->registro_id;
-    //             } else {
-    //                 return response()->json([
-    //                     'data' => [],
-    //                     'success' => false,
-    //                     'mensaje' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos.'
-    //                 ]);
-    //             }
-    //         }
-
-    //         $departamento = DB::table('departamentos_meldraft')
-    //             ->where('proyecto_id', $proyecto_id)
-    //             ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
-
-    //         $recomendaciones = DB::table('reporterecomendaciones')
-    //             ->where('proyecto_id', $proyecto_id)
-    //             ->where('agente_id', $idAgente)
-    //             ->select('id', 'reporterecomendaciones_descripcion')
-    //             ->get();
-
-    //         $areas = DB::select("
-    //         SELECT
-    //             reportearea.proyecto_id,
-    //             reportearea.id,
-    //             reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
-    //             reportearea.reportearea_nombre AS reportequimicosarea_nombre,
-    //             reportearea.reportearea_porcientooperacion,
-    //             reporteareacategoria.reportecategoria_id AS reportequimicoscategoria_id,
-    //             reportecategoria.reportecategoria_orden AS reportequimicoscategoria_orden,
-    //             reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
-    //             reporteareacategoria.reporteareacategoria_actividades AS reportequimicosareacategoria_actividades,
-    //             IFNULL((
-    //                 SELECT
-    //                     IF(reportequimicosareacategoria.reportequimicoscategoria_id, 'activo', '') AS checked
-    //                 FROM reportequimicosareacategoria
-    //                 WHERE reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
-    //                   AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-    //                   AND reportequimicosareacategoria.reportequimicosareacategoria_poe = $reporteregistro_id
-    //                 LIMIT 1
-    //             ), '') AS activo
-    //         FROM reportearea
-    //         LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
-    //         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
-    //         WHERE reportearea.proyecto_id = $proyecto_id
-    //         ORDER BY
-    //             reportearea.reportearea_instalacion ASC,
-    //             reportearea.reportearea_nombre ASC,
-    //             reportecategoria.reportecategoria_orden ASC,
-    //             reportecategoria.reportecategoria_nombre ASC
-    //     ");
-
-    //         foreach ($areas as $value) {
-    //             if (($value->reportearea_porcientooperacion ?? 0) > 0 && $value->activo) {
-    //                 $numero_registro++;
-
-    //                 $bloque_recomendaciones = '<div class="contenedor-recomendaciones" data-recomendaciones="' . $numero_registro . '">';
-    //                 foreach ($recomendaciones as $r) {
-    //                     $descripcion = htmlspecialchars($r->reporterecomendaciones_descripcion);
-    //                     $bloque_recomendaciones .= '
-    //                     <div class="recomendacion-bloque mb-2">
-    //                         <div class="switch">
-    //                             <label>
-    //                                 <input type="checkbox" class="recomendacion_checkbox" data-id="' . $r->id . '">
-    //                                 <span class="lever switch-col-light-blue"></span>
-    //                             </label>
-    //                         </div>
-    //                         <textarea class="form-control" rows="5" readonly>' . $descripcion . '</textarea>
-    //                     </div>
-    //                 ';
-    //                 }
-    //                 $bloque_recomendaciones .= '</div>';
-
-    //                 $data[] = [
-    //                     'numero_registro' => $numero_registro,
-    //                     'DEPARTAMENTO_MEL' => $departamento,
-    //                     'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
-    //                     'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
-    //                     'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
-    //                     'nombre_agente' => 'Químico',
-    //                     'recomendaciones' => $bloque_recomendaciones
-    //                 ];
-    //             }
-    //         }
-
-    //         return response()->json([
-    //             'success' => true,
-    //             'data' => $data,
-    //             'mensaje' => 'Datos de matriz de recomendaciones cargados correctamente.'
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'mensaje' => 'Error al consultar matriz de recomendaciones: ' . $e->getMessage(),
-    //             'linea' => $e->getLine(),
-    //             'data' => []
-    //         ]);
-    //     }
-    // }
 
 
 
@@ -1122,236 +1005,8 @@ class reportesController extends Controller
     }
 
 
-    // public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
-    // {
-    //     try {
-    //         // 📦 1. Obtener datos de la matriz
-    //         $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
-    //         $json = $resultado->getData(true);
-    //         if (!$json['success']) {
-    //             return response()->json(['message' => 'No se encontraron datos para exportar.']);
-    //         }
 
-    //         $data = $json['data'];
-    //         if (empty($data)) {
-    //             return response()->json(['message' => 'No hay información disponible para exportar.']);
-    //         }
-
-    //         // 📄 2. Cargar plantilla base
-    //         $plantillaPath = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_melrecomendaciones.xlsx');
-    //         if (!file_exists($plantillaPath)) {
-    //             return response()->json(['message' => 'No se encontró la plantilla del reporte.']);
-    //         }
-
-    //         $spreadsheet = IOFactory::load($plantillaPath);
-    //         $sheet = $spreadsheet->getActiveSheet();
-
-    //         $filaInicio = 9;
-    //         $contador = 1;
-
-    //         // 🔹 3. Recorrer las áreas y generar filas
-    //         foreach ($data as $item) {
-    //             $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
-    //                 ->where('proyecto_id', $proyecto_id)
-    //                 ->where('area_id', $item['area_id'])
-    //                 ->where('categoria_id', $item['categoria_id'])
-    //                 ->value('recomendaciones_json');
-
-    //             $recomendaciones = [];
-    //             if ($recomendaciones_guardadas) {
-    //                 $recomendaciones = json_decode($recomendaciones_guardadas, true);
-    //             }
-
-    //             if (empty($recomendaciones)) {
-    //                 // Si no hay recomendaciones, se genera una fila vacía
-    //                 $sheet->setCellValue("A{$filaInicio}", $contador);
-    //                 $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
-    //                 $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
-    //                 $sheet->setCellValue("D{$filaInicio}", $item['reportequimicosarea_nombre']);
-    //                 $sheet->setCellValue("E{$filaInicio}", $item['reportequimicoscategoria_nombre']);
-    //                 $sheet->setCellValue("F{$filaInicio}", $item['nombre_agente']);
-    //                 $sheet->setCellValue("G{$filaInicio}", 'N/A');
-    //                 $filaInicio++;
-    //                 $contador++;
-    //             } else {
-    //                 foreach ($recomendaciones as $r) {
-    //                     // Obtener descripción de la recomendación
-    //                     $rec = DB::table('reporterecomendaciones')
-    //                         ->where('id', $r['id'])
-    //                         ->value('reporterecomendaciones_descripcion');
-
-    //                     $descripcion = $rec ? $rec : 'N/A';
-    //                     $estado = ($r['seleccionado'] === 'true' || $r['seleccionado'] === true) ? 'Sí' : 'No';
-
-    //                     // Insertar fila
-    //                     $sheet->setCellValue("A{$filaInicio}", $contador);
-    //                     $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
-    //                     $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
-    //                     $sheet->setCellValue("D{$filaInicio}", $item['reportequimicosarea_nombre']);
-    //                     $sheet->setCellValue("E{$filaInicio}", $item['reportequimicoscategoria_nombre']);
-    //                     $sheet->setCellValue("F{$filaInicio}", $item['nombre_agente']);
-    //                     $sheet->setCellValue("G{$filaInicio}", $descripcion);
-    //                     $sheet->setCellValue("H{$filaInicio}", $estado);
-
-    //                     // Ajustes visuales básicos
-    //                     $sheet->getStyle("A{$filaInicio}:H{$filaInicio}")
-    //                         ->getAlignment()->setVertical(Alignment::VERTICAL_CENTER)->setWrapText(true);
-
-    //                     $filaInicio++;
-    //                     $contador++;
-    //                 }
-    //             }
-    //         }
-
-    //         // 🔹 4. Combinar celdas agrupadas
-    //         // B: Departamento (todo igual)
-    //         $ultimaFila = $filaInicio - 1;
-    //         $sheet->mergeCells("B9:B{$ultimaFila}");
-    //         $sheet->mergeCells("C9:C{$ultimaFila}");
-
-    //         // 🔹 5. Guardar archivo temporal y descargar
-    //         $nombreArchivo = 'Matriz_Recomendaciones_' . date('Ymd_His') . '.xlsx';
-    //         $tempPath = storage_path('app/public/' . $nombreArchivo);
-
-    //         $writer = new Xlsx($spreadsheet);
-    //         $writer->save($tempPath);
-
-    //         return response()->download($tempPath)->deleteFileAfterSend(true);
-    //     } catch (\Exception $e) {
-    //         \Log::error('Error al exportar matriz recomendaciones: ' . $e->getMessage());
-    //         return response()->json(['message' => 'Error al generar Excel: ' . $e->getMessage()]);
-    //     }
-    // }
-
-
-
-
-
-    // public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
-    // {
-    //     try {
-    //         $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
-    //         $recsensorial = $proyecto ? $proyecto->recsensorial : null;
-
-    //         if (!$proyecto || !$recsensorial) {
-    //             return response()->json(['message' => 'No se encontró información del proyecto o reconocimiento sensorial.']);
-    //         }
-
-    //         $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
-    //         $json = $resultado->getData(true);
-    //         if (empty($json['success']) || empty($json['data'])) {
-    //             return response()->json(['message' => 'No hay información disponible para exportar.']);
-    //         }
-
-    //         $data = $json['data'];
-    //         $quimicos_nombre = $this->quimicosnombre($proyecto_id, $reporteregistro_id);
-
-    //         $plantillaPath = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_melrecomendaciones.xlsx');
-    //         if (!file_exists($plantillaPath)) {
-    //             return response()->json(['message' => 'No se encontró la plantilla del reporte.']);
-    //         }
-
-    //         $spreadsheet = IOFactory::load($plantillaPath);
-    //         $sheet = $spreadsheet->getActiveSheet();
-
-    //         $sheet->getStyle('A8:M8')->applyFromArray([
-    //             'fill' => [
-    //                 'fillType' => Fill::FILL_SOLID,
-    //                 'color' => ['rgb' => 'BFBFBF']
-    //             ],
-    //             'alignment' => [
-    //                 'horizontal' => Alignment::HORIZONTAL_CENTER,
-    //                 'vertical' => Alignment::VERTICAL_CENTER
-    //             ],
-    //             'font' => [
-    //                 'bold' => true
-    //             ],
-    //             'borders' => [
-    //                 'allBorders' => [
-    //                     'borderStyle' => Border::BORDER_THIN
-    //                 ]
-    //             ]
-    //         ]);
-
-    //         $filaInicio = 9;
-    //         $contador = 1;
-
-    //         foreach ($data as $item) {
-    //             $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
-    //                 ->where('proyecto_id', $proyecto_id)
-    //                 ->where('area_id', $item['area_id'])
-    //                 ->where('categoria_id', $item['categoria_id'])
-    //                 ->value('recomendaciones_json');
-
-    //             $recomendaciones = [];
-    //             if ($recomendaciones_guardadas) {
-    //                 $recomendaciones = json_decode($recomendaciones_guardadas, true);
-    //             }
-
-    //             $recomendacionesFiltradas = collect($recomendaciones)
-    //                 ->filter(fn($r) => isset($r['seleccionado']) && ($r['seleccionado'] === 'true' || $r['seleccionado'] === true))
-    //                 ->values();
-
-    //             if ($recomendacionesFiltradas->isEmpty()) {
-    //                 continue;
-    //             }
-
-    //             foreach ($recomendacionesFiltradas as $r) {
-    //                 $rec = DB::table('reporterecomendaciones')
-    //                     ->where('id', $r['id'])
-    //                     ->value('reporterecomendaciones_descripcion');
-
-    //                 if ($rec) {
-    //                     $descripcion = $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $rec);
-    //                 } else {
-    //                     $descripcion = 'N/A';
-    //                 }
-
-    //                 $sheet->setCellValue("A{$filaInicio}", $contador);
-    //                 $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
-    //                 $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
-    //                 $sheet->setCellValue("D{$filaInicio}", $item['reportequimicosarea_nombre']);
-    //                 $sheet->setCellValue("E{$filaInicio}", $item['reportequimicoscategoria_nombre']);
-    //                 $sheet->setCellValue("F{$filaInicio}", $item['nombre_agente']);
-    //                 $sheet->setCellValue("G{$filaInicio}", $descripcion);
-    //                 $sheet->setCellValue("H{$filaInicio}", '');
-
-    //                 $sheet->getRowDimension($filaInicio)->setRowHeight(60.9, 'pt');
-
-    //                 $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
-    //                     ->getAlignment()
-    //                     ->setVertical(Alignment::VERTICAL_CENTER)
-    //                     ->setWrapText(true);
-
-    //                 $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
-    //                     ->getBorders()
-    //                     ->getAllBorders()
-    //                     ->setBorderStyle(Border::BORDER_THIN);
-
-    //                 $filaInicio++;
-    //                 $contador++;
-    //             }
-    //         }
-
-    //         $ultimaFila = $filaInicio - 1;
-    //         if ($ultimaFila >= 9) {
-    //             $sheet->mergeCells("B9:B{$ultimaFila}");
-    //             $sheet->mergeCells("C9:C{$ultimaFila}");
-    //         }
-
-    //         $nombreArchivo = 'Matriz_Recomendaciones_' . date('Ymd_His') . '.xlsx';
-    //         $tempPath = storage_path('app/public/' . $nombreArchivo);
-
-    //         $writer = new Xlsx($spreadsheet);
-    //         $writer->save($tempPath);
-
-    //         return response()->download($tempPath)->deleteFileAfterSend(true);
-    //     } catch (\Exception $e) {
-    //         \Log::error('Error al exportar matriz recomendaciones: ' . $e->getMessage() . ' en línea ' . $e->getLine());
-    //         return response()->json(['message' => 'Error al generar Excel: ' . $e->getMessage()]);
-    //     }
-    // }
-
+  
 
 
     public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
@@ -1365,7 +1020,6 @@ class reportesController extends Controller
             }
 
             $nombreInstalacion = $proyecto->proyecto_clienteinstalacion ?? 'SinInstalacion';
-
             $nombreInstalacion = str_replace(
                 ['\\', '/', ':', '*', '?', '"', '<', '>', '|', ' '],
                 '_',
@@ -1374,6 +1028,7 @@ class reportesController extends Controller
 
             $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
             $json = $resultado->getData(true);
+
             if (empty($json['success']) || empty($json['data'])) {
                 return response()->json(['message' => 'No hay información disponible para exportar.']);
             }
@@ -1422,9 +1077,7 @@ class reportesController extends Controller
                     ->filter(fn($r) => isset($r['seleccionado']) && ($r['seleccionado'] === 'true' || $r['seleccionado'] === true))
                     ->values();
 
-                if ($recomendacionesFiltradas->isEmpty()) {
-                    continue;
-                }
+                if ($recomendacionesFiltradas->isEmpty()) continue;
 
                 foreach ($recomendacionesFiltradas as $r) {
                     $rec = DB::table('reporterecomendaciones')
@@ -1445,10 +1098,12 @@ class reportesController extends Controller
                     $sheet->setCellValue("H{$filaInicio}", '');
 
                     $sheet->getRowDimension($filaInicio)->setRowHeight(60.9, 'pt');
+
                     $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
                         ->getAlignment()
                         ->setVertical(Alignment::VERTICAL_CENTER)
                         ->setWrapText(true);
+
                     $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
                         ->getBorders()
                         ->getAllBorders()
@@ -1465,7 +1120,7 @@ class reportesController extends Controller
                 $sheet->mergeCells("C9:C{$ultimaFila}");
             }
 
-            $nombreArchivo = "Matriz_Recomendaciones_{$nombreInstalacion}_" . date('Ymd_His') . '.xlsx';
+            $nombreArchivo = "Matriz recomendaciones - {$nombreInstalacion}";
             $tempPath = storage_path('app/public/' . $nombreArchivo);
 
             $carpetaPublic = storage_path('app/public');
@@ -1476,12 +1131,16 @@ class reportesController extends Controller
             $writer = new Xlsx($spreadsheet);
             $writer->save($tempPath);
 
-            return response()->download($tempPath)->deleteFileAfterSend(true);
+            return response()->download($tempPath, $nombreArchivo, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ])->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            \Log::error('Error al exportar matriz recomendaciones: ' . $e->getMessage() . ' en línea ' . $e->getLine());
+            \Log::error('Error al exportar matriz recomendaciones: ' . $e->getMessage() . ' línea ' . $e->getLine());
             return response()->json(['message' => 'Error al generar Excel: ' . $e->getMessage()]);
         }
     }
+
+
 
     /**
      * Display the specified resource.

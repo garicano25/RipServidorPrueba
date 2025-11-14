@@ -205,6 +205,7 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
 
 
 
+
 $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
     e.preventDefault();
 
@@ -224,82 +225,92 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                     cancelButtonText: "Cancelar",
                     reverseButtons: true
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#btnexportarmelrecomendaciones').prop('disabled', true);
+                    if (!result.isConfirmed) return;
 
-                        Swal.fire({
-                            title: "Generando reporte...",
-                            text: "Espere un momento mientras se prepara el documento.",
-                            icon: "info",
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            didOpen: () => Swal.showLoading()
-                        });
+                    $('#btnexportarmelrecomendaciones').prop('disabled', true);
 
-                        const url = '/exportarMatrizRecomendaciones/' + proyecto.id + '/' + reporteregistro_id;
+                    Swal.fire({
+                        title: "Generando reporte...",
+                        text: "Espere un momento mientras se prepara el documento.",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => Swal.showLoading()
+                    });
 
-                        $.ajax({
-                            url: url,
-                            method: 'GET',
-                            xhrFields: { responseType: 'blob' },
-                            success: function (data, status, xhr) {
-                                const contentType = xhr.getResponseHeader('Content-Type') || '';
-                                if (contentType.includes('application/json')) {
-                                    const reader = new FileReader();
-                                    reader.onload = function () {
-                                        try {
-                                            const response = JSON.parse(reader.result);
-                                            Swal.fire({
-                                                title: "Atención",
-                                                text: response.message || "No se puede generar el reporte.",
-                                                icon: "warning"
-                                            });
-                                        } catch {
-                                            Swal.fire({
-                                                title: "Error",
-                                                text: "Respuesta inválida del servidor.",
-                                                icon: "error"
-                                            });
-                                        }
-                                        $('#btnexportarmelrecomendaciones').prop('disabled', false);
-                                    };
-                                    reader.readAsText(data);
-                                    return;
-                                }
+                    const url = '/exportarMatrizRecomendaciones/' + proyecto.id + '/' + reporteregistro_id;
 
-                                // ✅ Descargar el archivo Excel
-                                const a = document.createElement('a');
-                                const urlDescarga = window.URL.createObjectURL(data);
-                                a.href = urlDescarga;
-                                a.download = 'Matriz_Recomendaciones.xlsx';
-                                document.body.appendChild(a);
-                                a.click();
-                                a.remove();
-                                window.URL.revokeObjectURL(urlDescarga);
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        xhrFields: { responseType: 'blob' },
+                        success: function (data, status, xhr) {
+                            const contentType = xhr.getResponseHeader('Content-Type') || '';
 
-                                Swal.fire({
-                                    title: "Éxito",
-                                    text: "El archivo 'Matriz_Recomendaciones.xlsx' se descargó correctamente.",
-                                    icon: "success"
-                                });
-
-                                $('#btnexportarmelrecomendaciones').prop('disabled', false);
-                            },
-                            error: function () {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: "No se pudo generar el reporte.",
-                                    icon: "error"
-                                });
-                                $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                            if (contentType.includes('application/json')) {
+                                const reader = new FileReader();
+                                reader.onload = function () {
+                                    try {
+                                        const response = JSON.parse(reader.result);
+                                        Swal.fire({
+                                            title: "Atención",
+                                            text: response.message || "No se puede generar el reporte.",
+                                            icon: "warning"
+                                        });
+                                    } catch {
+                                        Swal.fire({
+                                            title: "Error",
+                                            text: "Respuesta inválida del servidor.",
+                                            icon: "error"
+                                        });
+                                    }
+                                    $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                                };
+                                reader.readAsText(data);
+                                return;
                             }
-                        });
-                    }
+
+                            let nombreArchivo = "Matriz_Recomendaciones.xlsx";
+                            const disposition = xhr.getResponseHeader('Content-Disposition');
+                            if (disposition && disposition.indexOf('filename=') !== -1) {
+                                nombreArchivo = disposition
+                                    .split('filename=')[1]
+                                    .replace(/['"]/g, '')
+                                    .trim();
+                            }
+
+                            const a = document.createElement('a');
+                            const urlDescarga = window.URL.createObjectURL(data);
+                            a.href = urlDescarga;
+                            a.download = nombreArchivo;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                            window.URL.revokeObjectURL(urlDescarga);
+
+                            Swal.fire({
+                                title: "Éxito",
+                                text: `El archivo '${nombreArchivo}' se descargó correctamente.`,
+                                icon: "success",
+                                confirmButtonText: "Cerrar"
+                            });
+
+                            $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Error",
+                                text: "No se pudo generar el reporte.",
+                                icon: "error"
+                            });
+                            $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                        }
+                    });
                 });
             } else {
                 Swal.fire({
                     title: "Atención",
-                    text: respuesta.message,
+                    text: respuesta.message || "No se puede verificar la matriz.",
                     icon: "warning"
                 });
             }
