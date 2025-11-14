@@ -249,7 +249,6 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                         success: function (data, status, xhr) {
                             const contentType = xhr.getResponseHeader('Content-Type') || '';
 
-                            // ⚠️ Si devuelve JSON (error del servidor)
                             if (contentType.includes('application/json')) {
                                 const reader = new FileReader();
                                 reader.onload = function () {
@@ -273,7 +272,6 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                                 return;
                             }
 
-                            // ✅ Obtener nombre real del archivo desde la cabecera HTTP
                             let nombreArchivo = "Matriz_Recomendaciones.xlsx";
                             const disposition = xhr.getResponseHeader('Content-Disposition');
 
@@ -292,11 +290,9 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                                     }
                                 }
 
-                                // Quitar comillas y limpiar caracteres
                                 nombreArchivo = nombreArchivo.replace(/['"]/g, '').trim();
                             }
 
-                            // ✅ Crear enlace de descarga
                             const a = document.createElement('a');
                             const urlDescarga = window.URL.createObjectURL(data);
                             a.href = urlDescarga;
@@ -306,7 +302,6 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                             a.remove();
                             window.URL.revokeObjectURL(urlDescarga);
 
-                            // ✅ Notificación final
                             Swal.fire({
                                 title: "Éxito",
                                 text: `El archivo '${nombreArchivo}' se descargó correctamente.`,
