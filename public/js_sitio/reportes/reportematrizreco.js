@@ -206,6 +206,8 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
 
 
 
+
+
 $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
     e.preventDefault();
 
@@ -247,6 +249,7 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                         success: function (data, status, xhr) {
                             const contentType = xhr.getResponseHeader('Content-Type') || '';
 
+                            // ⚠️ Si devuelve JSON (error del servidor)
                             if (contentType.includes('application/json')) {
                                 const reader = new FileReader();
                                 reader.onload = function () {
@@ -270,15 +273,30 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                                 return;
                             }
 
+                            // ✅ Obtener nombre real del archivo desde la cabecera HTTP
                             let nombreArchivo = "Matriz_Recomendaciones.xlsx";
                             const disposition = xhr.getResponseHeader('Content-Disposition');
-                            if (disposition && disposition.indexOf('filename=') !== -1) {
-                                nombreArchivo = disposition
-                                    .split('filename=')[1]
-                                    .replace(/['"]/g, '')
-                                    .trim();
+
+                            if (disposition) {
+                                // Buscar formato UTF-8
+                                const utf8FilenameRegex = /filename\*\=UTF-8''([^;]+)/i;
+                                const simpleFilenameRegex = /filename\="?([^\";]+)"?/i;
+                                let match = utf8FilenameRegex.exec(disposition);
+
+                                if (match && match[1]) {
+                                    nombreArchivo = decodeURIComponent(match[1]);
+                                } else {
+                                    match = simpleFilenameRegex.exec(disposition);
+                                    if (match && match[1]) {
+                                        nombreArchivo = match[1];
+                                    }
+                                }
+
+                                // Quitar comillas y limpiar caracteres
+                                nombreArchivo = nombreArchivo.replace(/['"]/g, '').trim();
                             }
 
+                            // ✅ Crear enlace de descarga
                             const a = document.createElement('a');
                             const urlDescarga = window.URL.createObjectURL(data);
                             a.href = urlDescarga;
@@ -288,6 +306,7 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
                             a.remove();
                             window.URL.revokeObjectURL(urlDescarga);
 
+                            // ✅ Notificación final
                             Swal.fire({
                                 title: "Éxito",
                                 text: `El archivo '${nombreArchivo}' se descargó correctamente.`,
@@ -324,3 +343,4 @@ $(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
         }
     });
 });
+
