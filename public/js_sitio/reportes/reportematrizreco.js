@@ -202,3 +202,114 @@ $('#btn_guardar_recomendaciones').on('click', async function (e) {
             .html('Guardar <i class="fa fa-save"></i>');
     }
 });
+
+
+
+$(document).on('click', '#btnexportarmelrecomendaciones', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: '/verificarmatrizrecomendaciones/' + proyecto.id,
+        method: 'GET',
+        success: function (respuesta) {
+            if (respuesta.success) {
+                Swal.fire({
+                    title: "¿Desea generar la Matriz de Recomendaciones?",
+                    text: "Se exportará el archivo Excel con los datos actuales.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, descargar",
+                    cancelButtonText: "Cancelar",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#btnexportarmelrecomendaciones').prop('disabled', true);
+
+                        Swal.fire({
+                            title: "Generando reporte...",
+                            text: "Espere un momento mientras se prepara el documento.",
+                            icon: "info",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            didOpen: () => Swal.showLoading()
+                        });
+
+                        const url = '/exportarMatrizRecomendaciones/' + proyecto.id + '/' + reporteregistro_id;
+
+                        $.ajax({
+                            url: url,
+                            method: 'GET',
+                            xhrFields: { responseType: 'blob' },
+                            success: function (data, status, xhr) {
+                                const contentType = xhr.getResponseHeader('Content-Type') || '';
+                                if (contentType.includes('application/json')) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        try {
+                                            const response = JSON.parse(reader.result);
+                                            Swal.fire({
+                                                title: "Atención",
+                                                text: response.message || "No se puede generar el reporte.",
+                                                icon: "warning"
+                                            });
+                                        } catch {
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "Respuesta inválida del servidor.",
+                                                icon: "error"
+                                            });
+                                        }
+                                        $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                                    };
+                                    reader.readAsText(data);
+                                    return;
+                                }
+
+                                // ✅ Descargar el archivo Excel
+                                const a = document.createElement('a');
+                                const urlDescarga = window.URL.createObjectURL(data);
+                                a.href = urlDescarga;
+                                a.download = 'Matriz_Recomendaciones.xlsx';
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                                window.URL.revokeObjectURL(urlDescarga);
+
+                                Swal.fire({
+                                    title: "Éxito",
+                                    text: "El archivo 'Matriz_Recomendaciones.xlsx' se descargó correctamente.",
+                                    icon: "success"
+                                });
+
+                                $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "No se pudo generar el reporte.",
+                                    icon: "error"
+                                });
+                                $('#btnexportarmelrecomendaciones').prop('disabled', false);
+                            }
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Atención",
+                    text: respuesta.message,
+                    icon: "warning"
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo verificar la matriz.",
+                icon: "error"
+            });
+        }
+    });
+});

@@ -16,7 +16,6 @@ class CreateMatrizrecomendaciones extends Migration
         Schema::create('matrizrecomendaciones', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('proyecto_id');
-            $table->unsignedBigInteger('reporteregistro_id')->nullable();
             $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedBigInteger('agente_id')->default(15);
