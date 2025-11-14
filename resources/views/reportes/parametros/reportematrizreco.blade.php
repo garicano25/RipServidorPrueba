@@ -98,7 +98,7 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportematrizreco.js?v=1.6"></script>
+<script src="/js_sitio/reportes/reportematrizreco.js?v=1.7"></script>
 <!-- <script src="/js_sitio/reportes/reportemeldraft.js?v=1.6"></script> -->
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
