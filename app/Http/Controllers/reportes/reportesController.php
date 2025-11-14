@@ -1357,7 +1357,6 @@ class reportesController extends Controller
     public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
     {
         try {
-            // 📦 1. Obtener proyecto e instalación
             $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
             $recsensorial = $proyecto ? $proyecto->recsensorial : null;
 
@@ -1365,17 +1364,14 @@ class reportesController extends Controller
                 return response()->json(['message' => 'No se encontró información del proyecto o reconocimiento sensorial.']);
             }
 
-            // 📍 Obtener nombre de instalación desde la tabla proyecto
             $nombreInstalacion = $proyecto->proyecto_clienteinstalacion ?? 'SinInstalacion';
 
-            // Limpiar caracteres no válidos para nombre de archivo
             $nombreInstalacion = str_replace(
                 ['\\', '/', ':', '*', '?', '"', '<', '>', '|', ' '],
                 '_',
                 trim($nombreInstalacion)
             );
 
-            // 📋 Obtener matriz
             $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
             $json = $resultado->getData(true);
             if (empty($json['success']) || empty($json['data'])) {
@@ -1385,7 +1381,6 @@ class reportesController extends Controller
             $data = $json['data'];
             $quimicos_nombre = $this->quimicosnombre($proyecto_id, $reporteregistro_id);
 
-            // 📄 2. Cargar plantilla
             $plantillaPath = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_melrecomendaciones.xlsx');
             if (!file_exists($plantillaPath)) {
                 return response()->json(['message' => 'No se encontró la plantilla del reporte.']);
@@ -1394,7 +1389,6 @@ class reportesController extends Controller
             $spreadsheet = IOFactory::load($plantillaPath);
             $sheet = $spreadsheet->getActiveSheet();
 
-            // 🎨 Encabezado (fila 8)
             $sheet->getStyle('A8:M8')->applyFromArray([
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
@@ -1413,7 +1407,6 @@ class reportesController extends Controller
             $filaInicio = 9;
             $contador = 1;
 
-            // 🔹 3. Llenar datos de matriz
             foreach ($data as $item) {
                 $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
                     ->where('proyecto_id', $proyecto_id)
@@ -1442,7 +1435,6 @@ class reportesController extends Controller
                         ? $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $rec)
                         : 'N/A';
 
-                    // Insertar datos
                     $sheet->setCellValue("A{$filaInicio}", $contador);
                     $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
                     $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
@@ -1452,7 +1444,6 @@ class reportesController extends Controller
                     $sheet->setCellValue("G{$filaInicio}", $descripcion);
                     $sheet->setCellValue("H{$filaInicio}", '');
 
-                    // Formato visual
                     $sheet->getRowDimension($filaInicio)->setRowHeight(60.9, 'pt');
                     $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
                         ->getAlignment()
@@ -1468,18 +1459,15 @@ class reportesController extends Controller
                 }
             }
 
-            // 🔹 4. Combinar celdas fijas
             $ultimaFila = $filaInicio - 1;
             if ($ultimaFila >= 9) {
                 $sheet->mergeCells("B9:B{$ultimaFila}");
                 $sheet->mergeCells("C9:C{$ultimaFila}");
             }
 
-            // 🧾 5. Nombre del archivo con instalación
             $nombreArchivo = "Matriz_Recomendaciones_{$nombreInstalacion}_" . date('Ymd_His') . '.xlsx';
             $tempPath = storage_path('app/public/' . $nombreArchivo);
 
-            // Crear carpeta si no existe
             $carpetaPublic = storage_path('app/public');
             if (!file_exists($carpetaPublic)) {
                 mkdir($carpetaPublic, 0775, true);
