@@ -1227,9 +1227,137 @@ class reportesController extends Controller
 
 
 
+    // public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
+    // {
+    //     try {
+    //         $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
+    //         $recsensorial = $proyecto ? $proyecto->recsensorial : null;
+
+    //         if (!$proyecto || !$recsensorial) {
+    //             return response()->json(['message' => 'No se encontró información del proyecto o reconocimiento sensorial.']);
+    //         }
+
+    //         $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
+    //         $json = $resultado->getData(true);
+    //         if (empty($json['success']) || empty($json['data'])) {
+    //             return response()->json(['message' => 'No hay información disponible para exportar.']);
+    //         }
+
+    //         $data = $json['data'];
+    //         $quimicos_nombre = $this->quimicosnombre($proyecto_id, $reporteregistro_id);
+
+    //         $plantillaPath = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_melrecomendaciones.xlsx');
+    //         if (!file_exists($plantillaPath)) {
+    //             return response()->json(['message' => 'No se encontró la plantilla del reporte.']);
+    //         }
+
+    //         $spreadsheet = IOFactory::load($plantillaPath);
+    //         $sheet = $spreadsheet->getActiveSheet();
+
+    //         $sheet->getStyle('A8:M8')->applyFromArray([
+    //             'fill' => [
+    //                 'fillType' => Fill::FILL_SOLID,
+    //                 'color' => ['rgb' => 'BFBFBF']
+    //             ],
+    //             'alignment' => [
+    //                 'horizontal' => Alignment::HORIZONTAL_CENTER,
+    //                 'vertical' => Alignment::VERTICAL_CENTER
+    //             ],
+    //             'font' => [
+    //                 'bold' => true
+    //             ],
+    //             'borders' => [
+    //                 'allBorders' => [
+    //                     'borderStyle' => Border::BORDER_THIN
+    //                 ]
+    //             ]
+    //         ]);
+
+    //         $filaInicio = 9;
+    //         $contador = 1;
+
+    //         foreach ($data as $item) {
+    //             $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
+    //                 ->where('proyecto_id', $proyecto_id)
+    //                 ->where('area_id', $item['area_id'])
+    //                 ->where('categoria_id', $item['categoria_id'])
+    //                 ->value('recomendaciones_json');
+
+    //             $recomendaciones = [];
+    //             if ($recomendaciones_guardadas) {
+    //                 $recomendaciones = json_decode($recomendaciones_guardadas, true);
+    //             }
+
+    //             $recomendacionesFiltradas = collect($recomendaciones)
+    //                 ->filter(fn($r) => isset($r['seleccionado']) && ($r['seleccionado'] === 'true' || $r['seleccionado'] === true))
+    //                 ->values();
+
+    //             if ($recomendacionesFiltradas->isEmpty()) {
+    //                 continue;
+    //             }
+
+    //             foreach ($recomendacionesFiltradas as $r) {
+    //                 $rec = DB::table('reporterecomendaciones')
+    //                     ->where('id', $r['id'])
+    //                     ->value('reporterecomendaciones_descripcion');
+
+    //                 if ($rec) {
+    //                     $descripcion = $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $rec);
+    //                 } else {
+    //                     $descripcion = 'N/A';
+    //                 }
+
+    //                 $sheet->setCellValue("A{$filaInicio}", $contador);
+    //                 $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
+    //                 $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
+    //                 $sheet->setCellValue("D{$filaInicio}", $item['reportequimicosarea_nombre']);
+    //                 $sheet->setCellValue("E{$filaInicio}", $item['reportequimicoscategoria_nombre']);
+    //                 $sheet->setCellValue("F{$filaInicio}", $item['nombre_agente']);
+    //                 $sheet->setCellValue("G{$filaInicio}", $descripcion);
+    //                 $sheet->setCellValue("H{$filaInicio}", '');
+
+    //                 $sheet->getRowDimension($filaInicio)->setRowHeight(60.9, 'pt');
+
+    //                 $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
+    //                     ->getAlignment()
+    //                     ->setVertical(Alignment::VERTICAL_CENTER)
+    //                     ->setWrapText(true);
+
+    //                 $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
+    //                     ->getBorders()
+    //                     ->getAllBorders()
+    //                     ->setBorderStyle(Border::BORDER_THIN);
+
+    //                 $filaInicio++;
+    //                 $contador++;
+    //             }
+    //         }
+
+    //         $ultimaFila = $filaInicio - 1;
+    //         if ($ultimaFila >= 9) {
+    //             $sheet->mergeCells("B9:B{$ultimaFila}");
+    //             $sheet->mergeCells("C9:C{$ultimaFila}");
+    //         }
+
+    //         $nombreArchivo = 'Matriz_Recomendaciones_' . date('Ymd_His') . '.xlsx';
+    //         $tempPath = storage_path('app/public/' . $nombreArchivo);
+
+    //         $writer = new Xlsx($spreadsheet);
+    //         $writer->save($tempPath);
+
+    //         return response()->download($tempPath)->deleteFileAfterSend(true);
+    //     } catch (\Exception $e) {
+    //         \Log::error('Error al exportar matriz recomendaciones: ' . $e->getMessage() . ' en línea ' . $e->getLine());
+    //         return response()->json(['message' => 'Error al generar Excel: ' . $e->getMessage()]);
+    //     }
+    // }
+
+
+
     public function exportarMatrizRecomendaciones($proyecto_id, $reporteregistro_id)
     {
         try {
+            // 📦 1. Obtener proyecto e instalación
             $proyecto = proyectoModel::with('recsensorial')->find($proyecto_id);
             $recsensorial = $proyecto ? $proyecto->recsensorial : null;
 
@@ -1237,6 +1365,17 @@ class reportesController extends Controller
                 return response()->json(['message' => 'No se encontró información del proyecto o reconocimiento sensorial.']);
             }
 
+            // 📍 Obtener nombre de instalación desde la tabla proyecto
+            $nombreInstalacion = $proyecto->proyecto_clienteinstalacion ?? 'SinInstalacion';
+
+            // Limpiar caracteres no válidos para nombre de archivo
+            $nombreInstalacion = str_replace(
+                ['\\', '/', ':', '*', '?', '"', '<', '>', '|', ' '],
+                '_',
+                trim($nombreInstalacion)
+            );
+
+            // 📋 Obtener matriz
             $resultado = $this->matrizrecomendaciones($proyecto_id, $reporteregistro_id, 1);
             $json = $resultado->getData(true);
             if (empty($json['success']) || empty($json['data'])) {
@@ -1246,6 +1385,7 @@ class reportesController extends Controller
             $data = $json['data'];
             $quimicos_nombre = $this->quimicosnombre($proyecto_id, $reporteregistro_id);
 
+            // 📄 2. Cargar plantilla
             $plantillaPath = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_melrecomendaciones.xlsx');
             if (!file_exists($plantillaPath)) {
                 return response()->json(['message' => 'No se encontró la plantilla del reporte.']);
@@ -1254,6 +1394,7 @@ class reportesController extends Controller
             $spreadsheet = IOFactory::load($plantillaPath);
             $sheet = $spreadsheet->getActiveSheet();
 
+            // 🎨 Encabezado (fila 8)
             $sheet->getStyle('A8:M8')->applyFromArray([
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
@@ -1263,19 +1404,16 @@ class reportesController extends Controller
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                     'vertical' => Alignment::VERTICAL_CENTER
                 ],
-                'font' => [
-                    'bold' => true
-                ],
+                'font' => ['bold' => true],
                 'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN
-                    ]
+                    'allBorders' => ['borderStyle' => Border::BORDER_THIN]
                 ]
             ]);
 
             $filaInicio = 9;
             $contador = 1;
 
+            // 🔹 3. Llenar datos de matriz
             foreach ($data as $item) {
                 $recomendaciones_guardadas = DB::table('matrizrecomendaciones')
                     ->where('proyecto_id', $proyecto_id)
@@ -1283,10 +1421,9 @@ class reportesController extends Controller
                     ->where('categoria_id', $item['categoria_id'])
                     ->value('recomendaciones_json');
 
-                $recomendaciones = [];
-                if ($recomendaciones_guardadas) {
-                    $recomendaciones = json_decode($recomendaciones_guardadas, true);
-                }
+                $recomendaciones = $recomendaciones_guardadas
+                    ? json_decode($recomendaciones_guardadas, true)
+                    : [];
 
                 $recomendacionesFiltradas = collect($recomendaciones)
                     ->filter(fn($r) => isset($r['seleccionado']) && ($r['seleccionado'] === 'true' || $r['seleccionado'] === true))
@@ -1301,12 +1438,11 @@ class reportesController extends Controller
                         ->where('id', $r['id'])
                         ->value('reporterecomendaciones_descripcion');
 
-                    if ($rec) {
-                        $descripcion = $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $rec);
-                    } else {
-                        $descripcion = 'N/A';
-                    }
+                    $descripcion = $rec
+                        ? $this->datosproyectoreemplazartextoquimico($proyecto, $recsensorial, $quimicos_nombre, $rec)
+                        : 'N/A';
 
+                    // Insertar datos
                     $sheet->setCellValue("A{$filaInicio}", $contador);
                     $sheet->setCellValue("B{$filaInicio}", $item['DEPARTAMENTO_MEL']);
                     $sheet->setCellValue("C{$filaInicio}", $item['reportequimicosarea_instalacion']);
@@ -1316,13 +1452,12 @@ class reportesController extends Controller
                     $sheet->setCellValue("G{$filaInicio}", $descripcion);
                     $sheet->setCellValue("H{$filaInicio}", '');
 
+                    // Formato visual
                     $sheet->getRowDimension($filaInicio)->setRowHeight(60.9, 'pt');
-
                     $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
                         ->getAlignment()
                         ->setVertical(Alignment::VERTICAL_CENTER)
                         ->setWrapText(true);
-
                     $sheet->getStyle("A{$filaInicio}:M{$filaInicio}")
                         ->getBorders()
                         ->getAllBorders()
@@ -1333,14 +1468,22 @@ class reportesController extends Controller
                 }
             }
 
+            // 🔹 4. Combinar celdas fijas
             $ultimaFila = $filaInicio - 1;
             if ($ultimaFila >= 9) {
                 $sheet->mergeCells("B9:B{$ultimaFila}");
                 $sheet->mergeCells("C9:C{$ultimaFila}");
             }
 
-            $nombreArchivo = 'Matriz_Recomendaciones_' . date('Ymd_His') . '.xlsx';
+            // 🧾 5. Nombre del archivo con instalación
+            $nombreArchivo = "Matriz_Recomendaciones_{$nombreInstalacion}_" . date('Ymd_His') . '.xlsx';
             $tempPath = storage_path('app/public/' . $nombreArchivo);
+
+            // Crear carpeta si no existe
+            $carpetaPublic = storage_path('app/public');
+            if (!file_exists($carpetaPublic)) {
+                mkdir($carpetaPublic, 0775, true);
+            }
 
             $writer = new Xlsx($spreadsheet);
             $writer->save($tempPath);
@@ -1351,6 +1494,7 @@ class reportesController extends Controller
             return response()->json(['message' => 'Error al generar Excel: ' . $e->getMessage()]);
         }
     }
+
     /**
      * Display the specified resource.
      *
