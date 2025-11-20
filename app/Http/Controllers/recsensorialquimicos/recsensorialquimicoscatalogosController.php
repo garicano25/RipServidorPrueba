@@ -135,6 +135,43 @@ class recsensorialquimicoscatalogosController extends Controller
         try {
             switch (($num_catalogo + 0)) {
                 case 0: //CATALOGO DE SUSTANCIAS QUIMICAS
+                    // $catalogo = DB::select('SELECT cat.ID_SUSTANCIA_QUIMICA,
+                    //                             cat.SUSTANCIA_QUIMICA,
+                    //                             cat.ALTERACION_EFECTO,
+                    //                             cat.PM, 
+                    //                             cat.NUM_CAS,
+                    //                             cat.ACTIVO,
+                    //                             cat.OTROS_NOMBRES,
+                    //                             cat.TIPO_CLASIFICACION,
+                    //                             cat.CATEGORIA_PELIGRO_ID,
+                    //                             cat.GRADO_RIESGO_ID,
+                    //                             cat.CLASIFICACION_RIESGO,
+                    //                             cat.VIA_INGRESO, 
+                    //                             COUNT(DISTINCT sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
+                    //                             COUNT(DISTINCT beis.ID_BEI) as TOTALBEIS
+                    //                             FROM catsustancias_quimicas as cat
+                    //                             LEFT JOIN sustanciaQuimicaEntidad sus 
+                    //                             ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                    //                             AND cat.ACTIVO = 1
+                    //                             LEFT JOIN sustanciasEntidadBeis beis 
+                    //                             ON beis.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                    //                             AND cat.ACTIVO = 1
+                    //                             GROUP BY cat.ID_SUSTANCIA_QUIMICA,
+                    //                             cat.SUSTANCIA_QUIMICA,
+                    //                             cat.ALTERACION_EFECTO,
+                    //                             cat.PM, 
+                    //                             cat.NUM_CAS,
+                    //                             cat.ACTIVO,
+                    //                             cat.OTROS_NOMBRES,
+                    //                             cat.TIPO_CLASIFICACION,
+                    //                             cat.CATEGORIA_PELIGRO_ID,
+                    //                             cat.GRADO_RIESGO_ID,
+                    //                             cat.CLASIFICACION_RIESGO,
+                    //                             cat.VIA_INGRESO
+                    //                             ');
+
+
+
                     $catalogo = DB::select('SELECT cat.ID_SUSTANCIA_QUIMICA,
                                                 cat.SUSTANCIA_QUIMICA,
                                                 cat.ALTERACION_EFECTO,
@@ -147,7 +184,13 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.GRADO_RIESGO_ID,
                                                 cat.CLASIFICACION_RIESGO,
                                                 cat.VIA_INGRESO, 
-                                                COUNT(DISTINCT sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
+                                                COUNT(
+                                                    DISTINCT 
+                                                    CASE 
+                                                        WHEN sus.ENTIDAD_ID = 11 THEN NULL 
+                                                        ELSE sus.ID_SUSTANCIA_QUIMICA_ENTIDAD 
+                                                    END
+                                                ) AS TOTAL,
                                                 COUNT(DISTINCT beis.ID_BEI) as TOTALBEIS
                                                 FROM catsustancias_quimicas as cat
                                                 LEFT JOIN sustanciaQuimicaEntidad sus 
@@ -169,6 +212,9 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.CLASIFICACION_RIESGO,
                                                 cat.VIA_INGRESO
                                                 ');
+
+
+
 
                     // crear campos NOMBRE Y ESTADO
                     foreach ($catalogo as $key => $value) {
