@@ -341,36 +341,95 @@ class recsensorialquimicosreportewordController extends Controller
 
 
         //LOGOS DE AS EMPRESAS DE INFORME
-        if ($contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
-            if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
-                // $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 180, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-                $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-            } else {
+        // if ($contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+        //     if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+        //         // $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 180, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+        //         $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+        //     } else {
 
+        //         $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+        //         // $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+        //     }
+        // } else {
+        //     // $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+        //     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+        // }
+
+
+        // if ($contrato->CONTRATO_PLANTILLA_LOGODERECHO) {
+        //     if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO))) {
+        //         // $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 180, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+        //         $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+        //     } else {
+
+        //         $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+        //         // $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+        //     }
+        // } else {
+        //     // $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+        //     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+        // }
+
+        // -----------------------------------------
+        // PRIMERA VALIDACIÓN: Contrato existe
+        // -----------------------------------------
+        
+        if ($contrato) {
+            // ============================
+            // LOGO IZQUIERDO
+            // ============================
+            if (!empty($contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO)) {
+
+                if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                    $plantillaword->setImageValue(
+                        'LOGO_IZQUIERDO',
+                        [
+                            'path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO),
+                            'width' => 120,
+                            'height' => 150,
+                            'ratio' => true,
+                            'borderColor' => '000000'
+                        ]
+                    );
+                } else {
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                }
+            } else {
                 $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
-                // $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
             }
-        } else {
-            // $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
-        }
 
 
-        if ($contrato->CONTRATO_PLANTILLA_LOGODERECHO) {
-            if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO))) {
-                // $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 180, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+            // ============================
+            // LOGO DERECHO
+            // ============================
+            if (!empty($contrato->CONTRATO_PLANTILLA_LOGODERECHO)) {
 
-                $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                    $plantillaword->setImageValue(
+                        'LOGO_DERECHO',
+                        [
+                            'path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO),
+                            'width' => 120,
+                            'height' => 150,
+                            'ratio' => true,
+                            'borderColor' => '000000'
+                        ]
+                    );
+                } else {
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                }
             } else {
-
                 $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
-                // $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
             }
         } else {
-            // $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+
+         
+            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
             $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
         }
-
 
 
         $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial[0]->contrato_id)
