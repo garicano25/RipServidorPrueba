@@ -302,17 +302,18 @@ class recsensorialquimicosreportewordController extends Controller
 
         $cliente = clienteModel::findOrFail($recsensorial[0]->cliente_id);
         // $contrato = clientecontratoModel::findOrFail($recsensorial[0]->contrato_id);
+
+
         $contratoId = $recsensorial[0]->contrato_id ?? null;
 
-        if (!$contratoId) {
-            return response()->json([
-                'msj' => 'Sin contrato relacionado',
-                'recsensorial' => 0,
-                'recsensorial_bloqueado' => 0
-            ]);
+        // Validar si existe dicho contrato
+        if ($contratoId) {
+            // Si existe, buscarlo
+            $contrato = clientecontratoModel::find($contratoId);
+        } else {
+            // Si NO existe, dejarlo como null
+            $contrato = null;
         }
-
-        $contrato = clientecontratoModel::findOrFail($contratoId);
 
 
         $recursos = recsensorialRecursosInformesModel::where('RECSENSORIAL_ID', $recsensorial[0]->id)->get();
