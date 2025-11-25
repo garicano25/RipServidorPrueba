@@ -374,7 +374,7 @@ class recsensorialquimicosreportewordController extends Controller
         // -----------------------------------------
         // PRIMERA VALIDACIÓN: Contrato existe
         // -----------------------------------------
-        
+
         if ($contrato) {
             // ============================
             // LOGO IZQUIERDO
@@ -496,7 +496,20 @@ class recsensorialquimicosreportewordController extends Controller
         $plantillaword->setValue('metodologia', $recursos[0]->METODOLOGIA);
 
         //PIE DE PAGINA DE LAS HOJAS
-        $plantillaword->setValue('PIE_PAGINA', str_replace("\n", "<w:br/>", $contrato->CONTRATO_PLANTILLA_PIEPAGINA));
+
+        // $plantillaword->setValue('PIE_PAGINA', str_replace("\n", "<w:br/>", $contrato->CONTRATO_PLANTILLA_PIEPAGINA));
+
+        if ($contrato && !empty($contrato->CONTRATO_PLANTILLA_PIEPAGINA)) {
+
+            $pie = str_replace("\n", "<w:br/>", $contrato->CONTRATO_PLANTILLA_PIEPAGINA);
+
+            $plantillaword->setValue('PIE_PAGINA', $pie);
+        } else {
+
+            $plantillaword->setValue('PIE_PAGINA', '');
+        }
+
+
 
         //DATOS DEL CENTRO DE TRABAJO
         $plantillaword->setValue('instalación', $recsensorial[0]->recsensorial_instalacion);
