@@ -382,7 +382,7 @@
 
 
 
-                                                        <div class="col-2">
+                                                        <div class="col-3">
                                                             <div class="form-group">
                                                                 <label>Se fabrica con tallas *</label>
                                                                 <select class="custom-select form-control" id="FABRICATALLAS_EPP" name="FABRICATALLAS_EPP">
@@ -394,9 +394,9 @@
                                                         </div>
 
 
-                                                        <div id="DIV_TALLAS_EPP" class="col-10" style="display:none;">
+                                                        <div id="DIV_TALLAS_EPP" class="col-9" style="display:none;">
                                                             <div class="row">
-                                                                <div class="col-4">
+                                                                <div class="col-5">
                                                                     <div class="form-group">
                                                                         <label>Tallas *</label>
                                                                         <select class="custom-select form-control" id="TALLAS_EPP" name="TALLAS_EPP[]" multiple>
@@ -408,7 +408,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-6">
+                                                                <div class="col-7">
                                                                     <div class="form-group">
                                                                         <label>Recomendaciones para seleccionar la talla del EPP </label>
                                                                         <input type="text" class="form-control" id="RECOMENDACIONES_TALLAS_EPP" name="RECOMENDACIONES_TALLAS_EPP">
