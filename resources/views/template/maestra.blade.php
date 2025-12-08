@@ -163,6 +163,19 @@ use Illuminate\Support\Str;
     <link rel="stylesheet" href="/assets/plugins/dropify/dist/css/dropify.min.css">
     @endif
 
+
+    @if(request()->is('eppcatalogos'))
+    <!-- file upload -->
+    <link rel="stylesheet" href="/assets/plugins/dropify/dist/css/dropify.min.css">
+    <!-- form_wizard_steps -->
+    <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
+    </link>
+    {{-- Select search filter --}}
+    <link href="/assets/plugins/select-search/selectize.css" rel="stylesheet" type="text/css" />
+    @endif
+
+
+
     @if(request()->is('externo'))
     {{-- datatable --}}
     {{-- <link href="/assets/plugins/datatables/jquery.dataTables.min2.css" rel="stylesheet"></link> --}}
@@ -245,6 +258,12 @@ use Illuminate\Support\Str;
 
 
 
+                    @if (preg_match('/\beppcatalogos\b/', request()->path()))
+                    <div class="navbar-nav" style="left: 35%; position: absolute;">
+                        <h1 style="color:#ffff;font-weight: bold;">Seguridad Industrial</h1>
+                    </div>
+
+                    @endif
 
 
 
@@ -570,14 +589,32 @@ use Illuminate\Support\Str;
                             </ul>
                         </li>
                         @endif
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
+                        @endif
+
+
+
+
+
+                        @if (preg_match('/\beppcatalogos\b/', request()->path()))
+
+
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
                         <li>
-                            <a class="has-arrow " href="{{route('biblioteca.index')}}" aria-expanded="false">
-                                <i class="fa fa-book"></i><span class="hide-menu">Centro de información</span>
+                            <a class="has-arrow " href="#" aria-expanded="false">
+                                <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
                             </a>
+                            <ul aria-expanded="false" class="collapse">
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                <li><a href="{{route('eppcatalogos.index')}}">Catálogo EPP</a></li>
+                                @endif
+
+
+                            </ul>
                         </li>
                         @endif
                         @endif
+
+
 
 
                         @if(auth()->user()->hasRoles(['Externo']))
@@ -829,8 +866,6 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
 
-
-
     @endif
 
     @if(request()->is('recsensorialquimicoscatalogos'))
@@ -1076,6 +1111,30 @@ use Illuminate\Support\Str;
     <script src="/js_sitio/usuario.js?v=2.0"></script>
     <script src="/js_sitio/usuarioperfil.js?v=2.0"></script>
     @endif
+
+
+
+    @if(request()->is('eppcatalogos'))
+    {{-- datatable --}}
+
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/js_sitio/eppcatalogos.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    {{-- Select2 search filter --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- jQuery file upload -->
+    <script src="/js/jasny-bootstrap.js"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/custom.min.js"></script>
+    @endif
+
+
+
+
 
     @if(request()->is('externo'))
     {{-- datatable --}}

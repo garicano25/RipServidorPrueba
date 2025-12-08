@@ -373,6 +373,8 @@ class equipoController extends Controller
                     $equipo->save();
                     return response()->json($equipo);
                 }
+
+                
             } else if ($request['api'] == 2) { #GUARDAMOS LOS DOCUMENTOS DEL EQUIPO
 
                 if ($request['ACTIVO'] == 1) //SI ES 1 ES PORQUE ESTA ACTIVO SI ES 0 ES PORQUE LO VAN A DESACTIVAR

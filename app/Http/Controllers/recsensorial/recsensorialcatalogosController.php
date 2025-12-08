@@ -76,6 +76,8 @@ class recsensorialcatalogosController extends Controller
      * @param  int  $num_catalogo
      * @return \Illuminate\Http\Response
      */
+
+    
     public function recsensorialconsultacatalogo($num_catalogo)
     {
         switch (($num_catalogo + 0)) {
@@ -994,4 +996,5 @@ class recsensorialcatalogosController extends Controller
             return response()->json($dato);
         }
     }
+    
 }

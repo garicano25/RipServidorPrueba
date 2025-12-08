@@ -195,11 +195,15 @@
                         </div>
                     </a>
                 </div>
+
+
+
+
                 <!-- Seguridad Industrial -->
-                <div class="row mb-4">
+                <!-- <div class="row mb-4">
                     <div class="col-8">
                         <div class="d-flex justify-content-start ml-5 mb-4">
-                            <a id="btnSeguridad" class="cta disabled" href="#">
+                            <a id="btnSeguridad" class="cta " href="#">
                                 <div class="row circle-one">
                                     <div class="col-12 circle-two">
                                         <img src="/assets/images/modulos/seguridad.png" class="logos" alt="Modulos de Seguridad Industrial">
@@ -212,7 +216,47 @@
                     <div class="col-4 ld ld-breath" style="animation-duration:3.0s; justify-content: end; display:flex; align-items:center">
                         <h1 style="font-size: 180px; color: #3f6a98; margin:40px">H</h1>
                     </div>
+                </div> -->
+
+
+                <div class="row mb-4">
+                    <div class="col-8">
+                        <div class="d-flex justify-content-start ml-5 mb-4">
+
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            <a class="unauthorized" href="#">
+                                @else
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                                <a class="cta" href="{{route('eppcatalogos.index')}}"> {{-- ← Ruta para Seguridad Industrial --}}
+                                    @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
+                                    <a class="cta" href="{{route('eppcatalogos.index')}}"> {{-- También pueden entrar --}}
+                                        @endif
+                                        @endif
+
+                                        <div class="row circle-one">
+                                            <div class="col-12 circle-two">
+                                                <img src="/assets/images/modulos/seguridad.png"
+                                                    class="logos"
+                                                    alt="Modulos de Seguridad Industrial">
+                                            </div>
+                                            <span class="titulos" style="justify-content: center; margin-top:20px">
+                                                Seguridad Industrial
+                                            </span>
+                                        </div>
+                                    </a>
+
+                        </div>
+                    </div>
+
+                    <div class="col-4 ld ld-breath"
+                        style="animation-duration:3.0s; justify-content: end; display:flex; align-items:center">
+                        <h1 style="font-size: 180px; color: #3f6a98; margin:40px">H</h1>
+                    </div>
                 </div>
+
+
+
+
             </div>
 
             <!-- Logo -->

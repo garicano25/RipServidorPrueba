@@ -2053,18 +2053,14 @@ Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones
 Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
 Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');
 Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
-
 Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 //====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
 Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
 Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
-
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
-
 Route::get('consultaLibro/{id}', ['as' => 'biblioteca.consultaLibro', 'uses' => 'biblioteca\bibliotecaController@consultaLibro']);
-
 Route::get('eliminarLibro/{id}', ['as' => 'biblioteca.eliminarLibro', 'uses' => 'biblioteca\bibliotecaController@eliminarLibro']);
 
 //CATÁLOGOS
@@ -2073,6 +2069,24 @@ Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatal
 Route::resource('recpsicocatalogosrec', 'PSICO\recpsicocatalogosrecController');
 Route::get('recpsicocatalogosinformes/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogosrec', 'uses' => 'PSICO\recpsicocatalogosrecController@tablaCatalogoRec']);
 Route::get('recpsicocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 'recpsicocatalogos.recpsicocatalogodesactiva', 'uses' => 'PSICO\recpsicocatalogosController@recpsicocatalogodesactiva']);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////SEGURIDAD INDUSTRIAL////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::resource('eppcatalogos', 'SEGURIDADINDUSTRIAL\eppcatalogosController');
+
+Route::get('eppconsultacatalogo/{num_catalogo}', ['as' => 'SEGURIDADINDUSTRIAL.eppconsultacatalogo', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@eppconsultacatalogo']);
+
+Route::get('eppcatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 'SEGURIDADINDUSTRIAL.eppcatalogodesactiva', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@eppcatalogodesactiva']);
+
+Route::get('vereppfoto/{id}', ['as' => 'vereppfoto', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereppfoto']);
+
+Route::get('tablaeppdocumento/{epp_id}', ['as' => 'SEGURIDADINDUSTRIAL.tablaeppdocumento', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@tablaeppdocumento']);
+
+Route::get('vereeppdocumentopdf/{documento_id}', ['as' => 'vereeppdocumentopdf', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereeppdocumentopdf']);
+Route::get('vereppfotodocumento/{id}', ['as' => 'vereppfotodocumento', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereppfotodocumento']);
 
 
 Route::get('/clear-cache', function () {

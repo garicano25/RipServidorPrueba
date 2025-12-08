@@ -1,0 +1,68 @@
+<?php
+
+namespace App\modelos\eppcatalogo;
+
+use Illuminate\Database\Eloquent\Model;
+
+class catepps extends Model
+{
+    protected $table = 'cat_epps';
+    protected $primaryKey = 'ID_CAT_EPP';
+    protected $fillable = [
+        'FOTO_EPP',
+        'REGION_ANATOMICA_EPP',
+        'CLAVEYEPP_EPP',
+        'TIPO_RIESGO_EPP',
+        'NOMBRE_EPP',
+        'MARCA_EPP',
+        'MODELO_EPP',
+        'NORMASNACIONALES_EPP',
+        'APARTADONOMNACIONALES_EPP',
+        'NORMASINTERNACIONALES_EPP',
+        'APARTADONOMINTERNACIONALES_EPP',
+        'CERTIFICACIONES_ADICIONALES_EPP',
+        'TIPO_GRADO_EPP',
+        'FABRICATALLAS_EPP',
+        'TALLAS_EPP',
+        'RECOMENDACIONES_TALLAS_EPP',
+        'TRABAJADORES_DISCAPACIDAD_EPP',
+        'ESPECIFIQUE_FORMA_EPP',
+        'CLASIFICACION_RIESGO_EPP',
+        'CUAL_CLASIFICACION_EPP',
+        'TIPO_USO_EPP',
+        'PARTE_EXPUESTA_EPP',
+        'RECOMENDACIONES_USO_EPP',
+        'RESTRICCIONES_USO_EPP',
+        'REQUIERE_AJUSTE_EPP',
+        'ESPECIFIQUE_AJUSTE_EPP',
+        'RECOMENDACION_ALMACENAMIENTO_EPP',
+        'UTILIZAR_EMERGENCIA_EPP',
+        'ESPECIFIQUE_EMERGENCIA_EPP',
+        'COMPATIBILIDAD_EPPS',
+        'INCOMPATIBILIDAD_EPPS',
+        'INSPECCION_INTERNA_EPP',
+        'FRECUENCIA_INTERNA_EPP',
+        'RESPONSABLE_INTERNA_EPP',
+        'INSPECCION_EXTERNA_EPP',
+        'FRECUENCIA_EXTERNA_EPP',
+        'RESPONSABLE_EXTERNA_EPP',
+        'RECOMENDACION_LIMPIEZA_EPPS',
+        'PROCEDIMIENTO_DESCONTAMINACION_EPP',
+        'DESCONTAMINACION_ESPECIFIQUE_EPP',
+        'VIDA_UTIL_EPP',
+        'CRITERIOS_DESECHAR_EPP',
+        'RECOMENDACION_DISPOSICION_EPPS',
+        'CARACTERISTICAS_ESPECIFICAS_EPP',
+        'MATERIALES_UTILIZADOS_EPP',
+        'ACTIVO'
+    ];
+
+    protected $casts = [
+        'NORMASNACIONALES_EPP' => 'array',
+        'NORMASINTERNACIONALES_EPP' => 'array',
+        'TALLAS_EPP' => 'array',
+        'CLASIFICACION_RIESGO_EPP' => 'array',
+
+    ];
+}
+

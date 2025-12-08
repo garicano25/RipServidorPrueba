@@ -107,6 +107,7 @@ $("#boton_guardar_cargo").click(function () {
             url: '/recpsicocatalogosrec',
             data: {},
             resetForm: false,
+            
             success: function (dato) {
                 // actualizar tabla
                 tabla_catalogo_cargos(catalogo);
