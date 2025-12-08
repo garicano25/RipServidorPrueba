@@ -308,8 +308,8 @@
 
                                                         <div class="col-6">
                                                             <div class="form-group">
-                                                                <label>Normas nacionales que cumple *</label>
-                                                                <select class="custom-select form-control" id="NORMASNACIONALES_EPP" name="NORMASNACIONALES_EPP[]" multiple required>
+                                                                <label>Normas nacionales que cumple </label>
+                                                                <select class="custom-select form-control" id="NORMASNACIONALES_EPP" name="NORMASNACIONALES_EPP[]" multiple>
                                                                     @foreach ($catnormasnacionales as $nomnacionales)
                                                                     <option value="{{ $nomnacionales->ID_NORMAS_NACIONALES }}">
                                                                         {{ $nomnacionales->NOMBRE_NORMA_NACIONALES }}
@@ -331,7 +331,7 @@
                                                         <div class="col-6">
                                                             <div class="form-group">
                                                                 <label>Normas internacionales que cumple *</label>
-                                                                <select class="custom-select form-control" id="NORMASINTERNACIONALES_EPP" name="NORMASINTERNACIONALES_EPP[]" multiple required>
+                                                                <select class="custom-select form-control" id="NORMASINTERNACIONALES_EPP" name="NORMASINTERNACIONALES_EPP[]" multiple>
                                                                     @foreach ($catnormasinternacionales as $nominternacionales)
                                                                     <option value="{{ $nominternacionales->ID_NORMAS_INTERNACIONALES }}">
                                                                         {{ $nominternacionales->NOMBRE_NORMA_INTERNACIONALES }}
@@ -382,10 +382,10 @@
 
 
 
-                                                        <div class="col-4">
+                                                        <div class="col-2">
                                                             <div class="form-group">
                                                                 <label>Se fabrica con tallas *</label>
-                                                                <select class="custom-select form-control" id="FABRICATALLAS_EPP" name="FABRICATALLAS_EPP" required>
+                                                                <select class="custom-select form-control" id="FABRICATALLAS_EPP" name="FABRICATALLAS_EPP">
                                                                     <option value selected="">Seleccione una opción</option>
                                                                     <option value="1">Sí</option>
                                                                     <option value="2">No</option>
@@ -394,9 +394,9 @@
                                                         </div>
 
 
-                                                        <div id="DIV_TALLAS_EPP" class="col-8" style="display:none;">
+                                                        <div id="DIV_TALLAS_EPP" class="col-10" style="display:none;">
                                                             <div class="row">
-                                                                <div class="col-6">
+                                                                <div class="col-4">
                                                                     <div class="form-group">
                                                                         <label>Tallas *</label>
                                                                         <select class="custom-select form-control" id="TALLAS_EPP" name="TALLAS_EPP[]" multiple>
@@ -975,7 +975,7 @@
             <form method="post" enctype="multipart/form-data" name="form_normas_internacionales" id="form_normas_internacionales">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="modal_titulo">Norma/estándar nacional</h4>
+                    <h4 class="modal-title" id="modal_titulo">Norma/estándar internacionales</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
