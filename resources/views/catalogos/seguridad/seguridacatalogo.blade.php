@@ -330,7 +330,7 @@
 
                                                         <div class="col-6">
                                                             <div class="form-group">
-                                                                <label>Normas internacionales que cumple *</label>
+                                                                <label>Normas internacionales que cumple </label>
                                                                 <select class="custom-select form-control" id="NORMASINTERNACIONALES_EPP" name="NORMASINTERNACIONALES_EPP[]" multiple>
                                                                     @foreach ($catnormasinternacionales as $nominternacionales)
                                                                     <option value="{{ $nominternacionales->ID_NORMAS_INTERNACIONALES }}">
