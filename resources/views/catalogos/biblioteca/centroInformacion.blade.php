@@ -177,6 +177,8 @@
                                     <option value="3">Higiene Industrial</option>
                                     <option value="4">Normas Mexicanas</option>
                                     <option value="5">Normas Internacionales</option>
+                                    <option value="7">Seguridad Industrial</option>
+                                    <option value="8">EPP</option>
                                     <option value="6">Otros</option>
                                 </select>
                             </div>
