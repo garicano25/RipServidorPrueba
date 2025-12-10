@@ -107,10 +107,6 @@
     <div class="col-12">
         <ol class="breadcrumb mb-3">
             <h2 style="color: #ffff; margin: 0;"><i class="fa fa-book" aria-hidden="true"></i> Centro de información</h2>
-
-
-
-
             <select class="form-control mx-3" style="width: 265px;" id="CLASIFICACION_SELECT">
                 <option value="" selected disabled>Seleccione una clasificacion</option>
                 <option value="0"></option>
@@ -119,6 +115,8 @@
                 <option value="3">Higiene Industrial</option>
                 <option value="4">Normas Mexicanas</option>
                 <option value="5">Normas Internacionales</option>
+                <option value="7">Seguridad Industrial</option>
+                <option value="8">EPP</option>
                 <option value="6">Otros</option>
             </select>
             <input type="text" class="form-control" style="width: 400px;" id="TITULO_SELECT" placeholder="Buscar por...">
