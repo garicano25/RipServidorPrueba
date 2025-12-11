@@ -21,10 +21,23 @@ var datatable_tallas = null;
 var datatable_clasificacionriesgp = null;
 var datatable_tipouso = null;
 var datatable_epp = null;
-var TablaEppDocumentos  = null;
+var TablaEppDocumentos = null;
+var datatable_entidades = null;
+
 
 var caracteristicasespecificos = [];
 var materialesutilizados = [];
+var notasnomnacionales = [];
+var apartandonomnacionales = [];
+var notasnominternacionales = [];
+var apartandonominternacionales = [];
+var certificacionesadicionales = [];
+var restriccionesdeuso = [];
+var recomendacionalmacenamiento = [];
+var recomendacionlimpieza = [];
+var recomendaciondisposicion = [];
+var nomnacionales = [];
+
 
 var CAT_EPP_ID = 0;
 
@@ -71,7 +84,8 @@ function mostrar_catalogo(num_catalogo)
             $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_epp" width="100%">'+
                                         '<thead>'+
                                             '<tr>'+
-                                            '   <th>#</th>'+
+                                                '<th>#</th>' +
+                                                '<th>Foto EPP</th>'+
                                                 '<th>Región anatómica</th>'+
                                                 '<th>Clave y EPP</th>'+
                                                 '<th>Nombre</th>' +
@@ -134,7 +148,6 @@ function mostrar_catalogo(num_catalogo)
             $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_claveyepp" width="100%">'+
                                         '<thead>'+
                                             '<tr>'+
-                                                '<th>#</th>'+
                                                 '<th>Región anatómica</th>' +
                                                 '<th>Clave y EPP </th>'+
                                                 '<th>Tipo de riesgo</th>'+
@@ -196,6 +209,7 @@ function mostrar_catalogo(num_catalogo)
                                         '<thead>'+
                                             '<tr>'+
                                                 '<th>#</th>' +
+                                                '<th>Entidades</th>' +
                                                 '<th>Nombre norma/estándar</th>' +
                                                 '<th>Descripción</th>' +
                                                 '<th style="width: 90px!important;">Editar</th>'+
@@ -226,6 +240,7 @@ function mostrar_catalogo(num_catalogo)
                                         '<thead>'+
                                             '<tr>'+
                                                 '<th>#</th>' +
+                                                '<th>Entidades</th>' +
                                                 '<th>Nombre norma/estándar</th>' +
                                                 '<th>Descripción</th>' +
                                                 '<th style="width: 90px!important;">Editar</th>'+
@@ -327,6 +342,37 @@ function mostrar_catalogo(num_catalogo)
 
             tabla_tipouso(catalogo);
             break;
+            case 11:
+         
+            $("#titulo_tabla").html('Catálogo [Entidades]');
+            $("#tr_11").addClass("active");
+            $("#cat_11").addClass("text-info");
+
+            // Inicializar tabla
+            if(datatable_entidades != null)
+            {
+                datatable_entidades.destroy();
+                datatable_entidades = null;
+            }
+
+            // diseño tabla
+                  // $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_tipouso" width="100%">'+
+                              $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_entidades" width="100%">'+
+
+                                       '<thead>'+
+                                            '<tr>'+
+                                                '<th>#</th>' +
+                                                '<th>Entidad</th>' +
+                                                '<th>Descripción</th>' +
+                                                '<th style="width: 90px!important;">Editar</th>'+
+                                                '<th style="width: 90px!important;">Activo</th>'+
+                                            '</tr>'+
+                                        '</thead>'+
+                                        '<tbody></tbody>'+
+                                    '</table>');
+
+            tabla_entidades(catalogo);
+            break;
 
     }
 }
@@ -338,18 +384,6 @@ $("#boton_nuevo_registro").click(function()
     {
         case 1:
             
-               var selectNacionales = $('#NORMASNACIONALES_EPP').selectize({
-                    placeholder: 'Seleccione una o varias opciones',
-                    allowEmptyOption: true,
-                    closeAfterSelect: false,
-                })[0].selectize;
-            
-                 var selectInternacionales = $('#NORMASINTERNACIONALES_EPP').selectize({
-                    placeholder: 'Seleccione una o varias opciones',
-                    allowEmptyOption: true,
-                    closeAfterSelect: false,
-                })[0].selectize;
-                        
             
                 var selectTallas = $('#TALLAS_EPP').selectize({
                     placeholder: 'Seleccione una o varias opciones',
@@ -371,9 +405,15 @@ $("#boton_nuevo_registro").click(function()
                 $("#DIV_INSPECCION_INTERNA").hide();
                 $("#DIV_INSPECCION_EXTERNA").hide();
                 $("#DIV_DESCONTAMINACION").hide();
+                $("#NOM_NACIONALES_BOTON").hide();
+                $("#NOM_NACIONALES_DIV").hide();
+                $("#NOM_INTERNACIONALES_BOTON").hide();
+                $("#NOM_INTERNACIONALES_DIV").hide();
+                $("#TABLA_FRECUENCIA").hide();
+                $("#TABLA_ATENUACION").hide();
+                $("#TABLA_DESVIACION").hide();
+                $("#DIV_ATENUACION_RUIDO").hide();
 
-            
-            
                 $('#form_epp').each(function(){
                     this.reset();
                 });
@@ -381,8 +421,6 @@ $("#boton_nuevo_registro").click(function()
                 $("#ID_CAT_EPP").val(0);
                 $("#catalogo").val(catalogo);
     
-            
-              // Mostrar Foto Mapa instalacion en el INPUT
                 if ($('#FOTO_EPP').data('dropify'))
                 {
                     $('#FOTO_EPP').dropify().data('dropify').resetPreview();
@@ -410,18 +448,21 @@ $("#boton_nuevo_registro").click(function()
                     });
                 }
 
-            
-            	selectNacionales.clear();
-                selectInternacionales.clear();
                 selectTallas.clear();
                 selectRiesgo.clear();
             
-        
                 $('#modal_epp').modal({ backdrop: false });
+            
                 $(".listacaracteristicasespecificas").empty();
                 $(".materialesutilizadosfabricante").empty();
+                $(".certificacionesadicionales").empty();
+                $(".restriccionesdeuso").empty();
+                $(".recomendacionalmacenamiento").empty();
+                $(".recomendacionlimpieza").empty();
+                $(".recomendaciondisposicionfinal").empty();
+                $(".listanomnacionales").empty();
+                $(".listanominternacionales").empty();
 
-            
             break;
           case 2:
                 $('#form_region_anatomica').each(function(){
@@ -461,9 +502,12 @@ $("#boton_nuevo_registro").click(function()
                 });
     
                 $("#ID_NORMAS_NACIONALES").val(0);
-                $("#catalogo").val(catalogo);
-    
-                $('#modal_normasnacionales').modal({backdrop:false});
+                 $("#catalogo").val(catalogo);
+            
+                $('#modal_normasnacionales').modal({ backdrop: false });
+            
+                $(".notasnomnacionales").empty();
+                $(".apartadonomnacionales").empty();
             break;
          case 6:
                 $('#form_normas_internacionales').each(function(){
@@ -473,7 +517,10 @@ $("#boton_nuevo_registro").click(function()
                 $("#ID_NORMAS_INTERNACIONALES").val(0);
                 $("#catalogo").val(catalogo);
     
-                $('#modal_normasinternacionales').modal({backdrop:false});
+                $('#modal_normasinternacionales').modal({ backdrop: false });
+            
+                $(".notasnominternacional").empty();
+                $(".apartadonominternacional").empty();
             break;
          case 7:
                 $('#form_tallas').each(function(){
@@ -505,7 +552,16 @@ $("#boton_nuevo_registro").click(function()
     
                 $('#modal_tipouso').modal({backdrop:false});
             break;
-        
+          case 11:
+                $('#form_entidades').each(function(){
+                    this.reset();
+                });
+    
+                $("#ID_ENTIDAD_EPP").val(0);
+                $("#catalogo").val(catalogo);
+    
+                $('#modal_entidades').modal({backdrop:false});
+            break;
         default:
             // Borrar formulario
             $('#form_catalogo').each(function(){
@@ -564,6 +620,7 @@ document.getElementById('REGION_ANATOMICA_EPP').addEventListener('change', funct
 
 });
 
+///// DINAMICO CARACTERISTICAS ESPECIFICAS
 document.addEventListener("DOMContentLoaded", function() {
     const botonAgregar = document.getElementById('botonagregarcaracteristicasespecificas');
     botonAgregar.addEventListener('click', agregarCaracteristicas);
@@ -608,6 +665,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+///// DINAMICO MATERIALES UTILIZADOS
 document.addEventListener("DOMContentLoaded", function() {
     const botonAgregar = document.getElementById('botonagregarmaterialesutilizados');
     botonAgregar.addEventListener('click', agregarMaterial);
@@ -628,7 +686,7 @@ document.addEventListener("DOMContentLoaded", function() {
         bloque.classList.add('col-4');
         bloque.innerHTML = `
             <div class="form-group">
-                <label>Nombrte del material *</label>
+                <label>Nombre del material *</label>
                 <input type="text" class="form-control" name="MATERIAL_UTILIZADO" required>
 
                 <div class="mt-2" style="text-align:center;">
@@ -646,6 +704,229 @@ document.addEventListener("DOMContentLoaded", function() {
                 bloque.remove();
 
                 if (ultimaFila.querySelectorAll('.col-4').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+///// DINAMICO CERTIFICACIONES ADICIONALES
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarcertficaciones = document.getElementById('botonagregarcertificacionesadicionales');
+    botonAgregarcertficaciones.addEventListener('click', agregarcertificaciones);
+
+    function agregarcertificaciones() {
+
+        const contenedor = document.querySelector('.certificacionesadicionales');
+
+        let ultimaFila = contenedor.querySelector('.fila-certificaciones:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Certificaciones adicionales *</label>
+                <input type="text" class="form-control" name="CERTIFICACIONES_ADICIONALES" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarcertificaciones">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarcertificaciones')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+///// DINAMICO RESTRICIONES DE USO
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarestriccionuso = document.getElementById('botonagregarestriccionesuso');
+    botonAgregarestriccionuso.addEventListener('click', agregarestriccionesuso);
+
+    function agregarestriccionesuso() {
+
+        const contenedor = document.querySelector('.restriccionesdeuso');
+
+        let ultimaFila = contenedor.querySelector('.fila-restricciones:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-restricciones', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Restricciones de uso *</label>
+                <input type="text" class="form-control" name="RESTRICCIONES_USO" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarestricciones">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarestricciones')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+///// DINAMICO RECOMENDACION ALMACENAMIENTO
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarecomendacionesalmacenamiento = document.getElementById('botonagregarecomendacionalmacenamiento');
+    botonAgregarecomendacionesalmacenamiento.addEventListener('click', agregarecomendacionaesalamcenamiento);
+
+    function agregarecomendacionaesalamcenamiento() {
+
+        const contenedor = document.querySelector('.recomendacionalmacenamiento');
+
+        let ultimaFila = contenedor.querySelector('.fila-recoalmacenamiento:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recoalmacenamiento', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" name="RECOMENDACION_ALMACENAMIENTO" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarrecomendacionalmacenamietno">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarrecomendacionalmacenamietno')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+///// DINAMICO RECOMENDACION LIMPIEZA  
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarecolimpieza = document.getElementById('botonagregarecomendacionlimpieza');
+    botonAgregarecolimpieza.addEventListener('click', agregarecolimpieza);
+
+    function agregarecolimpieza() {
+
+        const contenedor = document.querySelector('.recomendacionlimpieza');
+
+        let ultimaFila = contenedor.querySelector('.fila-recolimpieza:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recolimpieza', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" name="RECOMENDACION_LIMPIEZA" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarecolimpieza">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarecolimpieza')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+///// DINAMICO RECOMENDACION DISPOSICION FINAL  
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarecodisposicion = document.getElementById('botonagregarecomendaciondisposicionfinal');
+    botonAgregarecodisposicion.addEventListener('click', agregarecodisposicion);
+
+    function agregarecodisposicion() {
+
+        const contenedor = document.querySelector('.recomendaciondisposicionfinal');
+
+        let ultimaFila = contenedor.querySelector('.fila-recodisposicion:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recodisposicion', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" name="RECOMENDACION_DISPOSICION" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarecodisposicion">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarecodisposicion')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
                     ultimaFila.remove();
                 }
             });
@@ -733,47 +1014,390 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selectNacionales = document.getElementById("CUMPLE_NORMA_NACIONALES");
+    const divBoton = document.getElementById("NOM_NACIONALES_BOTON");
+    const divContenido = document.getElementById("NOM_NACIONALES_DIV");
+
+    selectNacionales.addEventListener("change", function () {
+
+        if (this.value === "1") { 
+            divBoton.style.display = "block";
+            divContenido.style.display = "block";
+        } else {
+            divBoton.style.display = "none";
+            divContenido.style.display = "none";
+        }
+
+    });
+
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selectInternacionales = document.getElementById("CUMPLE_NORMA_INTERNACIONALES");
+    const divBotonIntl = document.getElementById("NOM_INTERNACIONALES_BOTON");
+    const divContenidoIntl = document.getElementById("NOM_INTERNACIONALES_DIV");
+
+    selectInternacionales.addEventListener("change", function () {
+
+        if (this.value === "1") { 
+            divBotonIntl.style.display = "block";
+            divContenidoIntl.style.display = "block";
+        } else {
+            divBotonIntl.style.display = "none";
+            divContenidoIntl.style.display = "none";
+        }
+
+    });
+
+});
+    
+////// DINAMICO NOM NACIONALES
+document.addEventListener("DOMContentLoaded", function() {
+
+    const botonAgregarnomnacionales = document.getElementById('botonagregarnomnacionales');
+    botonAgregarnomnacionales.addEventListener('click', agregarnomnacionales);
+
+    function agregarnomnacionales() {
+
+        let opciones = `<option value="">Seleccione una norma</option>`;
+        window.catnormasnacionales.forEach(function(norma) {
+            opciones += `
+                <option value="${norma.ID_NORMAS_NACIONALES}">
+                    ${norma.NOMBRE_NORMA_NACIONALES}
+                </option>`;
+        });
+
+        const divnomnacionales = document.createElement('div');
+        divnomnacionales.classList.add('row', 'generarnomnacionales', 'mb-3');
+
+        divnomnacionales.innerHTML = `
+        <div class="col-6">
+            <div class="form-group">
+                <label>Norma/estándar nacional *</label>
+                <select class="form-control select-norma-nacional" name="NOM_NACIONALES" required>
+                    ${opciones}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <select class="form-control select-apartado-nacional" name="APARTADO_NACIONALES" required>
+                    <option value="">Seleccione una norma primero</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group" style="text-align: center;">
+                <button type="button" class="btn btn-danger botonEliminarNomnacionales">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        `;
+
+        const contenedor = document.querySelector('.listanomnacionales');
+        contenedor.appendChild(divnomnacionales);
+
+        const botonEliminar = divnomnacionales.querySelector('.botonEliminarNomnacionales');
+        botonEliminar.addEventListener('click', function() {
+            contenedor.removeChild(divnomnacionales);
+        });
+
+        const selectNorma = divnomnacionales.querySelector('.select-norma-nacional');
+        const selectApartado = divnomnacionales.querySelector('.select-apartado-nacional');
+
+        selectNorma.addEventListener('change', function () {
+
+            const idNorma = this.value;
+            const norma = window.catnormasnacionales.find(n => n.ID_NORMAS_NACIONALES == idNorma);
+
+            selectApartado.innerHTML = ""; 
+
+            if (!norma) {
+                selectApartado.innerHTML = `<option value="">Error al cargar norma</option>`;
+                return;
+            }
+
+           
+            let apartados = norma.APARTADO_NACIONALES_JSON;
+
+            if (typeof apartados === "string") {
+                try {
+                    apartados = JSON.parse(apartados);
+                } catch (e) {
+                    apartados = [];
+                }
+            }
+
+            if (!Array.isArray(apartados)) {
+                apartados = [];
+            }
+
+            if (apartados.length === 0) {
+                selectApartado.innerHTML = `
+                    <option value="">Esta norma no tiene apartados registrados</option>
+                `;
+                return;
+            }
+
+         
+            let opcionesApartados = `<option value="">Seleccione un apartado</option>`;
+
+            apartados.forEach(function(item) {
+                opcionesApartados += `
+                    <option value="${item.APARTADO_ESPECIFICO_NACIONALES}">
+                        ${item.APARTADO_ESPECIFICO_NACIONALES}
+                    </option>`;
+            });
+
+            selectApartado.innerHTML = opcionesApartados;
+        });
+    }
+});
+
+////// DINAMICO NOM INTERNACIONALES
+document.addEventListener("DOMContentLoaded", function() {
+
+    const botonAgregarnominternacionales = document.getElementById('botonagregarnominternacionales');
+    botonAgregarnominternacionales.addEventListener('click', agregarnominternacionales);
+
+    function agregarnominternacionales() {
+
+        let opciones = `<option value="">Seleccione una norma</option>`;
+        window.catnormasinternacionales.forEach(function(norma) {
+            opciones += `
+                <option value="${norma.ID_NORMAS_INTERNACIONALES}">
+                    ${norma.NOMBRE_NORMA_INTERNACIONALES}
+                </option>`;
+        });
+
+        const divnominternacional = document.createElement('div');
+        divnominternacional.classList.add('row', 'generarnominternacional', 'mb-3');
+
+        divnominternacional.innerHTML = `
+        <div class="col-6">
+            <div class="form-group">
+                <label>Norma/estándar internacional *</label>
+                <select class="form-control select-norma-internacional" name="NOM_INTERNACIONALES" required>
+                    ${opciones}
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <select class="form-control select-apartado-internacional" name="APARTADO_INTERNACIONALES" required>
+                    <option value="">Seleccione una norma primero</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group" style="text-align: center;">
+                <button type="button" class="btn btn-danger botonEliminarNominternacionales">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        `;
+
+        const contenedor = document.querySelector('.listanominternacionales');
+        contenedor.appendChild(divnominternacional);
+
+        const botonEliminar = divnominternacional.querySelector('.botonEliminarNominternacionales');
+        botonEliminar.addEventListener('click', function() {
+            contenedor.removeChild(divnominternacional);
+        });
+
+        const selectNorma = divnominternacional.querySelector('.select-norma-internacional');
+        const selectApartado = divnominternacional.querySelector('.select-apartado-internacional');
+
+        selectNorma.addEventListener('change', function () {
+
+            const idNorma = this.value;
+            const norma = window.catnormasinternacionales.find(n => n.ID_NORMAS_INTERNACIONALES == idNorma);
+
+            selectApartado.innerHTML = ""; 
+
+            if (!norma) {
+                selectApartado.innerHTML = `<option value="">Error al cargar norma</option>`;
+                return;
+            }
+
+           
+            let apartados = norma.APARTADO_INTERNACIONALES_JSON;
+
+            if (typeof apartados === "string") {
+                try {
+                    apartados = JSON.parse(apartados);
+                } catch (e) {
+                    apartados = [];
+                }
+            }
+
+            if (!Array.isArray(apartados)) {
+                apartados = [];
+            }
+
+            if (apartados.length === 0) {
+                selectApartado.innerHTML = `
+                    <option value="">Esta norma no tiene apartados registrados</option>
+                `;
+                return;
+            }
+
+         
+            let opcionesApartados = `<option value="">Seleccione un apartado</option>`;
+
+            apartados.forEach(function(item) {
+                opcionesApartados += `
+                    <option value="${item.APARTADO_ESPECIFICO_INTERNACIONALES}">
+                        ${item.APARTADO_ESPECIFICO_INTERNACIONALES}
+                    </option>`;
+            });
+
+            selectApartado.innerHTML = opcionesApartados;
+        });
+    }
+});
+
+
+/// DIV CUANDO SEA OIDO
+
+document.getElementById("REGION_ANATOMICA_EPP").addEventListener("change", function () {
+
+    const valor = this.value;
+
+    const divs = [
+        "TABLA_FRECUENCIA",
+        "TABLA_ATENUACION",
+        "TABLA_DESVIACION",
+        "DIV_ATENUACION_RUIDO"
+    ];
+
+    if (valor == "3") {
+
+        divs.forEach(id => {
+            document.getElementById(id).style.display = "block";
+        });
+
+    } else {
+
+        divs.forEach(id => {
+
+            const div = document.getElementById(id);
+
+            div.style.display = "none";
+
+            const inputs = div.querySelectorAll("input, textarea, select");
+
+            inputs.forEach(input => {
+                input.value = "";
+            });
+        });
+    }
+});
+
+
 
 $("#boton_guardar_epp").click(function (e) {
     e.preventDefault();
 
-    var valida = this.form.checkValidity();
-    if (!valida) {
-        swal({
-            title: "Complete todos los campos",
-            text: "Verifique que los datos ingresados concuerden con el tipo de datos",
-            type: "error",
-            buttons: { visible: false },
-            timer: 2000
-        });
-        return;
+    var form = document.getElementById("form_epp");
+
+    // VALIDACIÓN HTML5
+    if (!form.checkValidity()) {
+        form.reportValidity(); 
+        return; 
     }
 
     var formData = new FormData($('#form_epp')[0]);
 
- 
     var caracteristicasespecificos = [];
-
-    $("[name='CARACTERISTICA_EPP']").each(function() {
-        caracteristicasespecificos.push({
-            'CARACTERISTICA_EPP': $(this).val()
-        });
+    $("[name='CARACTERISTICA_EPP']").each(function () {
+        caracteristicasespecificos.push({ 'CARACTERISTICA_EPP': $(this).val() });
     });
-
     formData.append('CARACTERISTICAS_ESPECIFICAS_EPP', JSON.stringify(caracteristicasespecificos));
 
 
     var materialesutilizados = [];
-
-    $("[name='MATERIAL_UTILIZADO']").each(function() {
-        materialesutilizados.push({
-            'MATERIAL_UTILIZADO': $(this).val()
-        });
+    $("[name='MATERIAL_UTILIZADO']").each(function () {
+        materialesutilizados.push({ 'MATERIAL_UTILIZADO': $(this).val() });
     });
-
     formData.append('MATERIALES_UTILIZADOS_EPP', JSON.stringify(materialesutilizados));
 
-  
+
+    var certificacionesadicionales = [];
+    $("[name='CERTIFICACIONES_ADICIONALES']").each(function () {
+        certificacionesadicionales.push({ 'CERTIFICACIONES_ADICIONALES': $(this).val() });
+    });
+    formData.append('CERTIFICACIONES_ADICIONALES_EPP', JSON.stringify(certificacionesadicionales));
+
+
+    var restriccionesdeuso = [];
+    $("[name='RESTRICCIONES_USO']").each(function () {
+        restriccionesdeuso.push({ 'RESTRICCIONES_USO': $(this).val() });
+    });
+    formData.append('RESTRICCIONES_USO_EPP', JSON.stringify(restriccionesdeuso));
+
+
+    var recomendacionalmacenamiento = [];
+    $("[name='RECOMENDACION_ALMACENAMIENTO']").each(function () {
+        recomendacionalmacenamiento.push({ 'RECOMENDACION_ALMACENAMIENTO': $(this).val() });
+    });
+    formData.append('RECOMENDACION_ALMACENAMIENTO_EPP', JSON.stringify(recomendacionalmacenamiento));
+
+
+    var recomendacionlimpieza = [];
+    $("[name='RECOMENDACION_LIMPIEZA']").each(function () {
+        recomendacionlimpieza.push({ 'RECOMENDACION_LIMPIEZA': $(this).val() });
+    });
+    formData.append('RECOMENDACION_LIMPIEZA_EPPS', JSON.stringify(recomendacionlimpieza));
+
+
+    var recomendaciondisposicion = [];
+    $("[name='RECOMENDACION_DISPOSICION']").each(function () {
+        recomendaciondisposicion.push({ 'RECOMENDACION_DISPOSICION': $(this).val() });
+    });
+    formData.append('RECOMENDACION_DISPOSICION_EPPS', JSON.stringify(recomendaciondisposicion));
+
+
+    var nomnacionales = [];
+        $(".generarnomnacionales").each(function() {
+            var inputnomnacionales = {
+                'NOM_NACIONALES': $(this).find("select[name='NOM_NACIONALES']").val(),
+                'APARTADO_NACIONALES': $(this).find("select[name='APARTADO_NACIONALES']").val(),
+                
+
+            };
+            nomnacionales.push(inputnomnacionales);
+        });
+
+    formData.append('NORMASNACIONALES_EPP', JSON.stringify(nomnacionales));
+
+
+      var nominternacionales = [];
+        $(".generarnominternacional ").each(function() {
+            var inputnominternacionales = {
+                'NOM_INTERNACIONALES': $(this).find("select[name='NOM_INTERNACIONALES']").val(),
+                'APARTADO_INTERNACIONALES': $(this).find("select[name='APARTADO_INTERNACIONALES']").val(),
+                
+
+            };
+            nominternacionales.push(inputnominternacionales);
+        });
+
+    formData.append('NORMASINTERNACIONALES_EPP', JSON.stringify(nominternacionales));
+
+
+
     $.ajax({
         type: 'POST',
         url: "/eppcatalogos",
@@ -782,12 +1406,11 @@ $("#boton_guardar_epp").click(function (e) {
         processData: false,
         contentType: false,
 
-        beforeSend: function() {
+        beforeSend: function () {
             $('#boton_guardar_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
         },
 
-        success: function(dato) {
-
+        success: function (dato) {
             tabla_epp(catalogo);
 
             swal({
@@ -802,8 +1425,7 @@ $("#boton_guardar_epp").click(function (e) {
             $('#modal_epp').modal('hide');
         },
 
-        error: function(dato) {
-
+        error: function (dato) {
             $('#boton_guardar_epp').html('Guardar <i class="fa fa-save"></i>');
 
             swal({
@@ -815,8 +1437,8 @@ $("#boton_guardar_epp").click(function (e) {
             });
         }
     });
-
 });
+
 
 function tabla_epp(num_catalogo)
 {
@@ -850,7 +1472,9 @@ function tabla_epp(num_catalogo)
                             return meta.row + 1;
                         }
                     },
-
+                      {
+                        "data": "FOTO_EPP_TABLA"
+                    },
                     {
                         "data": "TEXTO_REGION_EPP"
                     },
@@ -941,9 +1565,6 @@ function editar_epp()
         $("#NOMBRE_EPP").val(row.data().NOMBRE_EPP);
         $("#MARCA_EPP").val(row.data().MARCA_EPP);
         $("#MODELO_EPP").val(row.data().MODELO_EPP);
-        $("#APARTADONOMNACIONALES_EPP").val(row.data().APARTADONOMNACIONALES_EPP);
-        $("#APARTADONOMINTERNACIONALES_EPP").val(row.data().APARTADONOMINTERNACIONALES_EPP);
-        $("#CERTIFICACIONES_ADICIONALES_EPP").val(row.data().CERTIFICACIONES_ADICIONALES_EPP);
         $("#TIPO_GRADO_EPP").val(row.data().TIPO_GRADO_EPP);
         $("#FABRICATALLAS_EPP").val(row.data().FABRICATALLAS_EPP);
         $("#RECOMENDACIONES_TALLAS_EPP").val(row.data().RECOMENDACIONES_TALLAS_EPP);
@@ -953,10 +1574,8 @@ function editar_epp()
         $("#TIPO_USO_EPP").val(row.data().TIPO_USO_EPP);
         $("#PARTE_EXPUESTA_EPP").val(row.data().PARTE_EXPUESTA_EPP);
         $("#RECOMENDACIONES_USO_EPP").val(row.data().RECOMENDACIONES_USO_EPP);
-        $("#RESTRICCIONES_USO_EPP").val(row.data().RESTRICCIONES_USO_EPP);
         $("#REQUIERE_AJUSTE_EPP").val(row.data().REQUIERE_AJUSTE_EPP);
         $("#ESPECIFIQUE_AJUSTE_EPP").val(row.data().ESPECIFIQUE_AJUSTE_EPP);
-        $("#RECOMENDACION_ALMACENAMIENTO_EPP").val(row.data().RECOMENDACION_ALMACENAMIENTO_EPP);
         $("#UTILIZAR_EMERGENCIA_EPP").val(row.data().UTILIZAR_EMERGENCIA_EPP);
         $("#ESPECIFIQUE_EMERGENCIA_EPP").val(row.data().ESPECIFIQUE_EMERGENCIA_EPP);
         $("#COMPATIBILIDAD_EPPS").val(row.data().COMPATIBILIDAD_EPPS);
@@ -967,58 +1586,38 @@ function editar_epp()
         $("#INSPECCION_EXTERNA_EPP").val(row.data().INSPECCION_EXTERNA_EPP);
         $("#FRECUENCIA_EXTERNA_EPP").val(row.data().FRECUENCIA_EXTERNA_EPP);
         $("#RESPONSABLE_EXTERNA_EPP").val(row.data().RESPONSABLE_EXTERNA_EPP);
-        $("#RECOMENDACION_LIMPIEZA_EPPS").val(row.data().RECOMENDACION_LIMPIEZA_EPPS);
         $("#PROCEDIMIENTO_DESCONTAMINACION_EPP").val(row.data().PROCEDIMIENTO_DESCONTAMINACION_EPP);
         $("#DESCONTAMINACION_ESPECIFIQUE_EPP").val(row.data().DESCONTAMINACION_ESPECIFIQUE_EPP);
         $("#VIDA_UTIL_EPP").val(row.data().VIDA_UTIL_EPP);
         $("#CRITERIOS_DESECHAR_EPP").val(row.data().CRITERIOS_DESECHAR_EPP);
-        $("#RECOMENDACION_DISPOSICION_EPPS").val(row.data().RECOMENDACION_DISPOSICION_EPPS);
+        $("#CUMPLE_NORMA_NACIONALES").val(row.data().CUMPLE_NORMA_NACIONALES);
+        $("#CUMPLE_NORMA_INTERNACIONALES").val(row.data().CUMPLE_NORMA_INTERNACIONALES);
 
+        $("#ATENUACION_125").val(row.data().ATENUACION_125);
+        $("#ATENUACION_250").val(row.data().ATENUACION_250);
+        $("#ATENUACION_500").val(row.data().ATENUACION_500);
+        $("#ATENUACION_1000").val(row.data().ATENUACION_1000);
+        $("#ATENUACION_2000").val(row.data().ATENUACION_2000);
+        $("#ATENUACION_3150").val(row.data().ATENUACION_3150);
+        $("#ATENUACION_4000").val(row.data().ATENUACION_4000);
+        $("#ATENUACION_6300").val(row.data().ATENUACION_6300);
+        $("#ATENUACION_8000").val(row.data().ATENUACION_8000);
+        $("#DESVIACION_125").val(row.data().DESVIACION_125);
+        $("#DESVIACION_250").val(row.data().DESVIACION_250);
+        $("#DESVIACION_500").val(row.data().DESVIACION_500);
+        $("#DESVIACION_1000").val(row.data().DESVIACION_1000);
+        $("#DESVIACION_2000").val(row.data().DESVIACION_2000);
+        $("#DESVIACION_3150").val(row.data().DESVIACION_3150);
+        $("#DESVIACION_4000").val(row.data().DESVIACION_4000);
+        $("#DESVIACION_6300").val(row.data().DESVIACION_6300);
+        $("#DESVIACION_8000").val(row.data().DESVIACION_8000);
+        $("#ATENUACION_H").val(row.data().ATENUACION_H);
+        $("#ATENUACION_M").val(row.data().ATENUACION_M);
+        $("#ATENUACION_L").val(row.data().ATENUACION_L);
+        $("#VALOR_SNR").val(row.data().VALOR_SNR);
+        $("#VALOR_NRR").val(row.data().VALOR_NRR);
 
         filtrarClaveAlEditar(row);
-
-    
-        if (!$('#NORMASNACIONALES_EPP')[0].selectize) {
-            $('#NORMASNACIONALES_EPP').selectize({
-                placeholder: 'Seleccione una o varias opciones',
-                maxItems: null
-            });
-        }
-
-        let selNac = $('#NORMASNACIONALES_EPP')[0].selectize;
-        selNac.clear(); 
-
-        let valoresNac = row.data().NORMASNACIONALES_EPP;
-
-        if (typeof valoresNac === "string") {
-            try { valoresNac = JSON.parse(valoresNac); } catch (e) { valoresNac = []; }
-        }
-
-        if (Array.isArray(valoresNac)) {
-            selNac.setValue(valoresNac); 
-        }
-
-
-        if (!$('#NORMASINTERNACIONALES_EPP')[0].selectize) {
-            $('#NORMASINTERNACIONALES_EPP').selectize({
-                placeholder: 'Seleccione una o varias opciones',
-                maxItems: null
-            });
-        }
-
-        let selInt = $('#NORMASINTERNACIONALES_EPP')[0].selectize;
-        selInt.clear();
-
-        let valoresInt = row.data().NORMASINTERNACIONALES_EPP;
-
-        if (typeof valoresInt === "string") {
-            try { valoresInt = JSON.parse(valoresInt); } catch (e) { valoresInt = []; }
-        }
-
-        if (Array.isArray(valoresInt)) {
-            selInt.setValue(valoresInt);
-        }
-
 
         if (!$('#TALLAS_EPP')[0].selectize) {
             $('#TALLAS_EPP').selectize({
@@ -1061,8 +1660,7 @@ function editar_epp()
             selRiesgo.setValue(valoresRiesgo);
         }
 
-        
-
+    
         if (row.data().FABRICATALLAS_EPP == "1") {
             $('#DIV_TALLAS_EPP').show();
         } else {
@@ -1099,6 +1697,54 @@ function editar_epp()
             $('#DIV_DESCONTAMINACION').hide();
         }
 
+
+        if (row.data().TRABAJADORES_DISCAPACIDAD_EPP == "1") {
+            $('#DIV_DISCAPACIODAD').show();
+        } else {
+            $('#DIV_DISCAPACIODAD').hide();
+        }
+
+
+
+        if (row.data().CUMPLE_NORMA_NACIONALES == "1") {
+            $('#NOM_NACIONALES_BOTON').show();
+            $('#NOM_NACIONALES_DIV').show();
+              
+        } else {
+            $('#NOM_NACIONALES_BOTON').hide();
+            $('#NOM_NACIONALES_DIV').hide();
+
+        }
+
+
+        if (row.data().CUMPLE_NORMA_INTERNACIONALES == "1") {
+            $('#NOM_INTERNACIONALES_BOTON').show();
+            $('#NOM_INTERNACIONALES_DIV').show();
+              
+        } else {
+            $('#NOM_INTERNACIONALES_BOTON').hide();
+            $('#NOM_INTERNACIONALES_DIV').hide();
+
+        }
+
+        if (row.data().REGION_ANATOMICA_EPP == "3") {
+
+            $('#TABLA_FRECUENCIA').show();
+            $('#TABLA_ATENUACION').show();
+            $('#TABLA_DESVIACION').show();
+            $('#DIV_ATENUACION_RUIDO').show();
+
+        } else {
+
+            $('#TABLA_FRECUENCIA').hide();
+            $('#TABLA_ATENUACION').hide();
+            $('#TABLA_DESVIACION').hide();
+            $('#DIV_ATENUACION_RUIDO').hide();
+        }
+
+
+
+
        if (row.data().FOTO_EPP) {
         var archivo = row.data().FOTO_EPP;
         var extension = archivo.substring(archivo.lastIndexOf("."));
@@ -1133,18 +1779,35 @@ function editar_epp()
     }
 
 
-
-        
         $("#catalogo").val(catalogo);
         $('#modal_epp').modal({ backdrop: false });
         
         $(".listacaracteristicasespecificas").empty();
         mostrarCaracteristicasEspecificas(row);
+
         $(".materialesutilizadosfabricante").empty();
         mostrarMaterialesUtilizados(row);
 
+        $(".certificacionesadicionales").empty();
+        mostrarCertificacionesadicionales(row);
 
-     
+         $(".restriccionesdeuso").empty();
+        mostrarRestricciones(row);
+
+         $(".recomendacionalmacenamiento").empty();
+        mostrarRecomendacionesalmacenamiento(row);
+
+        $(".recomendacionlimpieza").empty();
+        mostrarRecomendacioneslimpieza(row);
+
+         $(".recomendaciondisposicionfinal").empty();
+        mostrarRecomendacionesdisposicion(row);
+
+        $(".listanomnacionales").empty();
+        mostrarNormasNacionales(row);
+
+        $(".listanominternacionales").empty();
+        mostrarNormasInternacionales(row);
 
         $("#tab2_documentos_epp").off("click").on("click", function () {
         tabla_epp_documentos();  });
@@ -1264,6 +1927,285 @@ function mostrarMaterialesUtilizados(row) {
     });
 }
 
+function mostrarCertificacionesadicionales(row) {
+
+    let contenedor = document.querySelector('.certificacionesadicionales');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().CERTIFICACIONES_ADICIONALES_EPP;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Certificaciones adicionales *</label>
+                <input type="text" class="form-control" 
+                       name="CERTIFICACIONES_ADICIONALES" 
+                       value="${item.CERTIFICACIONES_ADICIONALES}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarcertificaciones">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarcertificaciones')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarRestricciones(row) {
+
+    let contenedor = document.querySelector('.restriccionesdeuso');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().RESTRICCIONES_USO_EPP;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-restricciones', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Restricción *</label>
+                <input type="text" class="form-control" 
+                       name="RESTRICCIONES_USO" 
+                       value="${item.RESTRICCIONES_USO}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarestricciones">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarestricciones')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarRecomendacionesalmacenamiento(row) {
+
+    let contenedor = document.querySelector('.recomendacionalmacenamiento');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().RECOMENDACION_ALMACENAMIENTO_EPP;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recoalmacenamiento', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" 
+                       name="RECOMENDACION_ALMACENAMIENTO" 
+                       value="${item.RECOMENDACION_ALMACENAMIENTO}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarrecomendacionalmacenamietno">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarrecomendacionalmacenamietno')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarRecomendacioneslimpieza(row) {
+
+    let contenedor = document.querySelector('.recomendacionlimpieza');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().RECOMENDACION_LIMPIEZA_EPPS;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recolimpieza', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" 
+                       name="RECOMENDACION_LIMPIEZA" 
+                       value="${item.RECOMENDACION_LIMPIEZA}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarecolimpieza">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarecolimpieza')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarRecomendacionesdisposicion(row) {
+
+    let contenedor = document.querySelector('.recomendaciondisposicionfinal');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().RECOMENDACION_DISPOSICION_EPPS;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-recodisposicion', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Recomendación *</label>
+                <input type="text" class="form-control" 
+                       name="RECOMENDACION_DISPOSICION" 
+                       value="${item.RECOMENDACION_DISPOSICION}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarecodisposicion">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarecodisposicion')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
 function filtrarClaveAlEditar(row) {
 
     const region = row.data().REGION_ANATOMICA_EPP;
@@ -1299,6 +2241,246 @@ function filtrarClaveAlEditar(row) {
     if (claveGuardada) {
         selectClave.value = claveGuardada;
     }
+}
+
+function mostrarNormasNacionales(row) {
+
+    const contenedor = document.querySelector('.listanomnacionales');
+    contenedor.innerHTML = ""; 
+
+
+    let data = row.data().NORMASNACIONALES_EPP;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+ 
+    data.forEach((item, index) => {
+
+        let normaSeleccionada = item.NOM_NACIONALES;
+        let apartadoSeleccionado = item.APARTADO_NACIONALES;
+
+        const fila = document.createElement('div');
+        fila.classList.add('row', 'generarnomnacionales', 'mb-3');
+
+        let opcionesNormas = `<option value="">Seleccione una norma</option>`;
+
+        window.catnormasnacionales.forEach(norma => {
+            opcionesNormas += `
+                <option value="${norma.ID_NORMAS_NACIONALES}" 
+                    ${norma.ID_NORMAS_NACIONALES == normaSeleccionada ? "selected" : ""}>
+                    ${norma.NOMBRE_NORMA_NACIONALES}
+                </option>`;
+        });
+
+        fila.innerHTML = `
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Norma/estándar nacional *</label>
+                    <select class="form-control select-norma-nacional" 
+                        name="NOM_NACIONALES" required>
+                        ${opcionesNormas}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Apartado específico *</label>
+                    <select class="form-control select-apartado-nacional"
+                        name="APARTADO_NACIONALES" required>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-danger botonEliminarNomnacionales">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        `;
+
+        contenedor.appendChild(fila);
+
+    
+        const selectNorma = fila.querySelector('.select-norma-nacional');
+        const selectApartado = fila.querySelector('.select-apartado-nacional');
+
+        function cargarApartados(idNorma, apartadoPreseleccionado = "") {
+
+            const norma = window.catnormasnacionales.find(
+                n => n.ID_NORMAS_NACIONALES == idNorma
+            );
+
+            selectApartado.innerHTML = "";
+
+            if (!norma) {
+                selectApartado.innerHTML = `<option value="">Error al cargar apartados</option>`;
+                return;
+            }
+
+            let apartados = norma.APARTADO_NACIONALES_JSON;
+
+            if (typeof apartados === "string") {
+                try { apartados = JSON.parse(apartados); } catch (e) { apartados = []; }
+            }
+
+            if (!Array.isArray(apartados)) apartados = [];
+
+            if (apartados.length === 0) {
+                selectApartado.innerHTML = `
+                    <option value="">Esta norma no tiene apartados registrados</option>
+                `;
+                return;
+            }
+
+            let opciones = `<option value="">Seleccione un apartado</option>`;
+            apartados.forEach(ap => {
+                opciones += `
+                    <option value="${ap.APARTADO_ESPECIFICO_NACIONALES}"
+                        ${apartadoPreseleccionado == ap.APARTADO_ESPECIFICO_NACIONALES ? "selected" : ""}>
+                        ${ap.APARTADO_ESPECIFICO_NACIONALES}
+                    </option>`;
+            });
+
+            selectApartado.innerHTML = opciones;
+        }
+
+        cargarApartados(normaSeleccionada, apartadoSeleccionado);
+
+        selectNorma.addEventListener("change", function() {
+            cargarApartados(this.value);
+        });
+
+        fila.querySelector('.botonEliminarNomnacionales')
+            .addEventListener('click', function() {
+                fila.remove();
+            });
+
+    });
+
+}
+
+function mostrarNormasInternacionales(row) {
+
+    const contenedor = document.querySelector('.listanominternacionales');
+    contenedor.innerHTML = "";  
+
+
+    let data = row.data().NORMASINTERNACIONALES_EPP;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    data.forEach((item, index) => {
+
+        let normaSeleccionada = item.NOM_INTERNACIONALES;
+        let apartadoSeleccionado = item.APARTADO_INTERNACIONALES;
+
+        const fila = document.createElement('div');
+        fila.classList.add('row', 'generarnominternacional', 'mb-3');
+
+        let opcionesNormas = `<option value="">Seleccione una norma</option>`;
+
+        window.catnormasinternacionales.forEach(norma => {
+            opcionesNormas += `
+                <option value="${norma.ID_NORMAS_INTERNACIONALES}" 
+                    ${norma.ID_NORMAS_INTERNACIONALES == normaSeleccionada ? "selected" : ""}>
+                    ${norma.NOMBRE_NORMA_INTERNACIONALES}
+                </option>`;
+        });
+
+        fila.innerHTML = `
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Norma/estándar internacional *</label>
+                    <select class="form-control select-norma-internacional" 
+                        name="NOM_INTERNACIONALES" required>
+                        ${opcionesNormas}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Apartado específico *</label>
+                    <select class="form-control select-apartado-internacional"
+                        name="APARTADO_INTERNACIONALES" required>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-danger botonEliminarNominternacionales">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        `;
+
+        contenedor.appendChild(fila);
+
+        const selectNorma = fila.querySelector('.select-norma-internacional');
+        const selectApartado = fila.querySelector('.select-apartado-internacional');
+
+        function cargarApartados(idNorma, apartadoPreseleccionado = "") {
+
+            const norma = window.catnormasinternacionales.find(
+                n => n.ID_NORMAS_INTERNACIONALES == idNorma
+            );
+
+            selectApartado.innerHTML = "";
+
+            if (!norma) {
+                selectApartado.innerHTML = `<option value="">Error al cargar apartados</option>`;
+                return;
+            }
+
+            let apartados = norma.APARTADO_INTERNACIONALES_JSON;
+
+            if (typeof apartados === "string") {
+                try { apartados = JSON.parse(apartados); } catch (e) { apartados = []; }
+            }
+
+            if (!Array.isArray(apartados)) apartados = [];
+
+            if (apartados.length === 0) {
+                selectApartado.innerHTML = `
+                    <option value="">Esta norma no tiene apartados registrados</option>
+                `;
+                return;
+            }
+
+            let opciones = `<option value="">Seleccione un apartado</option>`;
+            apartados.forEach(ap => {
+                opciones += `
+                    <option value="${ap.APARTADO_ESPECIFICO_INTERNACIONALES}"
+                        ${apartadoPreseleccionado == ap.APARTADO_ESPECIFICO_INTERNACIONALES ? "selected" : ""}>
+                        ${ap.APARTADO_ESPECIFICO_INTERNACIONALES}
+                    </option>`;
+            });
+
+            selectApartado.innerHTML = opciones;
+        }
+
+        cargarApartados(normaSeleccionada, apartadoSeleccionado);
+
+        selectNorma.addEventListener("change", function() {
+            cargarApartados(this.value);
+        });
+
+        fila.querySelector('.botonEliminarNominternacionales')
+            .addEventListener('click', function() {
+                fila.remove();
+            });
+
+    });
+
 }
 
 
@@ -1542,12 +2724,6 @@ function tabla_claveyepp(num_catalogo)
                 },
                 "columns": [
                     {
-                        data: null,
-                        render: function (data, type, row, meta) {
-                            return meta.row + 1;
-                        }
-                    },
-                    {
                         "data": "REGION_ANATOMICA_NOMBRE"
                     },
                      {
@@ -1572,7 +2748,7 @@ function tabla_claveyepp(num_catalogo)
                    
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                 rowsGroup: [1],
+                 rowsGroup: [0],
                 "order": [[ 0, "asc" ]],        
                 "searching": true,
                 "paging": false,
@@ -1793,55 +2969,174 @@ function editar_cat_marcas()
 // CATALOGO NORMAS NACIONALES
 //=======================================
 
-$("#boton_guardar_normasnacionales").click(function () {
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarnotasnacionales = document.getElementById('botonagregarnotasnacionales');
+    botonAgregarnotasnacionales.addEventListener('click', agregarnotasnacionales);
+
+    function agregarnotasnacionales() {
+
+        const contenedor = document.querySelector('.notasnomnacionales');
+
+        let ultimaFila = contenedor.querySelector('.fila-notasnacionales:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-notasnacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Nota *</label>
+                <input type="text" class="form-control" name="NOTAS_NACIONALES" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarnotasnacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarnotasnacionales')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarapartadonacionales = document.getElementById('botonagregarapartadonacionales');
+    botonAgregarapartadonacionales.addEventListener('click', agregarapartadonacionales);
+
+    function agregarapartadonacionales() {
+
+        const contenedor = document.querySelector('.apartadonomnacionales');
+
+        let ultimaFila = contenedor.querySelector('.fila-apartadonacionales:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-apartadonacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <input type="text" class="form-control" name="APARTADO_ESPECIFICO_NACIONALES" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarapartadonacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarapartadonacionales')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+$("#boton_guardar_normasnacionales").click(function (e) {
+    e.preventDefault();
 
     var valida = this.form.checkValidity();
-    if (valida) {
-        $('#form_normas_nacionales').ajaxForm({
-            dataType: 'json',
-            type: 'POST',
-            url: '/eppcatalogos',
-            data: {},
-            resetForm: false,
-            success: function (dato) {
-                tabla_normasnacionales(catalogo);
-
-                swal({
-                    title: "Correcto",
-                    text: "Información guardada correctamente",
-                    type: "success", 
-                    buttons: {
-                        visible: false, 
-                    },
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                $('#boton_guardar_normasnacionales').html('Guardar <i class="fa fa-save"></i>');
-
-                $('#modal_normasnacionales').modal('hide');
-            },
-            beforeSend: function () {
-                $('#boton_guardar_normasnacionales').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function (dato) {
-                $('#boton_guardar_normasnacionales').html('Guardar <i class="fa fa-save"></i>');
-                // mensaje
-                swal({
-                    title: "Error",
-                    text: "Error en la acción: " + dato,
-                    type: "error", 
-                    buttons: {
-                        visible: false, 
-                    },
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                return false;
-            }
-        }).submit();
-        return false;
+    if (!valida) {
+        swal({
+            title: "Complete todos los campos",
+            text: "Verifique que los datos ingresados concuerden con el tipo de datos",
+            type: "error",
+            buttons: { visible: false },
+            timer: 2000
+        });
+        return;
     }
+
+    var formData = new FormData($('#form_normas_nacionales')[0]);
+
+ 
+    var notasnomnacionales = [];
+
+    $("[name='NOTAS_NACIONALES']").each(function() {
+        notasnomnacionales.push({
+            'NOTAS_NACIONALES': $(this).val()
+        });
+    });
+
+    formData.append('NOTAS_NACIONALES_JSON', JSON.stringify(notasnomnacionales));
+
+
+    var apartandonomnacionales = [];
+
+    $("[name='APARTADO_ESPECIFICO_NACIONALES']").each(function() {
+        apartandonomnacionales.push({
+            'APARTADO_ESPECIFICO_NACIONALES': $(this).val()
+        });
+    });
+
+    formData.append('APARTADO_NACIONALES_JSON', JSON.stringify(apartandonomnacionales));
+
+  
+    $.ajax({
+        type: 'POST',
+        url: "/eppcatalogos",
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+
+        beforeSend: function() {
+            $('#boton_guardar_normasnacionales').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+        },
+
+        success: function(dato) {
+
+            tabla_normasnacionales(catalogo);
+
+            swal({
+                title: "Correcto",
+                text: "Información guardada correctamente",
+                type: "success",
+                buttons: { visible: false },
+                timer: 1500
+            });
+
+            $('#boton_guardar_normasnacionales').html('Guardar <i class="fa fa-save"></i>');
+            $('#modal_normasnacionales').modal('hide');
+        },
+
+        error: function(dato) {
+
+            $('#boton_guardar_normasnacionales').html('Guardar <i class="fa fa-save"></i>');
+
+            swal({
+                title: "Error",
+                text: "Error al guardar la información",
+                type: "error",
+                buttons: { visible: false },
+                timer: 1500
+            });
+        }
+    });
+
 });
 
 function tabla_normasnacionales(num_catalogo)
@@ -1875,6 +3170,9 @@ function tabla_normasnacionales(num_catalogo)
                         render: function (data, type, row, meta) {
                             return meta.row + 1;
                         }
+                    },
+                    {
+                        "data": "ENTIDAD_TEXTO"
                     },
                     {
                         "data": "NOMBRE_NORMA_NACIONALES"
@@ -1941,11 +3239,132 @@ function editar_cat_normasnacionales()
         });
 
         $("#ID_NORMAS_NACIONALES").val(row.data().ID_NORMAS_NACIONALES);
+        $("#ENTIDAD_NACIONALES").val(row.data().ENTIDAD_NACIONALES);
         $("#NOMBRE_NORMA_NACIONALES").val(row.data().NOMBRE_NORMA_NACIONALES);
         $("#DESCRIPCION_NORMA_NACIONALES").val(row.data().DESCRIPCION_NORMA_NACIONALES);
         $("#catalogo").val(catalogo);
 
-        $('#modal_normasnacionales').modal({backdrop:false});
+        $('#modal_normasnacionales').modal({ backdrop: false });
+        
+        
+        $(".notasnomnacionales").empty();
+        mostrarnotasnomnacionales(row);
+
+        $(".apartadonomnacionales").empty();
+        mostrarapartadonomnacionales(row);
+
+    });
+}
+
+function mostrarnotasnomnacionales(row) {
+
+    let contenedor = document.querySelector('.notasnomnacionales');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().NOTAS_NACIONALES_JSON;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-notasnacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Nota *</label>
+                <input type="text" class="form-control" 
+                       name="NOTAS_NACIONALES" 
+                       value="${item.NOTAS_NACIONALES}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarnotasnacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarnotasnacionales')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarapartadonomnacionales(row) {
+
+    let contenedor = document.querySelector('.apartadonomnacionales');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().APARTADO_NACIONALES_JSON;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-apartadonacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <input type="text" class="form-control" 
+                       name="APARTADO_ESPECIFICO_NACIONALES" 
+                       value="${item.APARTADO_ESPECIFICO_NACIONALES}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarapartadonacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarapartadonacionales')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
     });
 }
 
@@ -1953,55 +3372,174 @@ function editar_cat_normasnacionales()
 // CATALOGO NORMAS INTERNACIONALES
 //=======================================
 
-$("#boton_guardar_normasinternacionales").click(function () {
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarnotasinternacionales = document.getElementById('botonagregarnotasinternacionales');
+    botonAgregarnotasinternacionales.addEventListener('click', agregarnotasinternacionales);
+
+    function agregarnotasinternacionales() {
+
+        const contenedor = document.querySelector('.notasnominternacional');
+
+        let ultimaFila = contenedor.querySelector('.fila-notasinternacionales:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-notasinternacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Nota *</label>
+                <input type="text" class="form-control" name="NOTAS_INTERNACIONALES" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarnotasinternacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarnotasinternacionales')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregarapartadointernacionales= document.getElementById('botonagregarapartadointernacionales');
+    botonAgregarapartadointernacionales.addEventListener('click', agregarapartadointernacionales);
+
+    function agregarapartadointernacionales() {
+
+        const contenedor = document.querySelector('.apartadonominternacional');
+
+        let ultimaFila = contenedor.querySelector('.fila-apartadointernacionales:last-child');
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-apartadointernacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <input type="text" class="form-control" name="APARTADO_ESPECIFICO_INTERNACIONALES" required>
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarapartadointernacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarapartadointernacionales')
+            .addEventListener('click', function() {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    }
+});
+
+$("#boton_guardar_normasinternacionales").click(function (e) {
+    e.preventDefault();
 
     var valida = this.form.checkValidity();
-    if (valida) {
-        $('#form_normas_internacionales').ajaxForm({
-            dataType: 'json',
-            type: 'POST',
-            url: '/eppcatalogos',
-            data: {},
-            resetForm: false,
-            success: function (dato) {
-                tabla_normasinternacionales(catalogo);
-
-                swal({
-                    title: "Correcto",
-                    text: "Información guardada correctamente",
-                    type: "success", 
-                    buttons: {
-                        visible: false, 
-                    },
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                $('#boton_guardar_normasinternacionales').html('Guardar <i class="fa fa-save"></i>');
-
-                $('#modal_normasinternacionales').modal('hide');
-            },
-            beforeSend: function () {
-                $('#boton_guardar_normasinternacionales').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function (dato) {
-                $('#boton_guardar_normasinternacionales').html('Guardar <i class="fa fa-save"></i>');
-                // mensaje
-                swal({
-                    title: "Error",
-                    text: "Error en la acción: " + dato,
-                    type: "error", 
-                    buttons: {
-                        visible: false, 
-                    },
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                return false;
-            }
-        }).submit();
-        return false;
+    if (!valida) {
+        swal({
+            title: "Complete todos los campos",
+            text: "Verifique que los datos ingresados concuerden con el tipo de datos",
+            type: "error",
+            buttons: { visible: false },
+            timer: 2000
+        });
+        return;
     }
+
+    var formData = new FormData($('#form_normas_internacionales')[0]);
+
+ 
+    var notasnominternacionales = [];
+
+    $("[name='NOTAS_INTERNACIONALES']").each(function() {
+        notasnominternacionales.push({
+            'NOTAS_INTERNACIONALES': $(this).val()
+        });
+    });
+
+    formData.append('NOTAS_INTERNACIONALES_JSON', JSON.stringify(notasnominternacionales));
+
+
+    var apartandonominternacionales = [];
+
+    $("[name='APARTADO_ESPECIFICO_INTERNACIONALES']").each(function() {
+        apartandonominternacionales.push({
+            'APARTADO_ESPECIFICO_INTERNACIONALES': $(this).val()
+        });
+    });
+
+    formData.append('APARTADO_INTERNACIONALES_JSON', JSON.stringify(apartandonominternacionales));
+
+  
+    $.ajax({
+        type: 'POST',
+        url: "/eppcatalogos",
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+
+        beforeSend: function() {
+            $('#boton_guardar_normasinternacionales').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+        },
+
+        success: function(dato) {
+
+            tabla_normasinternacionales(catalogo);
+
+            swal({
+                title: "Correcto",
+                text: "Información guardada correctamente",
+                type: "success",
+                buttons: { visible: false },
+                timer: 1500
+            });
+
+            $('#boton_guardar_normasinternacionales').html('Guardar <i class="fa fa-save"></i>');
+            $('#modal_normasinternacionales').modal('hide');
+        },
+
+        error: function(dato) {
+
+            $('#boton_guardar_normasinternacionales').html('Guardar <i class="fa fa-save"></i>');
+
+            swal({
+                title: "Error",
+                text: "Error al guardar la información",
+                type: "error",
+                buttons: { visible: false },
+                timer: 1500
+            });
+        }
+    });
+
 });
 
 function tabla_normasinternacionales(num_catalogo)
@@ -2035,6 +3573,9 @@ function tabla_normasinternacionales(num_catalogo)
                         render: function (data, type, row, meta) {
                             return meta.row + 1;
                         }
+                    },
+                      {
+                        "data": "ENTIDAD_TEXTO"
                     },
                     {
                         "data": "NOMBRE_NORMA_INTERNACIONALES"
@@ -2101,11 +3642,133 @@ function editar_cat_normasinternacionales()
         });
 
         $("#ID_NORMAS_INTERNACIONALES").val(row.data().ID_NORMAS_INTERNACIONALES);
+        $("#ENTIDAD_INTERNACIONALES").val(row.data().ENTIDAD_INTERNACIONALES);
         $("#NOMBRE_NORMA_INTERNACIONALES").val(row.data().NOMBRE_NORMA_INTERNACIONALES);
         $("#DESCRIPCION_NORMA_INTERNACIONALES").val(row.data().DESCRIPCION_NORMA_INTERNACIONALES);
         $("#catalogo").val(catalogo);
 
-        $('#modal_normasinternacionales').modal({backdrop:false});
+        $('#modal_normasinternacionales').modal({ backdrop: false });
+        
+
+        $(".notasnominternacional").empty();
+        mostrarnotasnominternacionales(row);
+
+        $(".apartadonominternacional").empty();
+        mostrarapartadonominternacionales(row);
+
+
+    });
+}
+
+function mostrarnotasnominternacionales(row) {
+
+    let contenedor = document.querySelector('.notasnominternacional');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().NOTAS_INTERNACIONALES_JSON;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-notasinternacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Nota *</label>
+                <input type="text" class="form-control" 
+                       name="NOTAS_INTERNACIONALES" 
+                       value="${item.NOTAS_INTERNACIONALES}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarnotasinternacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarnotasinternacionales')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
+    });
+}
+
+function mostrarapartadonominternacionales(row) {
+
+    let contenedor = document.querySelector('.apartadonominternacional');
+
+    contenedor.innerHTML = "";
+
+    let data = row.data().APARTADO_INTERNACIONALES_JSON;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    let ultimaFila = null;
+
+    data.forEach((item, index) => {
+
+        if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+            ultimaFila = document.createElement('div');
+            ultimaFila.classList.add('row', 'fila-apartadointernacionales', 'mb-3');
+            contenedor.appendChild(ultimaFila);
+        }
+
+        const bloque = document.createElement('div');
+        bloque.classList.add('col-6');
+        bloque.innerHTML = `
+            <div class="form-group">
+                <label>Apartado específico *</label>
+                <input type="text" class="form-control" 
+                       name="APARTADO_ESPECIFICO_INTERNACIONALES" 
+                       value="${item.APARTADO_ESPECIFICO_INTERNACIONALES}" required>
+
+                <div class="mt-2" style="text-align:center;">
+                    <button type="button" class="btn btn-danger botonEliminarapartadointernacionales">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        ultimaFila.appendChild(bloque);
+
+        bloque.querySelector('.botonEliminarapartadointernacionales')
+            .addEventListener('click', function () {
+                bloque.remove();
+
+                if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+                    ultimaFila.remove();
+                }
+            });
     });
 }
 
@@ -2587,7 +4250,6 @@ function editar_cat_tipouso()
 // DOCUMENTOS HE IMAGENES DEL EPP
 //=======================================
 
-
 $("#boton_nuevo_epp_documento").click(function()
 {
    
@@ -2633,8 +4295,6 @@ $("#boton_nuevo_epp_documento").click(function()
          
 });
 
-
-
 $("#DOCUMENTO_TIPO").change(function () {
     let tipo = $(this).val();
 
@@ -2651,8 +4311,6 @@ $("#DOCUMENTO_TIPO").change(function () {
         $("#IMAGEN_DOCUMENTOS").hide();
     }
 });
-
-
 
 $("#boton_guardar_epp_documento").click(function () {
 
@@ -2709,91 +4367,6 @@ $("#boton_guardar_epp_documento").click(function () {
     }
 });
 
-
-
-
-// function tabla_epp_documentos()
-// {
-//     try 
-//     {
-//         var ruta = "/tablaeppdocumento/" + CAT_EPP_ID;
-
-//         if (TablaEppDocumentos != null)
-//         {
-//             TablaEppDocumentos.clear().draw();
-//             TablaEppDocumentos.ajax.url(ruta).load();
-//         }
-//         else
-//         {
-//             TablaEppDocumentos = $('#tabla_epp_documentos').DataTable({
-//                 "ajax": {
-//                     "url": ruta,
-//                     "type": "get",
-//                     "cache": false,
-//                     error: function (xhr, error, code)
-//                     {
-//                         // console.log(xhr); console.log(code);
-//                         tabla_epp_documentos(id);
-//                     },
-//                     "data": {}
-//                 },
-//                 "columns": [
-//                     {
-//                         "data": "numero_registro" 
-//                     },
-//                     {
-//                         "data": "NOMBRE_DOCUMENTO"
-//                     },
-//                     {
-//                         "className": 'Pdf',
-//                         "orderable": false,
-//                         "data": null,
-//                         "defaultContent": '<button type="button" class="btn btn-info btn-circle"><i class="fa fa-file-pdf-o"></i></button>'
-//                     },
-//                     {
-//                         "className": 'Editar',
-//                         "orderable": false,
-//                         "data": 'boton_editar',
-//                         "defaultContent": '-'
-//                     },
-//                     {
-//                         "className": 'Eliminar',
-//                         "orderable": false,
-//                         "data": 'boton_eliminar',
-//                         "defaultContent": '-'
-//                     }
-//                 ],
-//                 "lengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "Todos"]],
-//                 // "rowsGroup": [1], //agrupar filas
-//                 "order": [[ 0, "desc" ]],
-//                 "ordering": true,
-//                 "processing": true,
-//                 "language": {
-//                     "lengthMenu": "Mostrar _MENU_ Registros",
-//                     "zeroRecords": "No se encontraron registros",
-//                     "info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-//                     "infoEmpty": "No se encontraron registros",
-//                     "infoFiltered": "(Filtrado de _MAX_ registros)",
-//                     "emptyTable": "No hay datos disponibles en la tabla",
-//                     "loadingRecords": "Cargando datos....",
-//                     "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-//                     "search": "Buscar",
-//                     "paginate": {
-//                         "first": "Primera",
-//                         "last": "Ultima",
-//                         "next": "Siguiente",
-//                         "previous": "Anterior"
-//                     }
-//                 }
-//             });
-//         }
-//     }
-//     catch (exception)
-//     {
-//         tabla_epp_documentos();
-//     }
-// }
-
 function tabla_epp_documentos()
 {
     try 
@@ -2839,7 +4412,7 @@ function tabla_epp_documentos()
                             }
 
                             if (row.DOCUMENTO_TIPO == 2) {
-                                 return '<button type="button" class="btn btn-secondary btn-circle" disabled style="cursor:not-allowed; opacity:0.6; pointer-events:none;"><i class="fa fa-ban"></i></button>';
+                                    return row.FOTO_TABLA_DOCUMENTO;
                             }
 
                             return "-";
@@ -2880,22 +4453,6 @@ function tabla_epp_documentos()
         console.error("Error general tabla_epp_documentos():", exception);
     }
 }
-
-
-//  $('#tabla_epp_documentos tbody').on('click', 'td.Pdf', function () {
-//         var tr = $(this).closest('tr');
-//         var row = TablaEppDocumentos.row( tr );
-
-//         // abrir modal
-//         $('#modal_visor').modal({backdrop:false});
-
-//         // TITULO DEL VISOR
-//         $('#nombre_documento_visor').html(row.data().NOMBRE_DOCUMENTO);
-
-//         // Mostrar PDF
-//         $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/vereeppdocumentopdf/' + row.data().ID_EPP_DOCUMENTO);
-     
-//  });
 
 $('#tabla_epp_documentos tbody').on('click', 'td.Pdf', function (event) {
 
@@ -2984,7 +4541,168 @@ $(document).ready(function()
     });
 });
 
+//=======================================
+// CATALOGO ENTIDADES
+//=======================================
 
+$("#boton_guardar_entidades").click(function () {
+
+    var valida = this.form.checkValidity();
+    if (valida) {
+        $('#form_entidades').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/eppcatalogos',
+            data: {
+
+            },
+            resetForm: false,
+            success: function (dato) {
+                tabla_entidades(catalogo);
+
+                swal({
+                    title: "Correcto",
+                    text: "Información guardada correctamente",
+                    type: "success", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $('#boton_guardar_entidades').html('Guardar <i class="fa fa-save"></i>');
+
+                $('#modal_entidades').modal('hide');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_entidades').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                $('#boton_guardar_entidades').html('Guardar <i class="fa fa-save"></i>');
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+function tabla_entidades(num_catalogo)
+{
+    var ruta = "/eppconsultacatalogo/"+num_catalogo;
+
+    try
+    {
+        if (datatable_entidades != null)
+        {
+            datatable_entidades.clear().draw();
+            datatable_entidades.ajax.url(ruta).load();
+        }
+        else
+        {
+            datatable_entidades = $('#tabla_lista_entidades').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_entidades(num_catalogo);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+ {
+                        "data": "NOMBRE_ENTIDAD"
+                    },
+                    {
+                        "data": "ENTIDAD_DESCRIPCION"
+                    },
+                    {
+                        "className": 'editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
+                    },
+                    {
+                        // "className": 'Estado',
+                        // "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                    }
+                   
+                ],
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                "order": [[ 0, "asc" ]],        
+                "searching": true,
+                "paging": false,
+                "ordering": false,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "", //Página _PAGE_ de _PAGES_
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        // alert("error en el ajax");
+        tabla_entidades(num_catalogo);
+    }    
+}
+
+function editar_cat_entidades()
+{
+    $('#tabla_lista_entidades tbody').on('click', 'td.editar', function() {
+        var tr = $(this).closest('tr');
+        var row = datatable_entidades.row(tr);
+
+        $('#form_entidades').each(function(){
+            this.reset();
+        });
+
+        $("#ID_ENTIDAD_EPP").val(row.data().ID_ENTIDAD_EPP);
+        $("#NOMBRE_ENTIDAD").val(row.data().NOMBRE_ENTIDAD);
+        $("#ENTIDAD_DESCRIPCION").val(row.data().ENTIDAD_DESCRIPCION);
+
+        $("#catalogo").val(catalogo);
+
+        $('#modal_entidades').modal({backdrop:false});
+    });
+}
 
 //=======================================
 // FUNCION GLOBAL ACTIVAR/DESACTIVAR 

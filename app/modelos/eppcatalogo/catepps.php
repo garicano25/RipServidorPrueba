@@ -54,12 +54,38 @@ class catepps extends Model
         'RECOMENDACION_DISPOSICION_EPPS',
         'CARACTERISTICAS_ESPECIFICAS_EPP',
         'MATERIALES_UTILIZADOS_EPP',
-        'ACTIVO'
+        'CUMPLE_NORMA_NACIONALES',
+        'CUMPLE_NORMA_INTERNACIONALES',
+        'ACTIVO',
+
+        'ATENUACION_125',
+        'ATENUACION_250',
+        'ATENUACION_500',
+        'ATENUACION_1000',
+        'ATENUACION_2000',
+        'ATENUACION_3150',
+        'ATENUACION_4000',
+        'ATENUACION_6300',
+        'ATENUACION_8000',
+        'DESVIACION_125',
+        'DESVIACION_250',
+        'DESVIACION_500',
+        'DESVIACION_1000',
+        'DESVIACION_2000',
+        'DESVIACION_3150',
+        'DESVIACION_4000',
+        'DESVIACION_6300',
+        'DESVIACION_8000',
+
+        'ATENUACION_H',
+        'ATENUACION_M',
+        'ATENUACION_L',
+        'VALOR_SNR',
+        'VALOR_NRR',
     ];
 
     protected $casts = [
-        'NORMASNACIONALES_EPP' => 'array',
-        'NORMASINTERNACIONALES_EPP' => 'array',
+
         'TALLAS_EPP' => 'array',
         'CLASIFICACION_RIESGO_EPP' => 'array',
 

@@ -38,6 +38,67 @@
     table td b {
         font-weight: 600 !important;
     }
+
+    /* Contenedor general */
+    .tabla-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Tabla principal */
+    .tabla-epp {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        table-layout: fixed;
+        /* 🔥 Esto obliga a que TODAS las columnas tengan el mismo ancho */
+    }
+
+    /* Celdas */
+    .tabla-epp th,
+    .tabla-epp td {
+        border: 2px solid black;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Inputs */
+    .entrada-epp {
+        width: 100%;
+        max-width: 80px;
+        text-align: center;
+        border: 1px solid #999;
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    /* 🔥 BORDES REDONDEADOS EN TODA LA TABLA */
+    .tabla-epp tr:first-child th:first-child,
+    .tabla-epp tr:first-child td:first-child {
+        border-top-left-radius: 20px;
+    }
+
+    .tabla-epp tr:first-child th:last-child,
+    .tabla-epp tr:first-child td:last-child {
+        border-top-right-radius: 20px;
+    }
+
+    .tabla-epp tr:last-child th:first-child,
+    .tabla-epp tr:last-child td:first-child {
+        border-bottom-left-radius: 20px;
+    }
+
+    .tabla-epp tr:last-child th:last-child,
+    .tabla-epp tr:last-child td:last-child {
+        border-bottom-right-radius: 20px;
+    }
+
+    /* Ajustar título de columna */
+    .titulo-columna {
+        font-weight: bold;
+        text-align: center;
+        white-space: normal;
+    }
 </style>
 
 <div class="row">
@@ -94,6 +155,15 @@
                                         </a>
                                     </td>
                                 </tr>
+                                <tr id="tr_11">
+                                    <td>Entidades</td>
+                                    <td>
+                                        <a href="#" onclick="mostrar_catalogo(11);">
+                                            <i class="fa fa-chevron-circle-right fa-3x text-secondary"
+                                                id="cat_11"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 <tr id="tr_5">
                                     <td>Norma/estándar nacionales</td>
                                     <td>
@@ -139,7 +209,6 @@
                                         </a>
                                     </td>
                                 </tr>
-
 
                             </tbody>
                         </table>
@@ -245,7 +314,6 @@
                                                                     </option>
                                                                     @endforeach
                                                                 </select>
-
                                                             </div>
                                                         </div>
 
@@ -304,55 +372,218 @@
                                                             </div>
                                                         </div>
 
+                                                        <!-- FRECUENCIA (tabla fija) -->
+                                                        <div class="col-12 mb-3" id="TABLA_FRECUENCIA" style="display:none;">
+                                                            <div class="tabla-wrapper">
+                                                                <table class="tabla-epp">
+                                                                    <tr>
+                                                                        <th class="titulo-columna">Frecuencia<br>en Hz</th>
+                                                                        <th class="text-center">125</th>
+                                                                        <th class="text-center">250</th>
+                                                                        <th class="text-center">500</th>
+                                                                        <th class="text-center">1000</th>
+                                                                        <th class="text-center">2000</th>
+                                                                        <th class="text-center">3150</th>
+                                                                        <th class="text-center">4000</th>
+                                                                        <th class="text-center">6300</th>
+                                                                        <th class="text-center">8000</th>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- ATENUACIÓN (CON INPUTS) -->
+                                                        <div class="col-12 mb-3" id="TABLA_ATENUACION" style="display:none;">
+                                                            <div class="tabla-wrapper">
+                                                                <table class="tabla-epp">
+                                                                    <tr>
+                                                                        <th class="titulo-columna">ATENUACIÓN<br>MEDIA EN dB</th>
+                                                                        <td><input type="text" name="ATENUACION_125" id="ATENUACION_125" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_250" id="ATENUACION_250" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_500" id="ATENUACION_500" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_1000" id="ATENUACION_1000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_2000" id="ATENUACION_2000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_3150" id="ATENUACION_3150" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_4000" id="ATENUACION_4000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_6300" id="ATENUACION_6300" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="ATENUACION_8000" id="ATENUACION_8000" class="entrada-epp"></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- DESVIACIÓN (CON INPUTS) -->
+                                                        <div class="col-12 mb-3" id="TABLA_DESVIACION" style="display:none;">
+                                                            <div class="tabla-wrapper">
+                                                                <table class="tabla-epp">
+                                                                    <tr>
+                                                                        <th class="titulo-columna">DESVIACIÓN<br>ESTÁNDAR EN dB</th>
+                                                                        <td><input type="text" name="DESVIACION_125" id="DESVIACION_125" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_250" id="DESVIACION_250" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_500" id="DESVIACION_500" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_1000" id="DESVIACION_1000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_2000" id="DESVIACION_2000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_3150" id="DESVIACION_3150" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_4000" id="DESVIACION_4000" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_6300" id="DESVIACION_6300" class="entrada-epp"></td>
+                                                                        <td><input type="text" name="DESVIACION_8000" id="DESVIACION_8000" class="entrada-epp"></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div id="DIV_ATENUACION_RUIDO" style="display:none;" class="col-12 mb-4">
+
+                                                            <div style="
+                                                                border: 2px solid #000; 
+                                                                border-radius: 25px; 
+                                                                padding: 20px;
+                                                                margin-bottom: 20px;
+                                                                display: flex;
+                                                                flex-direction: column;
+                                                                align-items: center;
+                                                                text-align: center;">
+
+                                                                <h5 style="font-weight: bold; margin-bottom: 15px;">
+                                                                    Atenuación de frecuencias Altas (H) – Medias (M) – Bajas (L)
+                                                                </h5>
+
+                                                                <div class="row w-100">
+
+                                                                    <div class="col-4 text-center">
+                                                                        <label style="font-weight:bold;">H</label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_H"
+                                                                            name="ATENUACION_H"
+                                                                            class="form-control mt-2"
+                                                                            placeholder="Ej. 36">
+                                                                    </div>
+
+                                                                    <div class="col-4 text-center">
+                                                                        <label style="font-weight:bold;">M</label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_M"
+                                                                            name="ATENUACION_M"
+                                                                            class="form-control mt-2"
+                                                                            placeholder="Ej. 34">
+                                                                    </div>
+
+                                                                    <div class="col-4 text-center">
+                                                                     
+                                                                    <label style="font-weight:bold;">L</label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_L"
+                                                                            name="ATENUACION_L"
+                                                                            class="form-control mt-2"
+                                                                            placeholder="Ej. 33">
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div style="
+                                                                border: 2px solid #000; 
+                                                                border-radius: 25px; 
+                                                                padding: 20px;
+                                                                text-align: center;">
+
+                                                                <h5 style="font-weight: bold; margin-bottom: 15px;">
+                                                                    Valor de la reducción del ruido
+                                                                </h5>
+
+                                                                <div class="row w-100">
+
+                                                                    <div class="col-6 text-center">
+                                                                        <label style="font-weight:bold;">SNR</label>
+                                                                        <input type="text"
+                                                                            id="VALOR_SNR"
+                                                                            name="VALOR_SNR"
+                                                                            class="form-control mt-2"
+                                                                            placeholder="Ej. 21">
+                                                                    </div>
+
+                                                                    <div class="col-6 text-center">
+                                                                        <label style="font-weight:bold;">NRR</label>
+                                                                        <input type="text"
+                                                                            id="VALOR_NRR"
+                                                                            name="VALOR_NRR"
+                                                                            class="form-control mt-2"
+                                                                            placeholder="Ej. 26">
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
 
 
                                                         <div class="col-6">
                                                             <div class="form-group">
-                                                                <label>Normas nacionales que cumple </label>
-                                                                <select class="custom-select form-control" id="NORMASNACIONALES_EPP" name="NORMASNACIONALES_EPP[]" multiple>
-                                                                    @foreach ($catnormasnacionales as $nomnacionales)
-                                                                    <option value="{{ $nomnacionales->ID_NORMAS_NACIONALES }}">
-                                                                        {{ $nomnacionales->NOMBRE_NORMA_NACIONALES }}
-                                                                    </option>
-                                                                    @endforeach
+                                                                <label>Cumple norma/estándar nacionales *</label>
+                                                                <select class="custom-select form-control" id="CUMPLE_NORMA_NACIONALES" name="CUMPLE_NORMA_NACIONALES">
+                                                                    <option value selected="">Seleccione una opción</option>
+                                                                    <option value="1">Sí</option>
+                                                                    <option value="2">No</option>
                                                                 </select>
-
                                                             </div>
                                                         </div>
 
                                                         <div class="col-6">
                                                             <div class="form-group">
-                                                                <label>Apartado específico </label>
-                                                                <input type="text" class="form-control" id="APARTADONOMNACIONALES_EPP" name="APARTADONOMNACIONALES_EPP">
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="col-6">
-                                                            <div class="form-group">
-                                                                <label>Normas internacionales que cumple </label>
-                                                                <select class="custom-select form-control" id="NORMASINTERNACIONALES_EPP" name="NORMASINTERNACIONALES_EPP[]" multiple>
-                                                                    @foreach ($catnormasinternacionales as $nominternacionales)
-                                                                    <option value="{{ $nominternacionales->ID_NORMAS_INTERNACIONALES }}">
-                                                                        {{ $nominternacionales->NOMBRE_NORMA_INTERNACIONALES }}
-                                                                    </option>
-                                                                    @endforeach
+                                                                <label>Cumple norma/estándar internacionales *</label>
+                                                                <select class="custom-select form-control" id="CUMPLE_NORMA_INTERNACIONALES" name="CUMPLE_NORMA_INTERNACIONALES">
+                                                                    <option value selected="">Seleccione una opción</option>
+                                                                    <option value="1">Sí</option>
+                                                                    <option value="2">No</option>
                                                                 </select>
-
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-6">
+
+                                                        <div class="col-12" id="NOM_NACIONALES_BOTON" style="display: none;">
                                                             <div class="form-group">
-                                                                <label>Apartado específico </label>
-                                                                <input type="text" class="form-control" id="APARTADONOMINTERNACIONALES_EPP" name="APARTADONOMINTERNACIONALES_EPP">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarnomnacionales">
+                                                                    Agregar norma/estándar nacionales<i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-12" id="NOM_NACIONALES_DIV" style="display: none;">
+                                                            <div class="listanomnacionales">
+                                                            </div>
+                                                        </div>
+
+
+
+
+
+                                                        <div class="col-12" id="NOM_INTERNACIONALES_BOTON" style="display: none;">
+                                                            <div class="form-group">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarnominternacionales">
+                                                                    Agregar norma/estándar internacionales<i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12" id="NOM_INTERNACIONALES_DIV" style="display: none;">
+                                                            <div class="listanominternacionales">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarcertificacionesadicionales">
+                                                                    Certificaciones adicionales <i class="fa fa-plus"></i>
+                                                                </button>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label>Certificaciones adicionales </label>
-                                                                <input type="text" class="form-control" id="CERTIFICACIONES_ADICIONALES_EPP" name="CERTIFICACIONES_ADICIONALES_EPP">
+                                                            <div class="certificacionesadicionales">
                                                             </div>
                                                         </div>
 
@@ -363,8 +594,6 @@
                                                             </div>
                                                         </div>
 
-
-
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <button type="button" class="btn btn-danger " id="botonagregarcaracteristicasespecificas">
@@ -373,14 +602,10 @@
                                                             </div>
                                                         </div>
 
-
-
                                                         <div class="col-12">
                                                             <div class="listacaracteristicasespecificas">
                                                             </div>
                                                         </div>
-
-
 
                                                         <div class="col-3">
                                                             <div class="form-group">
@@ -392,7 +617,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
 
                                                         <div id="DIV_TALLAS_EPP" class="col-9" style="display:none;">
                                                             <div class="row">
@@ -418,8 +642,6 @@
                                                             </div>
                                                         </div>
 
-
-
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <label>Se adapta a trabajadores con discapacidad *</label>
@@ -430,7 +652,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
 
                                                         <div id="DIV_DISCAPACIODAD" class="col-12" style="display:none;">
                                                             <div class="row">
@@ -478,7 +699,6 @@
                                                             </div>
                                                         </div>
 
-
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <button type="button" class="btn btn-danger " id="botonagregarmaterialesutilizados">
@@ -487,39 +707,37 @@
                                                             </div>
                                                         </div>
 
-
-
                                                         <div class="col-12">
                                                             <div class="materialesutilizadosfabricante">
                                                             </div>
                                                         </div>
 
-
-
-
-                                                        <div class="col-4 mt-4">
+                                                        <div class="col-4">
                                                             <div class="form-group">
                                                                 <label>Parte del cuerpo expuesta *</label>
                                                                 <input type="text" class="form-control" id="PARTE_EXPUESTA_EPP" name="PARTE_EXPUESTA_EPP" required>
                                                             </div>
                                                         </div>
 
-
-                                                        <div class="col-4">
+                                                        <div class="col-8">
                                                             <div class="form-group">
                                                                 <label>Recomendaciones de uso y manejo (Antes, Durante y Después) *</label>
                                                                 <input type="text" class="form-control" id="RECOMENDACIONES_USO_EPP" name="RECOMENDACIONES_USO_EPP" required>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4 mt-4">
+                                                        <div class="col-12">
                                                             <div class="form-group">
-                                                                <label>Restricciones de uso *</label>
-                                                                <input type="text" class="form-control" id="RESTRICCIONES_USO_EPP" name="RESTRICCIONES_USO_EPP" required>
+                                                                <button type="button" class="btn btn-danger " id="botonagregarestriccionesuso">
+                                                                    Restricciones de uso <i class="fa fa-plus"></i>
+                                                                </button>
                                                             </div>
                                                         </div>
 
-
+                                                        <div class="col-12">
+                                                            <div class="restriccionesdeuso">
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-4">
                                                             <div class="form-group">
@@ -532,7 +750,6 @@
                                                             </div>
                                                         </div>
 
-
                                                         <div id="DIV_REQUIERE_PRUEBA" class="col-8" style="display:none;">
                                                             <div class="row">
                                                                 <div class="col-12">
@@ -542,13 +759,6 @@
                                                                     </div>
                                                                 </div>
 
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label>Recomendaciones para el almacenamiento</label>
-                                                                <input type="text" class="form-control" id="RECOMENDACION_ALMACENAMIENTO_EPP" name="RECOMENDACION_ALMACENAMIENTO_EPP">
                                                             </div>
                                                         </div>
 
@@ -584,8 +794,6 @@
                                                             </div>
                                                         </div>
 
-
-
                                                         <div class="col-4">
                                                             <div class="form-group">
                                                                 <label>Requiere inspecciones internas *</label>
@@ -596,7 +804,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
 
                                                         <div id="DIV_INSPECCION_INTERNA" class="col-8" style="display:none;">
                                                             <div class="row">
@@ -617,7 +824,7 @@
 
                                                         <div class="col-4">
                                                             <div class="form-group">
-                                                                <label>Requiere inspecciones externa *</label>
+                                                                <label>Requiere inspecciones externa (tercera parte) *</label>
                                                                 <select class="custom-select form-control" id="INSPECCION_EXTERNA_EPP" name="INSPECCION_EXTERNA_EPP" required>
                                                                     <option value selected="">Seleccione una opción</option>
                                                                     <option value="1">Sí</option>
@@ -625,7 +832,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
 
                                                         <div id="DIV_INSPECCION_EXTERNA" class="col-8" style="display:none;">
                                                             <div class="row">
@@ -644,14 +850,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <label>Recomendaciones para la limpieza</label>
-                                                                <textarea class="form-control" id="RECOMENDACION_LIMPIEZA_EPPS" name="RECOMENDACION_LIMPIEZA_EPPS" rows="3" required></textarea>
-                                                            </div>
-                                                        </div>
-
-
                                                         <div class="col-6">
                                                             <div class="form-group">
                                                                 <label>Aplica algún procedimiento de descontaminación *</label>
@@ -662,7 +860,6 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-
 
                                                         <div id="DIV_DESCONTAMINACION" class="col-6" style="display:none;">
                                                             <div class="row">
@@ -689,14 +886,46 @@
                                                             </div>
                                                         </div>
 
+
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <label>Recomendaciones para la disposición final *</label>
-                                                                <textarea class="form-control" id="RECOMENDACION_DISPOSICION_EPPS" name="RECOMENDACION_DISPOSICION_EPPS" rows="3" required></textarea>
+                                                                <button type="button" class="btn btn-danger " id="botonagregarecomendacionalmacenamiento">
+                                                                    Recomendaciones para el almacenamiento <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="recomendacionalmacenamiento">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarecomendacionlimpieza">
+                                                                    Recomendaciones para la limpieza <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="recomendacionlimpieza">
                                                             </div>
                                                         </div>
 
 
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarecomendaciondisposicionfinal">
+                                                                    Recomendaciones para la disposición final <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="recomendaciondisposicionfinal">
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-12" style="text-align: right;">
                                                             <div class="form-group">
@@ -923,7 +1152,7 @@
 
 <div id="modal_normasnacionales" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" enctype="multipart/form-data" name="form_normas_nacionales" id="form_normas_nacionales">
                 <div class="modal-header">
@@ -938,6 +1167,21 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
+                                <label>Entidades *</label>
+                                <select class="custom-select form-control" id="ENTIDAD_NACIONALES" name="ENTIDAD_NACIONALES" required>
+                                    <option value selected="">Seleccione una opción</option>
+                                    @foreach ($catentidades as $entidades)
+                                    <option value="{{ $entidades->ID_ENTIDAD_EPP }}">
+                                        {{ $entidades->NOMBRE_ENTIDAD }} - {{ $entidades->ENTIDAD_DESCRIPCION }}
+                                    </option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
                                 <label>Nombre de la norma/estándar *</label>
                                 <input type="text" class="form-control" id="NOMBRE_NORMA_NACIONALES" name="NOMBRE_NORMA_NACIONALES" required>
                             </div>
@@ -948,6 +1192,35 @@
                                 <input type="text" class="form-control" id="DESCRIPCION_NORMA_NACIONALES" name="DESCRIPCION_NORMA_NACIONALES" required>
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger " id="botonagregarnotasnacionales">
+                                    Agregar nota <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="notasnomnacionales">
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger " id="botonagregarapartadonacionales">
+                                    Apartado específico <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="apartadonomnacionales">
+                            </div>
+                        </div>
+
+
                         <div class="col-12">
                             <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="5">
                         </div>
@@ -970,7 +1243,7 @@
 
 <div id="modal_normasinternacionales" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="post" enctype="multipart/form-data" name="form_normas_internacionales" id="form_normas_internacionales">
                 <div class="modal-header">
@@ -985,6 +1258,20 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
+                                <label>Entidades *</label>
+                                <select class="custom-select form-control" id="ENTIDAD_INTERNACIONALES" name="ENTIDAD_INTERNACIONALES" required>
+                                    <option value selected="">Seleccione una opción</option>
+                                    @foreach ($catentidades as $entidades)
+                                    <option value="{{ $entidades->ID_ENTIDAD_EPP }}">
+                                        {{ $entidades->NOMBRE_ENTIDAD }} - {{ $entidades->ENTIDAD_DESCRIPCION }}
+                                    </option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
                                 <label>Nombre de la norma/estándar *</label>
                                 <input type="text" class="form-control" id="NOMBRE_NORMA_INTERNACIONALES" name="NOMBRE_NORMA_INTERNACIONALES" required>
                             </div>
@@ -995,6 +1282,39 @@
                                 <input type="text" class="form-control" id="DESCRIPCION_NORMA_INTERNACIONALES" name="DESCRIPCION_NORMA_INTERNACIONALES" required>
                             </div>
                         </div>
+
+
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger " id="botonagregarnotasinternacionales">
+                                    Agregar nota <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="notasnominternacional">
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger " id="botonagregarapartadointernacionales">
+                                    Apartado específico <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="apartadonominternacional">
+                            </div>
+                        </div>
+
+
+
+
                         <div class="col-12">
                             <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="6">
                         </div>
@@ -1134,12 +1454,54 @@
     </div>
 </div>
 
+<!-- ============================================================== -->
+<!-- MODAL ENTIDADES-->
+<!-- ============================================================== -->
 
-
+<div id="modal_entidades" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_entidades" id="form_entidades">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Entidad</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {!! csrf_field() !!}
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="ID_ENTIDAD_EPP" name="ID_ENTIDAD_EPP" value="0">
+                            <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="11">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Entidad *</label>
+                                <input type="text" class="form-control" id="NOMBRE_ENTIDAD" name="NOMBRE_ENTIDAD" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Descripción normativa *</label>
+                                <input type="text" class="form-control" id="ENTIDAD_DESCRIPCION" name="ENTIDAD_DESCRIPCION" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_entidades">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- ============================================================== -->
 <!-- MODAL DOCUMENTOS HE IMAGENES -->
 <!-- ============================================================== -->
+
 <div id="modal_epp_documento" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -1283,4 +1645,14 @@
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
 {{-- ========================================================================= --}}
+
+
+
+<script>
+    window.catnormasnacionales = @json($catnormasnacionales);
+    window.catnormasinternacionales = @json($catnormasinternacionales);
+</script>
+
+
+
 @endsection

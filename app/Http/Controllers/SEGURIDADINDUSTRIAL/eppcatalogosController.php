@@ -28,6 +28,7 @@ use App\modelos\eppcatalogo\catclasificacionriesgoModel;
 use App\modelos\eppcatalogo\cattipousoModel;
 use App\modelos\eppcatalogo\catepps;
 use App\modelos\eppcatalogo\documentoseppModel;
+use App\modelos\eppcatalogo\catentidadeseppModel;
 
 
 
@@ -44,7 +45,7 @@ class eppcatalogosController extends Controller
 
     }
 
-
+   
 
     public function index()
     {
@@ -57,9 +58,10 @@ class eppcatalogosController extends Controller
         $cattallas = cattallaseppModel::where('ACTIVO', 1)->get();
         $catclasificacion = catclasificacionriesgoModel::where('ACTIVO', 1)->get();
         $cattipouso = cattipousoModel::where('ACTIVO', 1)->get();
+        $catentidades = catentidadeseppModel::where('ACTIVO', 1)->get();
 
 
-        return view('catalogos.seguridad.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso'));
+        return view('catalogos.seguridad.nom-017.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso', 'catentidades'));
 
     }
 
@@ -121,6 +123,8 @@ class eppcatalogosController extends Controller
                     $value['ID_CAT_EPP'] = $value->ID_CAT_EPP;
                     $value['ACTIVO'] = $value->ACTIVO;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_epp();"><i class="fa fa-pencil"></i></button>';
+                    $value->FOTO_EPP_TABLA = '<img src="/vereppfoto/' . $value->ID_CAT_EPP . '" alt="" class="img-fluid" width="50" height="60">';
+
 
                     if ($value->ACTIVO == 1) {
                         $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CAT_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
@@ -150,8 +154,16 @@ class eppcatalogosController extends Controller
                 $lista = catclaveyeppModel::all();
 
                 foreach ($lista as $value) {
+
                     $region = catregionanatomicaModel::find($value->REGION_ANATOMICA_ID);
-                    $value['REGION_ANATOMICA_NOMBRE'] = $region ? $region->NOMBRE_REGION : 'N/A';
+
+                    if ($region) {
+                        $value['REGION_ANATOMICA_NOMBRE'] =
+                            $region->ID_REGION_ANATOMICA . ') ' . $region->NOMBRE_REGION;
+                    } else {
+                        $value['REGION_ANATOMICA_NOMBRE'] = 'N/A';
+                    }
+
                     $value['CLAVE_EPP'] = $value->CLAVE . ' - ' . $value->EPP;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cat_claveyepp();"><i class="fa fa-pencil"></i></button>';
 
@@ -183,11 +195,18 @@ class eppcatalogosController extends Controller
             case 5:
                 $lista = catnormasnacionalesModel::all();
 
+                $entidad = catentidadeseppModel::pluck('NOMBRE_ENTIDAD', 'ID_ENTIDAD_EPP')->toArray();
+
+
+
                 foreach ($lista as $key => $value) {
+
+                    $identidad= $value->ENTIDAD_NACIONALES;
+                    $value['ENTIDAD_TEXTO'] = $entidad[$identidad] ?? 'SIN ENTIDAD';
+
                     $value['ID_NORMAS_NACIONALES'] = $value->ID_NORMAS_NACIONALES;
                     $value['NOMBRE_NORMA_NACIONALES'] = $value->NOMBRE_NORMA_NACIONALES;
                     $value['DESCRIPCION_NORMA_NACIONALES'] = $value->DESCRIPCION_NORMA_NACIONALES;
-
                     $value['ACTIVO'] = $value->ACTIVO;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cat_normasnacionales();"><i class="fa fa-pencil"></i></button>';
 
@@ -202,7 +221,13 @@ class eppcatalogosController extends Controller
             case 6:
                 $lista = catnormasinternacionalesModel::all();
 
+                $entidad = catentidadeseppModel::pluck('NOMBRE_ENTIDAD', 'ID_ENTIDAD_EPP')->toArray();
+
                 foreach ($lista as $key => $value) {
+
+                    $identidad = $value->ENTIDAD_INTERNACIONALES;
+                    $value['ENTIDAD_TEXTO'] = $entidad[$identidad] ?? 'SIN ENTIDAD';
+
                     $value['ID_NORMAS_INTERNACIONALES'] = $value->ID_NORMAS_INTERNACIONALES;
                     $value['NOMBRE_NORMA_INTERNACIONALES'] = $value->NOMBRE_NORMA_INTERNACIONALES;
                     $value['DESCRIPCION_NORMA_INTERNACIONALES'] = $value->DESCRIPCION_NORMA_INTERNACIONALES;
@@ -264,6 +289,24 @@ class eppcatalogosController extends Controller
                     }
                 }
                 break;
+            case 11:
+                $lista = catentidadeseppModel::all();
+
+                foreach ($lista as $key => $value) {
+                    $value['ID_ENTIDAD_EPP'] = $value->ID_ENTIDAD_EPP;
+                    $value['NOMBRE_ENTIDAD'] = $value->NOMBRE_ENTIDAD;
+                    $value['ENTIDAD_DESCRIPCION'] = $value->ENTIDAD_DESCRIPCION;
+
+                    $value['ACTIVO'] = $value->ACTIVO;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cat_entidades();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ENTIDAD_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ENTIDAD_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+                break;
         }
 
         // Respuesta
@@ -321,6 +364,10 @@ class eppcatalogosController extends Controller
                     $tabla = cattipousoModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
+                case 11:
+                    $tabla = catentidadeseppModel::findOrFail($registro);
+                    $tabla->update(['ACTIVO' => $estado]);
+                    break;
                     
             }
 
@@ -374,7 +421,8 @@ class eppcatalogosController extends Controller
                     $value->TIPO_DOCUMENTO_TEXTO = "N/A";
                 }
 
-                
+                $value->FOTO_TABLA_DOCUMENTO = '<img src="/vereppfotodocumento/' . $value->ID_EPP_DOCUMENTO . '" alt="" class="img-fluid" width="50" height="60">';
+
 
                 // Botones
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
@@ -425,43 +473,7 @@ class eppcatalogosController extends Controller
         try {
             switch (($request['catalogo'] + 0)) {
 
-                // case 1:
-                //     if ($request['ID_CAT_EPP'] == 0) {
-
-                //         $request['NORMASNACIONALES_EPP'] = isset($request['NORMASNACIONALES_EPP']) ? $request['NORMASNACIONALES_EPP'] : null;
-                //         $request['NORMASINTERNACIONALES_EPP'] = isset($request['NORMASINTERNACIONALES_EPP']) ? $request['NORMASINTERNACIONALES_EPP'] : null;
-                //         $request['TALLAS_EPP'] = isset($request['TALLAS_EPP']) ? $request['TALLAS_EPP'] : null;
-
-
-                //         $catalogo = catepps::create($request->all());
-                //     } else {
-                //         $catalogo = catepps::findOrFail($request['ID_CAT_EPP']);
-
-
-                //         if (!isset($request['NORMASNACIONALES_EPP']) || empty($request['NORMASNACIONALES_EPP']) || is_null($request['NORMASNACIONALES_EPP']) || $request['NORMASNACIONALES_EPP'] == '') {
-                //             $request['NORMASNACIONALES_EPP'] = null;
-                //         } else {
-                //             $request['NORMASNACIONALES_EPP'] = $request['NORMASNACIONALES_EPP'];
-                //         }
-
-
-
-                //         if (!isset($request['NORMASINTERNACIONALES_EPP']) || empty($request['NORMASINTERNACIONALES_EPP']) || is_null($request['NORMASINTERNACIONALES_EPP']) || $request['NORMASINTERNACIONALES_EPP'] == '') {
-                //             $request['NORMASINTERNACIONALES_EPP'] = null;
-                //         } else {
-                //             $request['NORMASINTERNACIONALES_EPP'] = $request['NORMASINTERNACIONALES_EPP'];
-                //         }
-
-                //         if (!isset($request['TALLAS_EPP']) || empty($request['TALLAS_EPP']) || is_null($request['TALLAS_EPP']) || $request['TALLAS_EPP'] == '') {
-                //             $request['TALLAS_EPP'] = null;
-                //         } else {
-                //             $request['TALLAS_EPP'] = $request['TALLAS_EPP'];
-                //         }
-
-
-                //         $catalogo->update($request->all());
-                //     }
-                //     break;
+              
 
                 case 1:
 
@@ -470,9 +482,9 @@ class eppcatalogosController extends Controller
                       
                         if ($request['ID_CAT_EPP'] == 0) {
 
-                            $request['NORMASNACIONALES_EPP'] = isset($request['NORMASNACIONALES_EPP']) ? $request['NORMASNACIONALES_EPP'] : null;
-                            $request['NORMASINTERNACIONALES_EPP'] = isset($request['NORMASINTERNACIONALES_EPP']) ? $request['NORMASINTERNACIONALES_EPP'] : null;
+                    
                             $request['TALLAS_EPP'] = isset($request['TALLAS_EPP']) ? $request['TALLAS_EPP'] : null;
+
                             $request['CLASIFICACION_RIESGO_EPP'] = isset($request['CLASIFICACION_RIESGO_EPP']) ? $request['CLASIFICACION_RIESGO_EPP'] : null;
 
                             $catalogo = catepps::create($request->except('FOTO_EPP'));
@@ -499,14 +511,7 @@ class eppcatalogosController extends Controller
 
                             $catalogo = catepps::findOrFail($request['ID_CAT_EPP']);
 
-                            if (!isset($request['NORMASNACIONALES_EPP']) || empty($request['NORMASNACIONALES_EPP'])) {
-                                $request['NORMASNACIONALES_EPP'] = null;
-                            }
-
-                            if (!isset($request['NORMASINTERNACIONALES_EPP']) || empty($request['NORMASINTERNACIONALES_EPP'])) {
-                                $request['NORMASINTERNACIONALES_EPP'] = null;
-                            }
-
+                          
                             if (!isset($request['TALLAS_EPP']) || empty($request['TALLAS_EPP'])) {
                                 $request['TALLAS_EPP'] = null;
                             }
@@ -627,15 +632,6 @@ class eppcatalogosController extends Controller
                         $catalogo->update($request->all());
                     }
                     break;
-                // case 10:
-                //     if ($request['ID_EPP_DOCUMENTO'] == 0) {
-                //         $catalogo = documentoseppModel::create($request->all());
-                //     } else {
-                //         $catalogo = documentoseppModel::findOrFail($request['ID_EPP_DOCUMENTO']);
-                //         $catalogo->update($request->all());
-                //     }
-                //     break;
-
                 case 10:
 
                     try {
@@ -651,9 +647,7 @@ class eppcatalogosController extends Controller
 
                         $baseFolder = "cat_epp/{$request->EPP_ID}";
 
-                        // ===============================================================
-                        // 2️⃣ SUBIR PDF
-                        // ===============================================================
+                       
                         if ($request->DOCUMENTO_TIPO == 1 && $request->hasFile('EPP_PDF')) {
 
                             if ($catalogo->EPP_PDF && Storage::exists($catalogo->EPP_PDF)) {
@@ -667,11 +661,9 @@ class eppcatalogosController extends Controller
 
                             $ruta = $file->storeAs($folder, $filename);
 
-                            // Guardar en BD
                             $catalogo->EPP_PDF = $ruta;
                             $catalogo->save();
 
-                            Log::info("📄 PDF GUARDADO", ['ruta' => $ruta]);
                         }
 
                         if ($request->DOCUMENTO_TIPO == 2 && $request->hasFile('FOTO_DOCUMENTO')) {
@@ -690,12 +682,18 @@ class eppcatalogosController extends Controller
                             $catalogo->FOTO_DOCUMENTO = $ruta;
                             $catalogo->save();
 
-                            Log::info("🖼️ IMAGEN GUARDADA", ['ruta' => $ruta]);
                         }
                     } catch (\Exception $e) {
-                        Log::error("❌ Error guardando documento EPP: " . $e->getMessage());
-                    }
 
+                    }
+                    break;
+                case 11:
+                    if ($request['ID_ENTIDAD_EPP'] == 0) {
+                        $catalogo = catentidadeseppModel::create($request->all());
+                    } else {
+                        $catalogo = catentidadeseppModel::findOrFail($request['ID_ENTIDAD_EPP']);
+                        $catalogo->update($request->all());
+                    }
                     break;
             }
 

@@ -227,9 +227,9 @@
                             <a class="unauthorized" href="#">
                                 @else
                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
-                                <a class="cta" href="{{route('eppcatalogos.index')}}"> {{-- ← Ruta para Seguridad Industrial --}}
+                                <a class="cta" href="{{route('tableroepp.index')}}"> {{-- ← Ruta para Seguridad Industrial --}}
                                     @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
-                                    <a class="cta" href="{{route('eppcatalogos.index')}}"> {{-- También pueden entrar --}}
+                                    <a class="cta" href="{{route('tableroepp.index')}}"> {{-- También pueden entrar --}}
                                         @endif
                                         @endif
 

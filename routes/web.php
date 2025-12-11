@@ -2075,6 +2075,12 @@ Route::get('recpsicocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 
 //////////////////////////////////////////////////SEGURIDAD INDUSTRIAL////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+///// TABLERO  NOMS EPP
+
+Route::resource('tableroepp', 'SEGURIDADINDUSTRIAL\tableroeppController');
+
+////////// CATALOGO NOM-017-STPS-2024
 Route::resource('eppcatalogos', 'SEGURIDADINDUSTRIAL\eppcatalogosController');
 
 Route::get('eppconsultacatalogo/{num_catalogo}', ['as' => 'SEGURIDADINDUSTRIAL.eppconsultacatalogo', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@eppconsultacatalogo']);

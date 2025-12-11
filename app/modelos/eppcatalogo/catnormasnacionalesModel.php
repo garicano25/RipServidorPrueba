@@ -11,6 +11,9 @@ class catnormasnacionalesModel extends Model
     protected $fillable = [
         'NOMBRE_NORMA_NACIONALES',
         'DESCRIPCION_NORMA_NACIONALES',
+        'ENTIDAD_NACIONALES',
+        'NOTAS_NACIONALES_JSON',
+        'APARTADO_NACIONALES_JSON',
         'ACTIVO'
 
     ];

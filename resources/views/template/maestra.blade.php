@@ -250,19 +250,23 @@ use Illuminate\Support\Str;
 
                     @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path())|| preg_match('/\brecpsicocatalogosrec\b/', request()->path()))
                     <div class="navbar-nav" style="left: 38%; position: absolute;">
-
                         <h1 style="color:#ffff;font-weight: bold;">Factor de Riesgo Psicosocial</h1>
                     </div>
 
                     @endif
 
 
-
-                    @if (preg_match('/\beppcatalogos\b/', request()->path()))
+                    @if (preg_match('/\btableroepp\b/', request()->path()))
                     <div class="navbar-nav" style="left: 35%; position: absolute;">
                         <h1 style="color:#ffff;font-weight: bold;">Seguridad Industrial</h1>
                     </div>
+                    @endif
 
+
+                    @if (preg_match('/\beppcatalogos\b/', request()->path()) && !preg_match('/\btableroepp\b/', request()->path()))
+                    <div class="navbar-nav" style="left: 35%; position: absolute;">
+                        <h1 style="color:#ffff;font-weight: bold;">NOM-017-STPS</h1>
+                    </div>
                     @endif
 
 
@@ -595,24 +599,48 @@ use Illuminate\Support\Str;
 
 
 
-                        @if (preg_match('/\beppcatalogos\b/', request()->path()))
 
 
+                        @if (preg_match('/\btableroepp\b/', request()->path()))
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
                         <li>
-                            <a class="has-arrow " href="#" aria-expanded="false">
-                                <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
+                            <a class="has-arrow" href="{{route('tableroepp.index')}}" aria-expanded="false">
+                                <i class="mdi mdi-gauge"></i><span class="hide-menu">Tablero</span>
                             </a>
-                            <ul aria-expanded="false" class="collapse">
-                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
-                                <li><a href="{{route('eppcatalogos.index')}}">Catálogo EPP</a></li>
-                                @endif
-
-
-                            </ul>
                         </li>
                         @endif
                         @endif
+
+
+
+                        @if (preg_match('/\beppcatalogos\b/', request()->path()))
+
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
+                        <li>
+                            <a class="has-arrow" href="{{route('tableroepp.index')}}" aria-expanded="false">
+                                <i class="mdi mdi-gauge"></i><span class="hide-menu">Tablero</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
+                                <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
+                            </a>
+
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{route('eppcatalogos.index')}}">Catálogo EPP</a></li>
+                            </ul>
+                        </li>
+                        @endif
+
+                        @endif
+
+
+
+
+
 
 
 
@@ -1118,7 +1146,7 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/eppcatalogos.js"></script>
+    <script src="/js_sitio/eppcatalogos.js?v=1.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
