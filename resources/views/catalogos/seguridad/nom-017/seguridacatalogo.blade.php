@@ -941,7 +941,7 @@
                                     </div>
                                 </div>
                                 <!--tab 2 -->
-                                <div class="tab-pane" id="tab2_documentos" role="tabpanel">
+                                <div class="tab-pane" id="tab2_documentos" role="tabpanel" style="display: none;">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
