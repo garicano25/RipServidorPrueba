@@ -1557,8 +1557,6 @@ function editar_epp()
         });
 
         $("#tab1_epp_info").click();
-
-
         $("#tab2_documentos_epp").show();
         
         $("#ID_CAT_EPP").val(row.data().ID_CAT_EPP);
@@ -1818,14 +1816,14 @@ function editar_epp()
 
         
          $("#tab1_epp_info").off("click").on("click", function () {
-            $("#tab2_documentos_epp").hide();
+            $("#tab2_documentos").hide();
          });
         
 
         
         
         $("#tab2_documentos_epp").off("click").on("click", function () {
-            $("#tab2_documentos_epp").show();
+            $("#tab2_documentos").show();
             tabla_epp_documentos();
 
         });
