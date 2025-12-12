@@ -1089,8 +1089,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="col-6">
             <div class="form-group">
-                <label>Apartado específico *</label>
-                <select class="form-control select-apartado-nacional" name="APARTADO_NACIONALES" required>
+                <label>Apartado específico </label>
+                <select class="form-control select-apartado-nacional" name="APARTADO_NACIONALES" >
                     <option value="">Seleccione una norma primero</option>
                 </select>
             </div>
@@ -1196,8 +1196,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <div class="col-6">
             <div class="form-group">
-                <label>Apartado específico *</label>
-                <select class="form-control select-apartado-internacional" name="APARTADO_INTERNACIONALES" required>
+                <label>Apartado específico </label>
+                <select class="form-control select-apartado-internacional" name="APARTADO_INTERNACIONALES" >
                     <option value="">Seleccione una norma primero</option>
                 </select>
             </div>
@@ -1812,16 +1812,11 @@ function editar_epp()
 
         $(".listanominternacionales").empty();
         mostrarNormasInternacionales(row);
-
-
-        
+    
          $("#tab1_epp_info").off("click").on("click", function () {
             $("#tab2_documentos").hide();
          });
-        
-
-        
-        
+    
         $("#tab2_documentos_epp").off("click").on("click", function () {
             $("#tab2_documentos").show();
             tabla_epp_documentos();
@@ -2306,9 +2301,9 @@ function mostrarNormasNacionales(row) {
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Apartado específico *</label>
+                    <label>Apartado específico </label>
                     <select class="form-control select-apartado-nacional"
-                        name="APARTADO_NACIONALES" required>
+                        name="APARTADO_NACIONALES" >
                     </select>
                 </div>
             </div>
@@ -2426,9 +2421,9 @@ function mostrarNormasInternacionales(row) {
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Apartado específico *</label>
+                    <label>Apartado específico </label>
                     <select class="form-control select-apartado-internacional"
-                        name="APARTADO_INTERNACIONALES" required>
+                        name="APARTADO_INTERNACIONALES" >
                     </select>
                 </div>
             </div>
