@@ -1146,7 +1146,7 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/eppcatalogos.js?v=1.3"></script>
+    <script src="/js_sitio/eppcatalogos.js?v=1.4"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>

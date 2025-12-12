@@ -1070,7 +1070,8 @@ document.addEventListener("DOMContentLoaded", function() {
         window.catnormasnacionales.forEach(function(norma) {
             opciones += `
                 <option value="${norma.ID_NORMAS_NACIONALES}">
-                    ${norma.NOMBRE_NORMA_NACIONALES}
+                    ${norma.NOMBRE_NORMA_NACIONALES} - ${norma.DESCRIPCION_NORMA_NACIONALES}
+
                 </option>`;
         });
 
@@ -1177,7 +1178,8 @@ document.addEventListener("DOMContentLoaded", function() {
         window.catnormasinternacionales.forEach(function(norma) {
             opciones += `
                 <option value="${norma.ID_NORMAS_INTERNACIONALES}">
-                    ${norma.NOMBRE_NORMA_INTERNACIONALES}
+                    ${norma.NOMBRE_NORMA_INTERNACIONALES} - ${norma.DESCRIPCION_NORMA_INTERNACIONALES}
+
                 </option>`;
         });
 
@@ -2284,7 +2286,8 @@ function mostrarNormasNacionales(row) {
             opcionesNormas += `
                 <option value="${norma.ID_NORMAS_NACIONALES}" 
                     ${norma.ID_NORMAS_NACIONALES == normaSeleccionada ? "selected" : ""}>
-                    ${norma.NOMBRE_NORMA_NACIONALES}
+                    ${norma.NOMBRE_NORMA_NACIONALES} -  ${norma.DESCRIPCION_NORMA_NACIONALES}
+
                 </option>`;
         });
 
@@ -2404,7 +2407,7 @@ function mostrarNormasInternacionales(row) {
             opcionesNormas += `
                 <option value="${norma.ID_NORMAS_INTERNACIONALES}" 
                     ${norma.ID_NORMAS_INTERNACIONALES == normaSeleccionada ? "selected" : ""}>
-                    ${norma.NOMBRE_NORMA_INTERNACIONALES}
+                    ${norma.NOMBRE_NORMA_INTERNACIONALES} -   ${norma.DESCRIPCION_NORMA_INTERNACIONALES}
                 </option>`;
         });
 
