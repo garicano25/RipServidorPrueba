@@ -343,14 +343,14 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
+                                                        <div class="col-12">
                                                             <div class="form-group">
                                                                 <label>Nombre del EPP*</label>
                                                                 <input type="text" class="form-control" id="NOMBRE_EPP" name="NOMBRE_EPP" required>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
+                                                        <div class="col-6">
                                                             <div class="form-group">
                                                                 <label>Marca *</label>
                                                                 <select class="custom-select form-control" id="MARCA_EPP" name="MARCA_EPP" required>
@@ -365,7 +365,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
+                                                        <div class="col-6">
                                                             <div class="form-group">
                                                                 <label> Modelo *</label>
                                                                 <input type="text" class="form-control" id="MODELO_EPP" name="MODELO_EPP" required>
