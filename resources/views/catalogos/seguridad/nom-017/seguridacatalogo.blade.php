@@ -164,6 +164,15 @@
                                         </a>
                                     </td>
                                 </tr>
+                                <tr id="tr_12">
+                                    <td>Certificaciones</td>
+                                    <td>
+                                        <a href="#" onclick="mostrar_catalogo(12);">
+                                            <i class="fa fa-chevron-circle-right fa-3x text-secondary"
+                                                id="cat_12"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 <tr id="tr_5">
                                     <td>Norma/estándar nacionales</td>
                                     <td>
@@ -451,7 +460,7 @@
 
                                                                 <div class="row w-100">
 
-                                                                    <div class="col-4 text-center">
+                                                                    <div class="col-3 text-center">
                                                                         <label style="font-weight:bold;">H</label>
                                                                         <input type="text"
                                                                             id="ATENUACION_H"
@@ -460,7 +469,16 @@
                                                                             placeholder="Ej. 36">
                                                                     </div>
 
-                                                                    <div class="col-4 text-center">
+                                                                    <div class="col-1 text-center mt-2">
+                                                                        <label style="font-weight:bold;"> </label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_H_TEXTO"
+                                                                            name="ATENUACION_H_TEXTO"
+                                                                            class="form-control mt-2"
+                                                                            value="dB" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-3 text-center">
                                                                         <label style="font-weight:bold;">M</label>
                                                                         <input type="text"
                                                                             id="ATENUACION_M"
@@ -469,15 +487,34 @@
                                                                             placeholder="Ej. 34">
                                                                     </div>
 
-                                                                    <div class="col-4 text-center">
-                                                                     
-                                                                    <label style="font-weight:bold;">L</label>
+                                                                    <div class="col-1 text-center mt-2">
+                                                                        <label style="font-weight:bold;"> </label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_M_TEXTO"
+                                                                            name="ATENUACION_M_TEXTO"
+                                                                            class="form-control mt-2"
+                                                                            value="dB" readonly>
+                                                                    </div>
+
+
+                                                                    <div class="col-3 text-center">
+                                                                        <label style="font-weight:bold;">L</label>
                                                                         <input type="text"
                                                                             id="ATENUACION_L"
                                                                             name="ATENUACION_L"
                                                                             class="form-control mt-2"
                                                                             placeholder="Ej. 33">
                                                                     </div>
+
+                                                                    <div class="col-1 text-center mt-2">
+                                                                        <label style="font-weight:bold;"> </label>
+                                                                        <input type="text"
+                                                                            id="ATENUACION_L_TEXTO"
+                                                                            name="ATENUACION_L_TEXTO"
+                                                                            class="form-control mt-2"
+                                                                            value="dB" readonly>
+                                                                    </div>
+
 
                                                                 </div>
                                                             </div>
@@ -494,8 +531,8 @@
 
                                                                 <div class="row w-100">
 
-                                                                    <div class="col-6 text-center">
-                                                                        <label style="font-weight:bold;">SNR</label>
+                                                                    <div class="col-5 text-center">
+                                                                        <label style="font-weight:bold;">SNR (Single Number Rating)</label>
                                                                         <input type="text"
                                                                             id="VALOR_SNR"
                                                                             name="VALOR_SNR"
@@ -503,13 +540,31 @@
                                                                             placeholder="Ej. 21">
                                                                     </div>
 
-                                                                    <div class="col-6 text-center">
-                                                                        <label style="font-weight:bold;">NRR</label>
+                                                                    <div class="col-1 text-center mt-2">
+                                                                        <label style="font-weight:bold;"> </label>
+                                                                        <input type="text"
+                                                                            id="VALOR_SNR_TEXTO"
+                                                                            name="VALOR_SNR_TEXTO"
+                                                                            class="form-control mt-2"
+                                                                            value="dB" readonly>
+                                                                    </div>
+
+                                                                    <div class="col-5 text-center">
+                                                                        <label style="font-weight:bold;">NRR (Noise Reduction Rating) </label>
                                                                         <input type="text"
                                                                             id="VALOR_NRR"
                                                                             name="VALOR_NRR"
                                                                             class="form-control mt-2"
                                                                             placeholder="Ej. 26">
+                                                                    </div>
+
+                                                                    <div class="col-1 text-center mt-2">
+                                                                        <label style="font-weight:bold;"> </label>
+                                                                        <input type="text"
+                                                                            id="VALOR_NRR_TEXTO"
+                                                                            name="VALOR_NRR_TEXTO"
+                                                                            class="form-control mt-2"
+                                                                            value="dB" readonly>
                                                                     </div>
 
                                                                 </div>
@@ -1498,6 +1553,71 @@
     </div>
 </div>
 
+
+
+<!-- ============================================================== -->
+<!-- MODAL CERTIFICACIONES -->
+<!-- ============================================================== -->
+
+<div id="modal_certificaciones" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_certificaciones" id="form_certificaciones">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Certificación</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_CERTIFICACIONES_EPP" name="ID_CERTIFICACIONES_EPP" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label> Nombre *</label>
+                                <input type="text" class="form-control" id="NOMBRE_CERTIFICACION" name="NOMBRE_CERTIFICACION" required>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Descripción </label>
+                                <input type="text" class="form-control" id="DESCRIPCION_CERTIFICACION" name="DESCRIPCION_CERTIFICACION">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Pictograma </label>
+                                <input type="file" accept="image/jpeg,image/x-png,image/gif" id="FOTO_CERTIFICACION" name="FOTO_CERTIFICACION" data-allowed-file-extensions="jpg png JPG PNG" data-height="240" data-default-file="" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="col-12">
+                                <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light " id="boton_guardar_certificacion">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- ============================================================== -->
 <!-- MODAL DOCUMENTOS HE IMAGENES -->
 <!-- ============================================================== -->
@@ -1651,6 +1771,7 @@
 <script>
     window.catnormasnacionales = @json($catnormasnacionales);
     window.catnormasinternacionales = @json($catnormasinternacionales);
+    window.catcertificaciones = @json($catcertificaciones);
 </script>
 
 

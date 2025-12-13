@@ -23,6 +23,10 @@ var datatable_tipouso = null;
 var datatable_epp = null;
 var TablaEppDocumentos = null;
 var datatable_entidades = null;
+var datatable_certificaciones = null;
+
+
+
 
 
 var caracteristicasespecificos = [];
@@ -85,7 +89,7 @@ function mostrar_catalogo(num_catalogo)
                                         '<thead>'+
                                             '<tr>'+
                                                 '<th>#</th>' +
-                                                '<th>Foto EPP</th>'+
+                                                '<th style="width: 150px!important;">Foto EPP</th>'+
                                                 '<th>Región anatómica</th>'+
                                                 '<th>Clave y EPP</th>'+
                                                 '<th>Nombre</th>' +
@@ -372,7 +376,41 @@ function mostrar_catalogo(num_catalogo)
                                     '</table>');
 
             tabla_entidades(catalogo);
-            break;
+                  break;
+              
+               case 12:
+         
+            $("#titulo_tabla").html('Catálogo [Certificaciones]');
+            $("#tr_12").addClass("active");
+            $("#cat_12").addClass("text-info");
+
+            // Inicializar tabla
+            if(datatable_certificaciones != null)
+            {
+                datatable_certificaciones.destroy();
+                datatable_certificaciones = null;
+            }
+
+            // diseño tabla
+                  // $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_tipouso" width="100%">'+
+                              $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_certificaciones" width="100%">'+
+
+                                       '<thead>'+
+                                            '<tr>'+
+                                                '<th>#</th>' +
+                                                '<th>Entidad</th>' +
+                                                '<th>Descripción</th>' +
+                                                '<th style="width: 150px!important;">Pictograma</th>' +
+                                                '<th style="width: 90px!important;">Editar</th>'+
+                                                '<th style="width: 90px!important;">Activo</th>'+
+                                            '</tr>'+
+                                        '</thead>'+
+                                        '<tbody></tbody>'+
+                                    '</table>');
+
+            tabla_certificaciones(catalogo);
+                  break;
+              
 
     }
 }
@@ -424,6 +462,7 @@ $("#boton_nuevo_registro").click(function()
     
                 $("#ID_CAT_EPP").val(0);
                 $("#catalogo").val(catalogo);
+            
     
                 if ($('#FOTO_EPP').data('dropify'))
                 {
@@ -565,6 +604,44 @@ $("#boton_nuevo_registro").click(function()
                 $("#catalogo").val(catalogo);
     
                 $('#modal_entidades').modal({backdrop:false});
+            break;
+         case 12:
+                $('#form_certificaciones').each(function(){
+                    this.reset();
+                });
+    
+                $("#ID_CERTIFICACIONES_EPP").val(0);
+                $("#catalogo").val(catalogo);
+            
+
+                if ($('#FOTO_CERTIFICACION').data('dropify'))
+                {
+                    $('#FOTO_CERTIFICACION').dropify().data('dropify').resetPreview();
+                    $('#FOTO_CERTIFICACION').dropify().data('dropify').clearElement();
+                    
+                }
+                else
+                {
+                   
+                    $('#FOTO_CERTIFICACION').dropify({
+                        messages: {
+                            'default': 'Arrastre la imagen aquí o haga click',
+                            'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                            'remove':  'Quitar',
+                            'error':   'Ooops, ha ocurrido un error.'
+                        },
+                        error: {
+                            'fileSize': 'Demasiado grande ({{ value }} max).',
+                            'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                            'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                            'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                            'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                            'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                        }
+                    });
+                }
+    
+                $('#modal_certificaciones').modal({backdrop:false});
             break;
         default:
             // Borrar formulario
@@ -715,7 +792,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 ///// DINAMICO CERTIFICACIONES ADICIONALES
+
 document.addEventListener("DOMContentLoaded", function() {
+
     const botonAgregarcertficaciones = document.getElementById('botonagregarcertificacionesadicionales');
     botonAgregarcertficaciones.addEventListener('click', agregarcertificaciones);
 
@@ -733,10 +812,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const bloque = document.createElement('div');
         bloque.classList.add('col-6');
+
+        // 🔹 Opciones del select
+        let opciones = `<option value="">Seleccione una certificación</option>`;
+
+        if (window.catcertificaciones && Array.isArray(window.catcertificaciones)) {
+            window.catcertificaciones.forEach(item => {
+                opciones += `
+                    <option value="${item.ID_CERTIFICACIONES_EPP}">
+                        ${item.NOMBRE_CERTIFICACION}
+                    </option>
+                `;
+            });
+        }
+
         bloque.innerHTML = `
             <div class="form-group">
                 <label>Certificaciones adicionales *</label>
-                <input type="text" class="form-control" name="CERTIFICACIONES_ADICIONALES" required>
+
+                <select class="form-control"
+                        name="CERTIFICACIONES_ADICIONALES"
+                        required>
+                    ${opciones}
+                </select>
 
                 <div class="mt-2" style="text-align:center;">
                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
@@ -757,7 +855,53 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
     }
+
 });
+
+
+// document.addEventListener("DOMContentLoaded", function() {
+//     const botonAgregarcertficaciones = document.getElementById('botonagregarcertificacionesadicionales');
+//     botonAgregarcertficaciones.addEventListener('click', agregarcertificaciones);
+
+//     function agregarcertificaciones() {
+
+//         const contenedor = document.querySelector('.certificacionesadicionales');
+
+//         let ultimaFila = contenedor.querySelector('.fila-certificaciones:last-child');
+
+//         if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+//             ultimaFila = document.createElement('div');
+//             ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
+//             contenedor.appendChild(ultimaFila);
+//         }
+
+//         const bloque = document.createElement('div');
+//         bloque.classList.add('col-6');
+//         bloque.innerHTML = `
+//             <div class="form-group">
+//                 <label>Certificaciones adicionales *</label>
+//                 <input type="text" class="form-control" name="CERTIFICACIONES_ADICIONALES" required>
+
+//                 <div class="mt-2" style="text-align:center;">
+//                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
+//                         <i class="fa fa-trash"></i>
+//                     </button>
+//                 </div>
+//             </div>
+//         `;
+
+//         ultimaFila.appendChild(bloque);
+
+//         bloque.querySelector('.botonEliminarcertificaciones')
+//             .addEventListener('click', function() {
+//                 bloque.remove();
+
+//                 if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+//                     ultimaFila.remove();
+//                 }
+//             });
+//     }
+// });
 
 ///// DINAMICO RESTRICIONES DE USO
 document.addEventListener("DOMContentLoaded", function() {
@@ -988,7 +1132,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const selectInspeccionExterna = document.getElementById('INSPECCION_EXTERNA_EPP');
@@ -1311,8 +1454,6 @@ document.getElementById("REGION_ANATOMICA_EPP").addEventListener("change", funct
     }
 });
 
-
-
 $("#boton_guardar_epp").click(function (e) {
     e.preventDefault();
 
@@ -1444,7 +1585,6 @@ $("#boton_guardar_epp").click(function (e) {
         }
     });
 });
-
 
 function tabla_epp(num_catalogo)
 {
@@ -1941,10 +2081,66 @@ function mostrarMaterialesUtilizados(row) {
     });
 }
 
+// function mostrarCertificacionesadicionales(row) {
+
+//     let contenedor = document.querySelector('.certificacionesadicionales');
+
+//     contenedor.innerHTML = "";
+
+//     let data = row.data().CERTIFICACIONES_ADICIONALES_EPP;
+
+//     if (!data) return;
+
+//     try {
+//         data = JSON.parse(data);
+//     } catch (e) {
+//         data = [];
+//     }
+
+//     let ultimaFila = null;
+
+//     data.forEach((item, index) => {
+
+//         if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
+//             ultimaFila = document.createElement('div');
+//             ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
+//             contenedor.appendChild(ultimaFila);
+//         }
+
+//         const bloque = document.createElement('div');
+//         bloque.classList.add('col-6');
+//         bloque.innerHTML = `
+//             <div class="form-group">
+//                 <label>Certificaciones adicionales *</label>
+//                 <input type="text" class="form-control"
+//                        name="CERTIFICACIONES_ADICIONALES"
+//                        value="${item.CERTIFICACIONES_ADICIONALES}" required>
+
+//                 <div class="mt-2" style="text-align:center;">
+//                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
+//                         <i class="fa fa-trash"></i>
+//                     </button>
+//                 </div>
+//             </div>
+//         `;
+
+//         ultimaFila.appendChild(bloque);
+
+//         bloque.querySelector('.botonEliminarcertificaciones')
+//             .addEventListener('click', function () {
+//                 bloque.remove();
+
+//                 if (ultimaFila.querySelectorAll('.col-6').length === 0) {
+//                     ultimaFila.remove();
+//                 }
+//             });
+//     });
+// }
+
+
 function mostrarCertificacionesadicionales(row) {
 
     let contenedor = document.querySelector('.certificacionesadicionales');
-
     contenedor.innerHTML = "";
 
     let data = row.data().CERTIFICACIONES_ADICIONALES_EPP;
@@ -1959,7 +2155,7 @@ function mostrarCertificacionesadicionales(row) {
 
     let ultimaFila = null;
 
-    data.forEach((item, index) => {
+    data.forEach((item) => {
 
         if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
             ultimaFila = document.createElement('div');
@@ -1969,12 +2165,35 @@ function mostrarCertificacionesadicionales(row) {
 
         const bloque = document.createElement('div');
         bloque.classList.add('col-6');
+
+        // 🔹 Construir opciones del select
+        let opciones = `<option value="">Seleccione una certificación</option>`;
+
+        if (window.catcertificaciones && Array.isArray(window.catcertificaciones)) {
+            window.catcertificaciones.forEach(cert => {
+
+                const selected =
+                    cert.ID_CERTIFICACIONES_EPP == item.CERTIFICACIONES_ADICIONALES
+                        ? 'selected'
+                        : '';
+
+                opciones += `
+                    <option value="${cert.ID_CERTIFICACIONES_EPP}" ${selected}>
+                        ${cert.NOMBRE_CERTIFICACION}
+                    </option>
+                `;
+            });
+        }
+
         bloque.innerHTML = `
             <div class="form-group">
                 <label>Certificaciones adicionales *</label>
-                <input type="text" class="form-control" 
-                       name="CERTIFICACIONES_ADICIONALES" 
-                       value="${item.CERTIFICACIONES_ADICIONALES}" required>
+
+                <select class="form-control"
+                        name="CERTIFICACIONES_ADICIONALES"
+                        required>
+                    ${opciones}
+                </select>
 
                 <div class="mt-2" style="text-align:center;">
                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
@@ -1996,6 +2215,8 @@ function mostrarCertificacionesadicionales(row) {
             });
     });
 }
+
+
 
 function mostrarRestricciones(row) {
 
@@ -2220,6 +2441,7 @@ function mostrarRecomendacionesdisposicion(row) {
             });
     });
 }
+
 function filtrarClaveAlEditar(row) {
 
     const region = row.data().REGION_ANATOMICA_EPP;
@@ -4718,6 +4940,211 @@ function editar_cat_entidades()
         $('#modal_entidades').modal({backdrop:false});
     });
 }
+
+
+//=======================================
+// CATALOGO CERTIFICACIONES 
+//=======================================
+
+$("#boton_guardar_certificacion").click(function () {
+
+    var valida = this.form.checkValidity();
+    if (valida) {
+        $('#form_certificaciones').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/eppcatalogos',
+            data: {},
+            resetForm: false,
+            success: function (dato) {
+                tabla_certificaciones(catalogo);
+
+                swal({
+                    title: "Correcto",
+                    text: "Información guardada correctamente",
+                    type: "success", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $('#boton_guardar_certificacion').html('Guardar <i class="fa fa-save"></i>');
+
+                $('#modal_certificaciones').modal('hide');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_certificacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                $('#boton_guardar_certificacion').html('Guardar <i class="fa fa-save"></i>');
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+
+function tabla_certificaciones(num_catalogo)
+{
+    var ruta = "/eppconsultacatalogo/"+num_catalogo;
+
+    try
+    {
+        if (datatable_certificaciones != null)
+        {
+            datatable_certificaciones.clear().draw();
+            datatable_certificaciones.ajax.url(ruta).load();
+        }
+        else
+        {
+            datatable_certificaciones = $('#tabla_lista_certificaciones').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_certificaciones(num_catalogo);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        "data": "NOMBRE_CERTIFICACION"
+                    },
+                    {
+                        "data": "DESCRIPCION_CERTIFICACION"
+                    },
+                     {
+                        "data": "PICTOGRAMA"
+                    },
+                    {
+                        "className": 'editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
+                    },
+                    {
+                        // "className": 'Estado',
+                        // "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                    }
+                   
+                ],
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                "order": [[ 0, "asc" ]],        
+                "searching": true,
+                "paging": false,
+                "ordering": false,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "", //Página _PAGE_ de _PAGES_
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        // alert("error en el ajax");
+        tabla_certificaciones(num_catalogo);
+    }    
+}
+
+
+function editar_cat_certificaciones()
+{
+    $('#tabla_lista_certificaciones tbody').on('click', 'td.editar', function() {
+        var tr = $(this).closest('tr');
+        var row = datatable_certificaciones.row(tr);
+
+        $('#form_certificaciones').each(function(){
+            this.reset();
+        });
+
+        $("#ID_CERTIFICACIONES_EPP").val(row.data().ID_CERTIFICACIONES_EPP);
+        $("#NOMBRE_CERTIFICACION").val(row.data().NOMBRE_CERTIFICACION);
+        $("#DESCRIPCION_CERTIFICACION").val(row.data().DESCRIPCION_CERTIFICACION);
+
+
+
+        if (row.data().FOTO_CERTIFICACION) {
+            var archivo = row.data().FOTO_CERTIFICACION;
+            var extension = archivo.substring(archivo.lastIndexOf("."));
+            var imagenUrl = '/verepictograma/' + row.data().ID_CERTIFICACIONES_EPP + extension;
+
+            if ($('#FOTO_CERTIFICACION').data('dropify')) {
+                $('#FOTO_CERTIFICACION').dropify().data('dropify').destroy();
+                $('#FOTO_CERTIFICACION').dropify().data('dropify').settings.defaultFile = imagenUrl;
+                $('#FOTO_CERTIFICACION').dropify().data('dropify').init();
+            } else {
+                $('#FOTO_CERTIFICACION').attr('data-default-file', imagenUrl);
+                $('#FOTO_CERTIFICACION').dropify({
+                    messages: {
+                        'default': 'Arrastre la imagen aquí o haga click',
+                        'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                        'remove': 'Quitar',
+                        'error': 'Ooops, ha ocurrido un error.'
+                    },
+                    error: {
+                        'fileSize': 'Demasiado grande ({{ value }} max).',
+                        'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                        'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                        'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                        'maxHeight': 'Alto demasiado grande (max {{ value }}px).',
+                        'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                    }
+                });
+            }
+        } else {
+            $('#FOTO_CERTIFICACION').dropify().data('dropify').resetPreview();
+            $('#FOTO_CERTIFICACION').dropify().data('dropify').clearElement();
+        }
+
+
+        $("#catalogo").val(catalogo);
+
+        $('#modal_certificaciones').modal({backdrop:false});
+    });
+}
+
+
 
 //=======================================
 // FUNCION GLOBAL ACTIVAR/DESACTIVAR 

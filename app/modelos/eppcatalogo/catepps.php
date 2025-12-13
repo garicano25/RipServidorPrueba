@@ -76,12 +76,17 @@ class catepps extends Model
         'DESVIACION_4000',
         'DESVIACION_6300',
         'DESVIACION_8000',
-
         'ATENUACION_H',
         'ATENUACION_M',
         'ATENUACION_L',
         'VALOR_SNR',
         'VALOR_NRR',
+
+
+
+
+        
+
     ];
 
     protected $casts = [

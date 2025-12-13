@@ -30,6 +30,7 @@ use App\modelos\eppcatalogo\catepps;
 use App\modelos\eppcatalogo\documentoseppModel;
 use App\modelos\eppcatalogo\catentidadeseppModel;
 
+use App\modelos\eppcatalogo\catcertificacioneppModel;
 
 
 
@@ -60,8 +61,9 @@ class eppcatalogosController extends Controller
         $cattipouso = cattipousoModel::where('ACTIVO', 1)->get();
         $catentidades = catentidadeseppModel::where('ACTIVO', 1)->get();
 
+        $catcertificaciones = catcertificacioneppModel::where('ACTIVO', 1)->get();
 
-        return view('catalogos.seguridad.nom-017.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso', 'catentidades'));
+        return view('catalogos.seguridad.nom-017.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso', 'catentidades', 'catcertificaciones'));
 
     }
 
@@ -123,7 +125,8 @@ class eppcatalogosController extends Controller
                     $value['ID_CAT_EPP'] = $value->ID_CAT_EPP;
                     $value['ACTIVO'] = $value->ACTIVO;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_epp();"><i class="fa fa-pencil"></i></button>';
-                    $value->FOTO_EPP_TABLA = '<img src="/vereppfoto/' . $value->ID_CAT_EPP . '" alt="" class="img-fluid" width="50" height="60">';
+
+                    $value->FOTO_EPP_TABLA = '<img src="/vereppfoto/' . $value->ID_CAT_EPP . '" alt="" class="img-fluid" width="130">';
 
 
                     if ($value->ACTIVO == 1) {
@@ -307,6 +310,34 @@ class eppcatalogosController extends Controller
                     }
                 }
                 break;
+
+
+            case 12:
+                $lista = catcertificacioneppModel::all();
+
+                foreach ($lista as $key => $value) {
+                    $value['ID_CERTIFICACIONES_EPP'] = $value->ID_CERTIFICACIONES_EPP;
+                    $value['NOMBRE_CERTIFICACION'] = $value->NOMBRE_CERTIFICACION;
+                    $value['DESCRIPCION_CERTIFICACION'] = $value->DESCRIPCION_CERTIFICACION;
+
+                    $value['ACTIVO'] = $value->ACTIVO;
+
+
+
+                    $value->PICTOGRAMA = '<img src="/verepictograma/' . $value->ID_CERTIFICACIONES_EPP . '" alt="" class="img-fluid" width="130">';
+
+
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cat_certificaciones();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CERTIFICACIONES_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CERTIFICACIONES_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+                break;
+
+
         }
 
         // Respuesta
@@ -319,6 +350,13 @@ class eppcatalogosController extends Controller
     {
         $foto = catepps::findOrFail($epp_id);
         return Storage::response($foto->FOTO_EPP);
+    }
+
+
+    public function verepictograma($certificacion_id)
+    {
+        $foto = catcertificacioneppModel::findOrFail($certificacion_id);
+        return Storage::response($foto->FOTO_CERTIFICACION);
     }
 
 
@@ -366,6 +404,10 @@ class eppcatalogosController extends Controller
                     break;
                 case 11:
                     $tabla = catentidadeseppModel::findOrFail($registro);
+                    $tabla->update(['ACTIVO' => $estado]);
+                    break;
+                case 12:
+                    $tabla = catcertificacioneppModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
                     
@@ -695,7 +737,82 @@ class eppcatalogosController extends Controller
                         $catalogo->update($request->all());
                     }
                     break;
-            }
+
+                case 12:
+
+                    try {
+
+
+                        if ($request['ID_CERTIFICACIONES_EPP'] == 0) {
+
+                            $catalogo = catcertificacioneppModel::create($request->except('FOTO_CERTIFICACION'));
+
+
+                            if ($request->hasFile('FOTO_CERTIFICACION')) {
+
+                                $file = $request->file('FOTO_CERTIFICACION');
+
+                                $folder = "cat_certificacionesepp/{$catalogo->ID_CERTIFICACIONES_EPP}/FOTO_CERTIFICACION";
+                                $filename = "foto_pictograma." . $file->getClientOriginalExtension();
+
+                                $ruta = $file->storeAs($folder, $filename);
+
+                                $catalogo->FOTO_CERTIFICACION = $ruta;
+                                $catalogo->save();
+
+                            }
+                        } else {
+
+                            $catalogo = catcertificacioneppModel::findOrFail($request['ID_CERTIFICACIONES_EPP']);
+
+                            if ($request->hasFile('FOTO_CERTIFICACION')) {
+
+
+                                if ($catalogo->FOTO_CERTIFICACION && Storage::exists($catalogo->FOTO_CERTIFICACION)) {
+                                    Storage::delete($catalogo->FOTO_CERTIFICACION);
+                                }
+
+                                $file = $request->file('FOTO_CERTIFICACION');
+                                $folder = "cat_certificacionesepp/{$catalogo->ID_CERTIFICACIONES_EPP}/FOTO_CERTIFICACION";
+                                $filename = "foto_pictograma." . $file->getClientOriginalExtension();
+
+                                $ruta = $file->storeAs($folder, $filename);
+
+                                $catalogo->FOTO_CERTIFICACION = $ruta;
+                            }
+
+                            $catalogo->update($request->except('FOTO_CERTIFICACION'));
+                            $catalogo->save();
+                        }
+
+
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Guardado correctamente'
+                        ]);
+                    } catch (\Exception $e) {
+
+                        Log::error("ERROR AL GUARDAR EPP:", [
+                            'error' => $e->getMessage(),
+                            'line'  => $e->getLine(),
+                            'file'  => $e->getFile(),
+                            'trace' => $e->getTraceAsString(),
+                            'request' => $request->all()
+                        ]);
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Error al guardar',
+                            'error' => $e->getMessage(),
+                            'line'  => $e->getLine(),
+                            'file'  => $e->getFile()
+                        ], 500);
+                    }
+
+                    break;
+
+
+                }
 
             $dato["code"] = 1;
             $dato["msj"] = 'Información guardada correctamente';

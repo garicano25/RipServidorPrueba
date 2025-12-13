@@ -2077,10 +2077,10 @@ Route::get('recpsicocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 
 
 
 ///// TABLERO  NOMS EPP
-
 Route::resource('tableroepp', 'SEGURIDADINDUSTRIAL\tableroeppController');
 
 ////////// CATALOGO NOM-017-STPS-2024
+
 Route::resource('eppcatalogos', 'SEGURIDADINDUSTRIAL\eppcatalogosController');
 
 Route::get('eppconsultacatalogo/{num_catalogo}', ['as' => 'SEGURIDADINDUSTRIAL.eppconsultacatalogo', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@eppconsultacatalogo']);
@@ -2092,7 +2092,10 @@ Route::get('vereppfoto/{id}', ['as' => 'vereppfoto', 'uses' => 'SEGURIDADINDUSTR
 Route::get('tablaeppdocumento/{epp_id}', ['as' => 'SEGURIDADINDUSTRIAL.tablaeppdocumento', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@tablaeppdocumento']);
 
 Route::get('vereeppdocumentopdf/{documento_id}', ['as' => 'vereeppdocumentopdf', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereeppdocumentopdf']);
+
 Route::get('vereppfotodocumento/{id}', ['as' => 'vereppfotodocumento', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereppfotodocumento']);
+
+Route::get('verepictograma/{id}', ['as' => 'verepictograma', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@verepictograma']);
 
 
 Route::get('/clear-cache', function () {
