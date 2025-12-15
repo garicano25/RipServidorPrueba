@@ -39,22 +39,18 @@
         font-weight: 600 !important;
     }
 
-    /* Contenedor general */
     .tabla-wrapper {
         width: 100%;
         overflow-x: auto;
     }
 
-    /* Tabla principal */
     .tabla-epp {
         width: 100%;
         border-collapse: collapse;
         text-align: center;
         table-layout: fixed;
-        /* 🔥 Esto obliga a que TODAS las columnas tengan el mismo ancho */
     }
 
-    /* Celdas */
     .tabla-epp th,
     .tabla-epp td {
         border: 2px solid black;
@@ -62,7 +58,6 @@
         font-size: 14px;
     }
 
-    /* Inputs */
     .entrada-epp {
         width: 100%;
         max-width: 80px;
@@ -72,7 +67,6 @@
         padding: 4px;
     }
 
-    /* 🔥 BORDES REDONDEADOS EN TODA LA TABLA */
     .tabla-epp tr:first-child th:first-child,
     .tabla-epp tr:first-child td:first-child {
         border-top-left-radius: 20px;
@@ -93,7 +87,6 @@
         border-bottom-right-radius: 20px;
     }
 
-    /* Ajustar título de columna */
     .titulo-columna {
         font-weight: bold;
         text-align: center;
@@ -219,6 +212,15 @@
                                     </td>
                                 </tr>
 
+                                <tr id="tr_13">
+                                    <td>Parte del cuerpo expuesta</td>
+                                    <td>
+                                        <a href="#" onclick="mostrar_catalogo(13);">
+                                            <i class="fa fa-chevron-circle-right fa-3x text-secondary"
+                                                id="cat_13"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -720,23 +722,30 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
+                                                        <div class="col-12">
                                                             <div class="form-group">
-                                                                <label>Clasificación del Riesgo *</label>
-                                                                <select class="custom-select form-control" id="CLASIFICACION_RIESGO_EPP" name="CLASIFICACION_RIESGO_EPP[]" multiple>
-                                                                    @foreach ($catclasificacion as $clasificacionriesgo)
-                                                                    <option value="{{ $clasificacionriesgo->ID_CLASIFICACION_RIESGO }}">
-                                                                        {{ $clasificacionriesgo->CLASIFICACION_RIESGO }}
-                                                                    </option>
-                                                                    @endforeach
-                                                                </select>
+                                                                <button type="button" class="btn btn-danger " id="botonagregarclasificacionriesgo">
+                                                                    Clasificación del Riesgo <i class="fa fa-plus"></i>
+                                                                </button>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
+                                                        <div class="col-12">
+                                                            <div class="listaclasificacionriesgo">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-12">
                                                             <div class="form-group">
-                                                                <label>¿Cuál? </label>
-                                                                <input type="text" class="form-control" id="CUAL_CLASIFICACION_EPP" name="CUAL_CLASIFICACION_EPP">
+                                                                <button type="button" class="btn btn-danger " id="botonagregarmaterialesutilizados">
+                                                                    Materiales utilizados por el fabricante <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="materialesutilizadosfabricante">
                                                             </div>
                                                         </div>
 
@@ -754,32 +763,37 @@
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-8">
+                                                            <div class="form-group">
+                                                                <label>Parte del cuerpo expuesta *</label>
+                                                                <select class="custom-select form-control" id="PARTE_EXPUESTA_EPP" name="PARTE_EXPUESTA_EPP[]" multiple required>
+                                                                    @foreach ($catpartesexpuestas as $partexpuesta)
+                                                                    <option value="{{ $partexpuesta->ID_PARTE_EXPUESTO }}">
+                                                                        {{ $partexpuesta->NOMBRE_PARTE }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+
+
+                                                            </div>
+                                                        </div>
+
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <button type="button" class="btn btn-danger " id="botonagregarmaterialesutilizados">
-                                                                    Materiales utilizados por el fabricante <i class="fa fa-plus"></i>
+                                                                <button type="button" class="btn btn-danger " id="botonagregarecomendacionesuso">
+                                                                    Recomendaciones de uso y manejo (Antes, Durante y Después) <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
-                                                            <div class="materialesutilizadosfabricante">
+                                                            <div class="listarecomendacionesuso">
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-4">
-                                                            <div class="form-group">
-                                                                <label>Parte del cuerpo expuesta *</label>
-                                                                <input type="text" class="form-control" id="PARTE_EXPUESTA_EPP" name="PARTE_EXPUESTA_EPP" required>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-8">
-                                                            <div class="form-group">
-                                                                <label>Recomendaciones de uso y manejo (Antes, Durante y Después) *</label>
-                                                                <input type="text" class="form-control" id="RECOMENDACIONES_USO_EPP" name="RECOMENDACIONES_USO_EPP" required>
-                                                            </div>
-                                                        </div>
+
+                                                      
 
                                                         <div class="col-12">
                                                             <div class="form-group">
@@ -1387,7 +1401,7 @@
 </div>
 
 <!-- ============================================================== -->
-<!-- MODAL TALLAS -->
+<!-- MODAL CATALOGO TALLAS -->
 <!-- ============================================================== -->
 
 <div id="modal_tallas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -1428,7 +1442,7 @@
 </div>
 
 <!-- ============================================================== -->
-<!-- MODAL CLASIFICACION DE RIESGO -->
+<!-- MODAL CATALOGO CLASIFICACION DE RIESGO -->
 <!-- ============================================================== -->
 
 <div id="modal_clasificacionriesgo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -1469,7 +1483,7 @@
 </div>
 
 <!-- ============================================================== -->
-<!-- MODAL TIPO DE USO  -->
+<!-- MODAL CATALOGO TIPO DE USO  -->
 <!-- ============================================================== -->
 
 <div id="modal_tipouso" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -1510,7 +1524,7 @@
 </div>
 
 <!-- ============================================================== -->
-<!-- MODAL ENTIDADES-->
+<!-- MODAL CATALOGO ENTIDADES-->
 <!-- ============================================================== -->
 
 <div id="modal_entidades" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1553,10 +1567,8 @@
     </div>
 </div>
 
-
-
 <!-- ============================================================== -->
-<!-- MODAL CERTIFICACIONES -->
+<!-- MODAL CATALOGO CERTIFICACIONES -->
 <!-- ============================================================== -->
 
 <div id="modal_certificaciones" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1615,6 +1627,46 @@
     </div>
 </div>
 
+<!-- ============================================================== -->
+<!-- MODAL CATALOGO PARTE DEL CUERPO EXPUESTO -->
+<!-- ============================================================== -->
+
+<div id="modal_parteexpuesto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_parteexpuesto" id="form_parteexpuesto">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="modal_titulo">Parte del cuerpo expuesta</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {!! csrf_field() !!}
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="ID_PARTE_EXPUESTO" name="ID_PARTE_EXPUESTO" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Parte del cuerpo expuesta *</label>
+                                <input type="text" class="form-control" id="NOMBRE_PARTE" name="NOMBRE_PARTE" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="13">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parteexpuesto">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 
@@ -1761,6 +1813,7 @@
         </div>
     </div>
 </div>
+
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
@@ -1772,6 +1825,7 @@
     window.catnormasnacionales = @json($catnormasnacionales);
     window.catnormasinternacionales = @json($catnormasinternacionales);
     window.catcertificaciones = @json($catcertificaciones);
+    window.catclasificacion = @json($catclasificacion);
 </script>
 
 

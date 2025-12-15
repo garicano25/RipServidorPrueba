@@ -29,8 +29,8 @@ use App\modelos\eppcatalogo\cattipousoModel;
 use App\modelos\eppcatalogo\catepps;
 use App\modelos\eppcatalogo\documentoseppModel;
 use App\modelos\eppcatalogo\catentidadeseppModel;
-
 use App\modelos\eppcatalogo\catcertificacioneppModel;
+use App\modelos\eppcatalogo\catpartexpuestaeppModel;
 
 
 
@@ -60,10 +60,11 @@ class eppcatalogosController extends Controller
         $catclasificacion = catclasificacionriesgoModel::where('ACTIVO', 1)->get();
         $cattipouso = cattipousoModel::where('ACTIVO', 1)->get();
         $catentidades = catentidadeseppModel::where('ACTIVO', 1)->get();
-
         $catcertificaciones = catcertificacioneppModel::where('ACTIVO', 1)->get();
+        $catpartesexpuestas = catpartexpuestaeppModel::where('ACTIVO', 1)->get();
 
-        return view('catalogos.seguridad.nom-017.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso', 'catentidades', 'catcertificaciones'));
+
+        return view('catalogos.seguridad.nom-017.seguridacatalogo',compact('catregionanatomica', 'catclaveyepp', 'catmarcas', 'catnormasnacionales', 'catnormasinternacionales', 'cattallas', 'catclasificacion', 'cattipouso', 'catentidades', 'catcertificaciones', 'catpartesexpuestas'));
 
     }
 
@@ -82,8 +83,7 @@ class eppcatalogosController extends Controller
 
                 $marcas = catmarcaseppModel::pluck('NOMBRE_MARCA', 'ID_MARCAS_EPP')->toArray();
 
-                $clasificaciones = catclasificacionriesgoModel::pluck('CLASIFICACION_RIESGO', 'ID_CLASIFICACION_RIESGO')->toArray();
-
+                $clasificaciones = catclasificacionriesgoModel::pluck('CLASIFICACION_RIESGO','ID_CLASIFICACION_RIESGO')->toArray();
 
                 $lista = catepps::all();
 
@@ -100,27 +100,42 @@ class eppcatalogosController extends Controller
 
                     $idMarca = $value->MARCA_EPP;
                     $value['TEXTO_MARCA_EPP'] = $marcas[$idMarca] ?? 'SIN MARCA';
-                
-                    $listaIds = $value->CLASIFICACION_RIESGO_EPP;
 
-                    if (is_string($listaIds)) {
-                        $decoded = json_decode($listaIds, true);
-                        $listaIds = is_array($decoded) ? $decoded : [];
-                    }
 
-                    if (!is_array($listaIds)) {
-                        $listaIds = [];
-                    }
+                    
+                    $value['TEXTO_CLASIFICIACION_RIESGO'] = 'SIN CLASIFICACIÓN';
 
-                    $textoClasificacion = "";
+                    if (!empty($value->CLASIFICACION_RIESGO_EPP)) {
 
-                    foreach ($listaIds as $id) {
-                        if (isset($clasificaciones[$id])) {
-                            $textoClasificacion .= "• " . $clasificaciones[$id] . "<br>";
+                        $jsonClasificacion = json_decode($value->CLASIFICACION_RIESGO_EPP, true);
+
+                        if (is_array($jsonClasificacion) && count($jsonClasificacion) > 0) {
+
+                            $listaClasificaciones = [];
+
+                            foreach ($jsonClasificacion as $item) {
+
+                                $idClasificacion = $item['CLASIFICACION_RIESGO_CAT'] ?? null;
+
+                                if ($idClasificacion && isset($clasificaciones[$idClasificacion])) {
+                                    $listaClasificaciones[] = $clasificaciones[$idClasificacion];
+                                }
+                            }
+
+                            if (count($listaClasificaciones) > 0) {
+
+                                $value['TEXTO_CLASIFICIACION_RIESGO'] =
+                                    '<ul style="margin:0; padding-left:18px;">' .
+                                    collect($listaClasificaciones)
+                                    ->unique()
+                                    ->map(fn($c) => "<li>{$c}</li>")
+                                    ->implode('') .
+                                    '</ul>';
+                            }
                         }
                     }
 
-                    $value["TEXTO_CLASIFICACION_RIESGO_EPP"] = $textoClasificacion ?: "SIN CLASIFICACIÓN";
+
 
                     $value['ID_CAT_EPP'] = $value->ID_CAT_EPP;
                     $value['ACTIVO'] = $value->ACTIVO;
@@ -310,8 +325,6 @@ class eppcatalogosController extends Controller
                     }
                 }
                 break;
-
-
             case 12:
                 $lista = catcertificacioneppModel::all();
 
@@ -333,6 +346,23 @@ class eppcatalogosController extends Controller
                         $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CERTIFICACIONES_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                     } else {
                         $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CERTIFICACIONES_EPP . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+                break;
+            case 13:
+                $lista = catpartexpuestaeppModel::all();
+
+                foreach ($lista as $key => $value) {
+                    $value['ID_PARTE_EXPUESTO'] = $value->ID_PARTE_EXPUESTO;
+                    $value['NOMBRE_PARTE'] = $value->NOMBRE_PARTE;
+
+                    $value['ACTIVO'] = $value->ACTIVO;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cat_partesexpuesta();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_PARTE_EXPUESTO . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_PARTE_EXPUESTO . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                     }
                 }
                 break;
@@ -408,6 +438,10 @@ class eppcatalogosController extends Controller
                     break;
                 case 12:
                     $tabla = catcertificacioneppModel::findOrFail($registro);
+                    $tabla->update(['ACTIVO' => $estado]);
+                    break;
+                case 13:
+                    $tabla = catpartexpuestaeppModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
                     
@@ -527,7 +561,7 @@ class eppcatalogosController extends Controller
                     
                             $request['TALLAS_EPP'] = isset($request['TALLAS_EPP']) ? $request['TALLAS_EPP'] : null;
 
-                            $request['CLASIFICACION_RIESGO_EPP'] = isset($request['CLASIFICACION_RIESGO_EPP']) ? $request['CLASIFICACION_RIESGO_EPP'] : null;
+                            $request['PARTE_EXPUESTA_EPP'] = isset($request['PARTE_EXPUESTA_EPP']) ? $request['PARTE_EXPUESTA_EPP'] : null;
 
                             $catalogo = catepps::create($request->except('FOTO_EPP'));
 
@@ -558,8 +592,8 @@ class eppcatalogosController extends Controller
                                 $request['TALLAS_EPP'] = null;
                             }
 
-                            if (!isset($request['CLASIFICACION_RIESGO_EPP']) || empty($request['CLASIFICACION_RIESGO_EPP'])) {
-                                $request['CLASIFICACION_RIESGO_EPP'] = null;
+                            if (!isset($request['PARTE_EXPUESTA_EPP']) || empty($request['PARTE_EXPUESTA_EPP'])) {
+                                $request['PARTE_EXPUESTA_EPP'] = null;
                             }
 
                             if ($request->hasFile('FOTO_EPP')) {
@@ -809,6 +843,14 @@ class eppcatalogosController extends Controller
                         ], 500);
                     }
 
+                    break;
+                case 13:
+                    if ($request['ID_PARTE_EXPUESTO'] == 0) {
+                        $catalogo = catpartexpuestaeppModel::create($request->all());
+                    } else {
+                        $catalogo = catpartexpuestaeppModel::findOrFail($request['ID_PARTE_EXPUESTO']);
+                        $catalogo->update($request->all());
+                    }
                     break;
 
 

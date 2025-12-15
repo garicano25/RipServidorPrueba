@@ -25,6 +25,7 @@ var TablaEppDocumentos = null;
 var datatable_entidades = null;
 var datatable_certificaciones = null;
 
+var datatable_parteexpuesta = null;
 
 
 
@@ -41,6 +42,10 @@ var recomendacionalmacenamiento = [];
 var recomendacionlimpieza = [];
 var recomendaciondisposicion = [];
 var nomnacionales = [];
+var clasificacionriesgo = [];
+var recomendacionesuso = [];
+
+
 
 
 var CAT_EPP_ID = 0;
@@ -376,9 +381,8 @@ function mostrar_catalogo(num_catalogo)
                                     '</table>');
 
             tabla_entidades(catalogo);
-                  break;
-              
-               case 12:
+            break;
+            case 12:
          
             $("#titulo_tabla").html('Catálogo [Certificaciones]');
             $("#tr_12").addClass("active");
@@ -409,8 +413,38 @@ function mostrar_catalogo(num_catalogo)
                                     '</table>');
 
             tabla_certificaciones(catalogo);
-                  break;
+            break
               
+            case 13:
+         
+            $("#titulo_tabla").html('Catálogo [Parte del cuerpo expuesta]');
+            $("#tr_13").addClass("active");
+            $("#cat_13").addClass("text-info");
+
+            // Inicializar tabla
+            if(datatable_parteexpuesta != null)
+            {
+                datatable_parteexpuesta.destroy();
+                datatable_parteexpuesta = null;
+            }
+
+            // diseño tabla
+                  // $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_tipouso" width="100%">'+
+                              $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_partesexpuesta" width="100%">'+
+
+                                       '<thead>'+
+                                            '<tr>'+
+                                                '<th>#</th>' +
+                                                '<th>Parte del cuerpo expuesta</th>' +
+                                                '<th style="width: 90px!important;">Editar</th>'+
+                                                '<th style="width: 90px!important;">Activo</th>'+
+                                            '</tr>'+
+                                        '</thead>'+
+                                        '<tbody></tbody>'+
+                                    '</table>');
+
+            tabla_partesexpuesta(catalogo);
+            break;
 
     }
 }
@@ -428,19 +462,18 @@ $("#boton_nuevo_registro").click(function()
                     allowEmptyOption: true,
                     closeAfterSelect: false,
                 })[0].selectize;
-                     
-                 var selectRiesgo = $('#CLASIFICACION_RIESGO_EPP').selectize({
+                    
+                var selectPartesexpuestas = $('#PARTE_EXPUESTA_EPP').selectize({
                     placeholder: 'Seleccione una o varias opciones',
                     allowEmptyOption: true,
                     closeAfterSelect: false,
                 })[0].selectize;
-            
+
                 $("#tab1_epp_info").click();
                 $("#tab2_documentos_epp").hide();
                 $("#tab2_documentos").hide();
 
 
-            
                 $("#DIV_TALLAS_EPP").hide();
                 $("#DIV_DISCAPACIODAD").hide();
                 $("#DIV_REQUIERE_PRUEBA").hide();
@@ -492,7 +525,9 @@ $("#boton_nuevo_registro").click(function()
                 }
 
                 selectTallas.clear();
-                selectRiesgo.clear();
+                selectPartesexpuestas.clear();
+            
+            
             
                 $('#modal_epp').modal({ backdrop: false });
             
@@ -505,9 +540,12 @@ $("#boton_nuevo_registro").click(function()
                 $(".recomendaciondisposicionfinal").empty();
                 $(".listanomnacionales").empty();
                 $(".listanominternacionales").empty();
+                $(".listaclasificacionriesgo").empty();
+                $(".listarecomendacionesuso").empty();
 
+            
             break;
-          case 2:
+        case 2:
                 $('#form_region_anatomica').each(function(){
                     this.reset();
                 });
@@ -517,8 +555,7 @@ $("#boton_nuevo_registro").click(function()
     
                 $('#modal_regionanatomica').modal({backdrop:false});
            break;
-        
-          case 3:
+        case 3:
                 $('#form_claveyepp').each(function(){
                     this.reset();
                 });
@@ -529,7 +566,7 @@ $("#boton_nuevo_registro").click(function()
                 $('#modal_claveyepp').modal({backdrop:false});
             break;
         
-           case 4:
+        case 4:
                 $('#form_marcas').each(function(){
                     this.reset();
                 });
@@ -539,7 +576,7 @@ $("#boton_nuevo_registro").click(function()
     
                 $('#modal_marcas').modal({backdrop:false});
             break;
-          case 5:
+        case 5:
                 $('#form_normas_nacionales').each(function(){
                     this.reset();
                 });
@@ -552,7 +589,7 @@ $("#boton_nuevo_registro").click(function()
                 $(".notasnomnacionales").empty();
                 $(".apartadonomnacionales").empty();
             break;
-         case 6:
+        case 6:
                 $('#form_normas_internacionales').each(function(){
                     this.reset();
                 });
@@ -565,7 +602,7 @@ $("#boton_nuevo_registro").click(function()
                 $(".notasnominternacional").empty();
                 $(".apartadonominternacional").empty();
             break;
-         case 7:
+        case 7:
                 $('#form_tallas').each(function(){
                     this.reset();
                 });
@@ -585,7 +622,7 @@ $("#boton_nuevo_registro").click(function()
     
                 $('#modal_clasificacionriesgo').modal({backdrop:false});
             break;
-         case 9:
+        case 9:
                 $('#form_tipouso').each(function(){
                     this.reset();
                 });
@@ -595,7 +632,7 @@ $("#boton_nuevo_registro").click(function()
     
                 $('#modal_tipouso').modal({backdrop:false});
             break;
-          case 11:
+        case 11:
                 $('#form_entidades').each(function(){
                     this.reset();
                 });
@@ -642,6 +679,16 @@ $("#boton_nuevo_registro").click(function()
                 }
     
                 $('#modal_certificaciones').modal({backdrop:false});
+            break;
+            case 13:
+                $('#form_parteexpuesto').each(function(){
+                    this.reset();
+                });
+    
+                $("#ID_PARTE_EXPUESTO").val(0);
+                $("#catalogo").val(catalogo);
+    
+                $('#modal_parteexpuesto').modal({backdrop:false});
             break;
         default:
             // Borrar formulario
@@ -858,51 +905,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-
-// document.addEventListener("DOMContentLoaded", function() {
-//     const botonAgregarcertficaciones = document.getElementById('botonagregarcertificacionesadicionales');
-//     botonAgregarcertficaciones.addEventListener('click', agregarcertificaciones);
-
-//     function agregarcertificaciones() {
-
-//         const contenedor = document.querySelector('.certificacionesadicionales');
-
-//         let ultimaFila = contenedor.querySelector('.fila-certificaciones:last-child');
-
-//         if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
-//             ultimaFila = document.createElement('div');
-//             ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
-//             contenedor.appendChild(ultimaFila);
-//         }
-
-//         const bloque = document.createElement('div');
-//         bloque.classList.add('col-6');
-//         bloque.innerHTML = `
-//             <div class="form-group">
-//                 <label>Certificaciones adicionales *</label>
-//                 <input type="text" class="form-control" name="CERTIFICACIONES_ADICIONALES" required>
-
-//                 <div class="mt-2" style="text-align:center;">
-//                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
-//                         <i class="fa fa-trash"></i>
-//                     </button>
-//                 </div>
-//             </div>
-//         `;
-
-//         ultimaFila.appendChild(bloque);
-
-//         bloque.querySelector('.botonEliminarcertificaciones')
-//             .addEventListener('click', function() {
-//                 bloque.remove();
-
-//                 if (ultimaFila.querySelectorAll('.col-6').length === 0) {
-//                     ultimaFila.remove();
-//                 }
-//             });
-//     }
-// });
-
 ///// DINAMICO RESTRICIONES DE USO
 document.addEventListener("DOMContentLoaded", function() {
     const botonAgregarestriccionuso = document.getElementById('botonagregarestriccionesuso');
@@ -1080,6 +1082,124 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 });
+
+///// DINAMICO CLASIFICACION DE RIESGO
+document.addEventListener("DOMContentLoaded", function() {
+
+    const botonAgregarClasificacion = document.getElementById('botonagregarclasificacionriesgo');
+    botonAgregarClasificacion.addEventListener('click', agregarClasificacion);
+
+    function agregarClasificacion() {
+
+        // 🔹 Construir opciones del select desde window.catclasificacion
+        let opciones = `<option value="">Seleccione una clasificación</option>`;
+
+        if (window.catclasificacion && Array.isArray(window.catclasificacion)) {
+            window.catclasificacion.forEach(clasificacion => {
+                opciones += `
+                    <option value="${clasificacion.ID_CLASIFICACION_RIESGO}">
+                        ${clasificacion.CLASIFICACION_RIESGO}
+                    </option>
+                `;
+            });
+        }
+
+        const divClasificacion = document.createElement('div');
+        divClasificacion.classList.add('row', 'generarclasificacion', 'mb-3');
+
+        divClasificacion.innerHTML = `
+        
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Clasificación del Riesgo: *</label>
+
+                    <select class="form-control"
+                            name="CLASIFICACION_RIESGO_CAT"
+                            required>
+                        ${opciones}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>¿Cuál? *</label>
+                    <input type="text"
+                           class="form-control"
+                           name="CUAL_CLASIFICACION"
+                           required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group" style="text-align: center;">
+                    <button type="button"
+                            class="btn btn-danger botonEliminarClasificacion">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const contenedor = document.querySelector('.listaclasificacionriesgo');
+        contenedor.appendChild(divClasificacion);
+
+        const botonEliminar = divClasificacion.querySelector('.botonEliminarClasificacion');
+        botonEliminar.addEventListener('click', function() {
+            contenedor.removeChild(divClasificacion);
+        });
+    }
+
+});
+
+///// DINAMICO RECOMENDACION DE USO Y MANEJO (ANTES,DURANTE Y DESPUES )
+
+document.addEventListener("DOMContentLoaded", function() {
+    const botonAgregaRecomendacionuso = document.getElementById('botonagregarecomendacionesuso');
+    botonAgregaRecomendacionuso.addEventListener('click', agregarRecomendacionuso);
+
+    function agregarRecomendacionuso() {
+        const divRecomendacionuso = document.createElement('div');
+        divRecomendacionuso.classList.add('row', 'generarecomendacionesuso','mb-3');
+        divRecomendacionuso.innerHTML = `
+        
+    <div class="col-4">
+        <div class="form-group">
+            <label>Antes </label>
+            <input type="text" class="form-control" name="USO_ANTES" >
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label>Durante </label>
+            <input type="text" class="form-control" name="USO_DURANTE" >
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label>Después </label>
+            <input type="text" class="form-control" name="USO_DESPUES"  >
+        </div>
+    </div>
+    
+    <div class="col-12">
+        <div class="form-group" style="text-align: center;">
+            <button type="button" class="btn btn-danger botonEliminarRecomendacionUso"> <i class="fa fa-trash"></i></button>
+        </div>
+    </div>
+    
+        `;
+        const contenedor = document.querySelector('.listarecomendacionesuso');
+        contenedor.appendChild(divRecomendacionuso);
+
+        const botonEliminar = divRecomendacionuso.querySelector('.botonEliminarRecomendacionUso');
+        botonEliminar.addEventListener('click', function() {
+            contenedor.removeChild(divRecomendacionuso);
+        });
+    }
+});
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const selectTallas = document.getElementById('FABRICATALLAS_EPP');
@@ -1454,12 +1574,14 @@ document.getElementById("REGION_ANATOMICA_EPP").addEventListener("change", funct
     }
 });
 
+
+
+
 $("#boton_guardar_epp").click(function (e) {
     e.preventDefault();
 
     var form = document.getElementById("form_epp");
 
-    // VALIDACIÓN HTML5
     if (!form.checkValidity()) {
         form.reportValidity(); 
         return; 
@@ -1515,7 +1637,6 @@ $("#boton_guardar_epp").click(function (e) {
     });
     formData.append('RECOMENDACION_DISPOSICION_EPPS', JSON.stringify(recomendaciondisposicion));
 
-
     var nomnacionales = [];
         $(".generarnomnacionales").each(function() {
             var inputnomnacionales = {
@@ -1529,8 +1650,7 @@ $("#boton_guardar_epp").click(function (e) {
 
     formData.append('NORMASNACIONALES_EPP', JSON.stringify(nomnacionales));
 
-
-      var nominternacionales = [];
+    var nominternacionales = [];
         $(".generarnominternacional ").each(function() {
             var inputnominternacionales = {
                 'NOM_INTERNACIONALES': $(this).find("select[name='NOM_INTERNACIONALES']").val(),
@@ -1542,6 +1662,34 @@ $("#boton_guardar_epp").click(function (e) {
         });
 
     formData.append('NORMASINTERNACIONALES_EPP', JSON.stringify(nominternacionales));
+
+    var clasificacionriesgo = [];
+        $(".generarclasificacion ").each(function() {
+            var inputclasificacionriesgo = {
+                'CLASIFICACION_RIESGO_CAT': $(this).find("select[name='CLASIFICACION_RIESGO_CAT']").val(),
+                'CUAL_CLASIFICACION': $(this).find("input[name='CUAL_CLASIFICACION']").val(),
+
+
+            };
+            clasificacionriesgo.push(inputclasificacionriesgo);
+        });
+
+    formData.append('CLASIFICACION_RIESGO_EPP', JSON.stringify(clasificacionriesgo));
+
+
+    var recomendacionesuso = [];
+        $(".generarecomendacionesuso ").each(function() {
+            var inputrecomendacionesuso = {
+                'USO_ANTES': $(this).find("input[name='USO_ANTES']").val(),
+                'USO_DURANTE': $(this).find("input[name='USO_DURANTE']").val(),
+                'USO_DESPUES': $(this).find("input[name='USO_DESPUES']").val(),
+
+
+            };
+            recomendacionesuso.push(inputrecomendacionesuso);
+        });
+
+    formData.append('RECOMENDACIONES_USO_EPP', JSON.stringify(recomendacionesuso));
 
 
 
@@ -1637,7 +1785,7 @@ function tabla_epp(num_catalogo)
                         "data": "TEXTO_MARCA_EPP"
                     },
                     {
-                        "data": "TEXTO_CLASIFICACION_RIESGO_EPP"
+                        "data": "TEXTO_CLASIFICIACION_RIESGO"
                     },
                     {
                         "className": 'editar',
@@ -1716,10 +1864,8 @@ function editar_epp()
         $("#RECOMENDACIONES_TALLAS_EPP").val(row.data().RECOMENDACIONES_TALLAS_EPP);
         $("#TRABAJADORES_DISCAPACIDAD_EPP").val(row.data().TRABAJADORES_DISCAPACIDAD_EPP);
         $("#ESPECIFIQUE_FORMA_EPP").val(row.data().ESPECIFIQUE_FORMA_EPP);
-        $("#CUAL_CLASIFICACION_EPP").val(row.data().CUAL_CLASIFICACION_EPP);
         $("#TIPO_USO_EPP").val(row.data().TIPO_USO_EPP);
         $("#PARTE_EXPUESTA_EPP").val(row.data().PARTE_EXPUESTA_EPP);
-        $("#RECOMENDACIONES_USO_EPP").val(row.data().RECOMENDACIONES_USO_EPP);
         $("#REQUIERE_AJUSTE_EPP").val(row.data().REQUIERE_AJUSTE_EPP);
         $("#ESPECIFIQUE_AJUSTE_EPP").val(row.data().ESPECIFIQUE_AJUSTE_EPP);
         $("#UTILIZAR_EMERGENCIA_EPP").val(row.data().UTILIZAR_EMERGENCIA_EPP);
@@ -1786,27 +1932,29 @@ function editar_epp()
         }
 
 
-        if (!$('#CLASIFICACION_RIESGO_EPP')[0].selectize) {
-            $('#CLASIFICACION_RIESGO_EPP').selectize({
+
+        
+        if (!$('#PARTE_EXPUESTA_EPP')[0].selectize) {
+            $('#PARTE_EXPUESTA_EPP').selectize({
                 placeholder: 'Seleccione una o varias opciones',
                 maxItems: null
             });
         }
 
-        let selRiesgo = $('#CLASIFICACION_RIESGO_EPP')[0].selectize;
-        selRiesgo.clear();
+        let selCuerpo = $('#PARTE_EXPUESTA_EPP')[0].selectize;
+        selCuerpo.clear();
 
-        let valoresRiesgo = row.data().CLASIFICACION_RIESGO_EPP;
+        let valoresCuerpo= row.data().PARTE_EXPUESTA_EPP;
 
-        if (typeof valoresRiesgo === "string") {
-            try { valoresRiesgo = JSON.parse(valoresRiesgo); } catch (e) { valoresRiesgo = []; }
+        if (typeof valoresCuerpo === "string") {
+            try { valoresCuerpo = JSON.parse(valoresCuerpo); } catch (e) { valoresCuerpo = []; }
         }
 
-        if (Array.isArray(valoresRiesgo)) {
-            selRiesgo.setValue(valoresRiesgo);
+        if (Array.isArray(valoresCuerpo)) {
+            selCuerpo.setValue(valoresCuerpo);
         }
 
-    
+
         if (row.data().FABRICATALLAS_EPP == "1") {
             $('#DIV_TALLAS_EPP').show();
         } else {
@@ -1954,7 +2102,14 @@ function editar_epp()
 
         $(".listanominternacionales").empty();
         mostrarNormasInternacionales(row);
-    
+
+        $(".listaclasificacionriesgo").empty();
+        mostrarClasificacionRiesgo(row);
+
+        $(".listarecomendacionesuso").empty();
+        mostrarRecomendacionesUso(row);
+
+        
          $("#tab1_epp_info").off("click").on("click", function () {
             $("#tab2_documentos").hide();
          });
@@ -2081,63 +2236,6 @@ function mostrarMaterialesUtilizados(row) {
     });
 }
 
-// function mostrarCertificacionesadicionales(row) {
-
-//     let contenedor = document.querySelector('.certificacionesadicionales');
-
-//     contenedor.innerHTML = "";
-
-//     let data = row.data().CERTIFICACIONES_ADICIONALES_EPP;
-
-//     if (!data) return;
-
-//     try {
-//         data = JSON.parse(data);
-//     } catch (e) {
-//         data = [];
-//     }
-
-//     let ultimaFila = null;
-
-//     data.forEach((item, index) => {
-
-//         if (!ultimaFila || ultimaFila.querySelectorAll('.col-6').length === 2) {
-//             ultimaFila = document.createElement('div');
-//             ultimaFila.classList.add('row', 'fila-certificaciones', 'mb-3');
-//             contenedor.appendChild(ultimaFila);
-//         }
-
-//         const bloque = document.createElement('div');
-//         bloque.classList.add('col-6');
-//         bloque.innerHTML = `
-//             <div class="form-group">
-//                 <label>Certificaciones adicionales *</label>
-//                 <input type="text" class="form-control"
-//                        name="CERTIFICACIONES_ADICIONALES"
-//                        value="${item.CERTIFICACIONES_ADICIONALES}" required>
-
-//                 <div class="mt-2" style="text-align:center;">
-//                     <button type="button" class="btn btn-danger botonEliminarcertificaciones">
-//                         <i class="fa fa-trash"></i>
-//                     </button>
-//                 </div>
-//             </div>
-//         `;
-
-//         ultimaFila.appendChild(bloque);
-
-//         bloque.querySelector('.botonEliminarcertificaciones')
-//             .addEventListener('click', function () {
-//                 bloque.remove();
-
-//                 if (ultimaFila.querySelectorAll('.col-6').length === 0) {
-//                     ultimaFila.remove();
-//                 }
-//             });
-//     });
-// }
-
-
 function mostrarCertificacionesadicionales(row) {
 
     let contenedor = document.querySelector('.certificacionesadicionales');
@@ -2215,8 +2313,6 @@ function mostrarCertificacionesadicionales(row) {
             });
     });
 }
-
-
 
 function mostrarRestricciones(row) {
 
@@ -2720,6 +2816,156 @@ function mostrarNormasInternacionales(row) {
 
 }
 
+function mostrarClasificacionRiesgo(row) {
+
+    const contenedor = document.querySelector('.listaclasificacionriesgo');
+    contenedor.innerHTML = "";
+
+    let data = row.data().CLASIFICACION_RIESGO_EPP;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    data.forEach((item) => {
+
+        const fila = document.createElement('div');
+        fila.classList.add('row', 'generarclasificacion', 'mb-3');
+
+        const clasificacionSeleccionada = item.CLASIFICACION_RIESGO_CAT;
+        const cualClasificacion = item.CUAL_CLASIFICACION ?? "";
+
+        // 🔹 Opciones del select con selección
+        let opcionesClasificacion = `<option value="">Seleccione una clasificación</option>`;
+
+        if (window.catclasificacion && Array.isArray(window.catclasificacion)) {
+            window.catclasificacion.forEach(clasificacion => {
+                opcionesClasificacion += `
+                    <option value="${clasificacion.ID_CLASIFICACION_RIESGO}"
+                        ${clasificacion.ID_CLASIFICACION_RIESGO == clasificacionSeleccionada ? "selected" : ""}>
+                        ${clasificacion.CLASIFICACION_RIESGO}
+                    </option>
+                `;
+            });
+        }
+
+        fila.innerHTML = `
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Clasificación del Riesgo: *</label>
+                    <select class="form-control"
+                            name="CLASIFICACION_RIESGO_CAT"
+                            required>
+                        ${opcionesClasificacion}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>¿Cuál? *</label>
+                    <input type="text"
+                           class="form-control"
+                           name="CUAL_CLASIFICACION"
+                           value="${cualClasificacion}"
+                           required>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="button"
+                        class="btn btn-danger botonEliminarClasificacion">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        `;
+
+        contenedor.appendChild(fila);
+
+        // 🗑 Eliminar fila
+        fila.querySelector('.botonEliminarClasificacion')
+            .addEventListener('click', function () {
+                fila.remove();
+            });
+    });
+}
+
+function mostrarRecomendacionesUso(row) {
+
+    const contenedor = document.querySelector('.listarecomendacionesuso');
+    contenedor.innerHTML = "";
+
+    let data = row.data().RECOMENDACIONES_USO_EPP;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    data.forEach((item) => {
+
+        const fila = document.createElement('div');
+        fila.classList.add('row', 'generarecomendacionesuso', 'mb-3');
+
+        const usoAntes   = item.USO_ANTES   ?? "";
+        const usoDurante = item.USO_DURANTE ?? "";
+        const usoDespues = item.USO_DESPUES ?? "";
+
+        fila.innerHTML = `
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Antes</label>
+                    <input type="text"
+                           class="form-control"
+                           name="USO_ANTES"
+                           value="${usoAntes}">
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Durante</label>
+                    <input type="text"
+                           class="form-control"
+                           name="USO_DURANTE"
+                           value="${usoDurante}">
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Después</label>
+                    <input type="text"
+                           class="form-control"
+                           name="USO_DESPUES"
+                           value="${usoDespues}">
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="button"
+                        class="btn btn-danger botonEliminarRecomendacionUso">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        `;
+
+        contenedor.appendChild(fila);
+
+        fila.querySelector('.botonEliminarRecomendacionUso')
+            .addEventListener('click', function () {
+                fila.remove();
+            });
+
+    });
+}
 
 
 //=======================================
@@ -4941,7 +5187,6 @@ function editar_cat_entidades()
     });
 }
 
-
 //=======================================
 // CATALOGO CERTIFICACIONES 
 //=======================================
@@ -4996,7 +5241,6 @@ $("#boton_guardar_certificacion").click(function () {
         return false;
     }
 });
-
 
 function tabla_certificaciones(num_catalogo)
 {
@@ -5087,7 +5331,6 @@ function tabla_certificaciones(num_catalogo)
     }    
 }
 
-
 function editar_cat_certificaciones()
 {
     $('#tabla_lista_certificaciones tbody').on('click', 'td.editar', function() {
@@ -5145,6 +5388,164 @@ function editar_cat_certificaciones()
 }
 
 
+//=======================================
+// CATALOGO PARTE DEL CUERPO EXPUESTA
+//=======================================
+
+$("#boton_guardar_parteexpuesto").click(function () {
+
+    var valida = this.form.checkValidity();
+    if (valida) {
+        $('#form_parteexpuesto').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/eppcatalogos',
+            data: {
+
+            },
+            resetForm: false,
+            success: function (dato) {
+                tabla_partesexpuesta(catalogo);
+
+                swal({
+                    title: "Correcto",
+                    text: "Información guardada correctamente",
+                    type: "success", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                $('#boton_guardar_parteexpuesto').html('Guardar <i class="fa fa-save"></i>');
+
+                $('#modal_parteexpuesto').modal('hide');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_parteexpuesto').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                $('#boton_guardar_parteexpuesto').html('Guardar <i class="fa fa-save"></i>');
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+function tabla_partesexpuesta(num_catalogo)
+{
+    var ruta = "/eppconsultacatalogo/"+num_catalogo;
+
+    try
+    {
+        if (datatable_parteexpuesta != null)
+        {
+            datatable_parteexpuesta.clear().draw();
+            datatable_parteexpuesta.ajax.url(ruta).load();
+        }
+        else
+        {
+            datatable_parteexpuesta = $('#tabla_lista_partesexpuesta').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_partesexpuesta(num_catalogo);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+ {
+                        "data": "NOMBRE_PARTE"
+                    },
+                    {
+                        "className": 'editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
+                    },
+                    {
+                        // "className": 'Estado',
+                        // "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                    }
+                   
+                ],
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                "order": [[ 0, "asc" ]],        
+                "searching": true,
+                "paging": false,
+                "ordering": false,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "", //Página _PAGE_ de _PAGES_
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        // alert("error en el ajax");
+        tabla_partesexpuesta(num_catalogo);
+    }    
+}
+
+function editar_cat_partesexpuesta()
+{
+    $('#tabla_lista_partesexpuesta tbody').on('click', 'td.editar', function() {
+        var tr = $(this).closest('tr');
+        var row = datatable_parteexpuesta.row(tr);
+
+        $('#form_parteexpuesto').each(function(){
+            this.reset();
+        });
+
+        $("#ID_PARTE_EXPUESTO").val(row.data().ID_PARTE_EXPUESTO);
+        $("#NOMBRE_PARTE").val(row.data().NOMBRE_PARTE);
+
+        $("#catalogo").val(catalogo);
+
+        $('#modal_parteexpuesto').modal({backdrop:false});
+    });
+}
 
 //=======================================
 // FUNCION GLOBAL ACTIVAR/DESACTIVAR 

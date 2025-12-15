@@ -92,7 +92,7 @@ class catepps extends Model
     protected $casts = [
 
         'TALLAS_EPP' => 'array',
-        'CLASIFICACION_RIESGO_EPP' => 'array',
+        'PARTE_EXPUESTA_EPP' => 'array',
 
     ];
 }
