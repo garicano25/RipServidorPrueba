@@ -47,7 +47,7 @@ class inicioController extends Controller
         // return view('principal.index');
 
 
-        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador', 'Capturista']))
         {
             return view('principal.modulos');
             // return view('principal.index');

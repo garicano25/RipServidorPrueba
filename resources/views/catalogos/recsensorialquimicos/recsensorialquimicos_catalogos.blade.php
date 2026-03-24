@@ -55,6 +55,9 @@
 								</tr>
 							</thead>
 							<tbody>
+								@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI','Capturista']))
+
+
 								<tr id="tr_0" class="active">
 									<td>Referencias de Sustancias químicas de la NOM-010 y otros</td>
 									<td>
@@ -71,6 +74,9 @@
 										</a>
 									</td>
 								</tr>
+								@endif
+
+
 								<tr id="tr_2" class="" style="display: none;">
 									<td>Estado físico</td>
 									<td>
@@ -111,6 +117,10 @@
 										</a>
 									</td>
 								</tr>
+
+								@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
+
+
 								<!-- Hacemos uso del catalago 8 ya que el 7 fue ocupado para otra cosa -->
 								<tr id="tr_8" class="">
 									<td>Unidad de medida</td>
@@ -160,6 +170,8 @@
 										</a>
 									</td>
 								</tr>
+								@endif
+
 							</tbody>
 						</table>
 					</div>
@@ -461,7 +473,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -857,7 +869,7 @@
 												<ol class="breadcrumb mb-2 p-2 mt-3">
 													<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-file-text-o" aria-hidden="true"></i> Datos por entidad </h2>
 
-													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador','Capturista']))
 
 													<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva entidad" id="boton_nueva_sustanciaEntidad" style="margin-left: 13px;"> Entidad <i class="fa fa-plus"></i>
 													</button>
@@ -895,7 +907,7 @@
 												<ol class="breadcrumb mb-2 p-2 mt-3">
 													<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-meetup" aria-hidden="true"></i> Métodos de evaluación </h2>
 
-													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador','Capturista']))
 
 													<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva método" id="boton_nueva_metodo" style="margin-left: 13px;">Método<i class="fa fa-plus"></i>
 													</button>
@@ -924,7 +936,7 @@
 												<ol class="breadcrumb mb-2 p-2 mt-3 d-flex justify-content-between align-items-center">
 													<h2 style="color: #fff; margin: 0;" class="mx-2"><i class="fa fa-list-ol" aria-hidden="true"></i> Lista de IBE </h2>
 
-													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador','Capturista']))
 													<button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo IBE" id="boton_nueva_bei" style="margin-left: 75%;"> IBE <i class="fa fa-plus"></i></button>
 													@endif
 												</ol>
@@ -957,7 +969,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catSustanciaQuimica">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1132,7 +1144,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_metodo">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1302,7 +1314,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catUnidadMedida">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1356,7 +1368,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catConnotacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1400,7 +1412,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catEntidades">
 						Guardar <i class="fa fa-save"></i>
 					</button>

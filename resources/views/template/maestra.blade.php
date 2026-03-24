@@ -512,7 +512,7 @@ use Illuminate\Support\Str;
                         </li>
                         @endif
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI','Capturista']))
                         <li>
                             <a class="has-arrow " href="#" aria-expanded="false">
                                 <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
@@ -522,7 +522,7 @@ use Illuminate\Support\Str;
                                 <li><a href="{{route('recsensorialcatalogos.index')}}">Módulo Rec. sensorial</a></li>
                                 @endif
 
-                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI','Almacén','Compras']))
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI','Almacén','Compras','Capturista']))
                                 <li><a href="{{route('recsensorialquimicoscatalogos.index')}}">Módulo Rec. químicos</a></li>
                                 @endif
                             </ul>

@@ -77,14 +77,14 @@
                 </div>
 
                 <!-- Higiene Industrial -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-3 mx-5" style="transform: rotate(-90deg); color: #ffff; font-size:15px">
                         <span>Results In Performance</span>
                     </div>
                     <div class="col-7">
                         <div class="d-flex justify-content-start mr-5">
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo','Capturista']))
                             <a class="unauthorized" href="#">
 
                                 @else
@@ -106,7 +106,41 @@
                                     </a>
                         </div>
                     </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-3 mx-5" style="transform: rotate(-90deg); color: #ffff; font-size:15px">
+                        <span>Results In Performance</span>
+                    </div>
+                    <div class="col-7">
+                        <div class="d-flex justify-content-start mr-5">
+
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo','Capturista']))
+                            <a class="unauthorized" href="#">
+
+                                @else
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                                <a class="cta" href="{{route('programa.index')}}">
+
+                                    @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
+                                    <a class="cta" href="{{route('recsensorial.index')}}">
+
+                                        @elseif(auth()->user()->hasRoles(['Capturista']))
+                                        <a class="cta" href="{{route('recsensorialquimicoscatalogos.index')}}">
+
+                                            @endif
+                                            @endif
+                                            <div class="row circle-one">
+                                                <div class="col-12 circle-two">
+                                                    <img src="/assets/images/modulos/higiene.png" class="logos" alt="Modulos de Higiene Industrial">
+                                                </div>
+                                                <span class="titulos" style="justify-content: center; margin-top:20px">Higiene Industrial</span>
+
+                                            </div>
+                                        </a>
+                        </div>
+                    </div>
                 </div>
+                
                 <!-- Factor psicosial -->
                 <div class="row mb-4">
                     <div class="col-4" style="justify-content: start; display:flex; align-items:center">
