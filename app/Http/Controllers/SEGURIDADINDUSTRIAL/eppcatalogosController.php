@@ -578,7 +578,7 @@ class eppcatalogosController extends Controller
                                 $catalogo->FOTO_EPP = $ruta;
                                 $catalogo->save();
 
-                                Log::info("📷 FOTO EPP GUARDADA:", ['ruta' => $ruta]);
+                                Log::info("FOTO EPP GUARDADA:", ['ruta' => $ruta]);
                             }
                         }
 

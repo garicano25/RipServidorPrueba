@@ -1769,7 +1769,7 @@ class proyectoController extends Controller
 
                 //Buscamos los proyectos 
                 $folio = DB::select('SELECT
-                                (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
+                                (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
                             FROM
                                 proyecto
                             WHERE
@@ -1777,15 +1777,15 @@ class proyectoController extends Controller
                                 AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
 
 
-                switch (($folio[0]->nuevo_folio_proyecto + 2)) {
+                switch (($folio[0]->nuevo_folio_proyecto + 1)) {
                     case ($folio[0]->nuevo_folio_proyecto < 10):
-                        $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                        $proyecto_folio = "SST-CO" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
                         break;
                     case ($folio[0]->nuevo_folio_proyecto < 100):
-                        $proyecto_folio = "RES-PJ-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                        $proyecto_folio = "SST-CO" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
                         break;
                     default:
-                        $proyecto_folio = "RES-PJ-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                        $proyecto_folio = "SST-CO" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
                         break;
                 }
 
