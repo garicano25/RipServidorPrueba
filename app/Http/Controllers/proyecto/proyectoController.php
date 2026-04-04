@@ -218,18 +218,13 @@ class proyectoController extends Controller
 
 
 
-                // if (isset($value->created_at) && $value->created_at) {
-                //     $value->proyecto_fechacreacion = Carbon::createFromFormat('Y-m-d H:i:s', $value->created_at)->format('Y-m-d - h:i:s a');
-                // } else {
-                //     $value->proyecto_fechacreacion = 'Fecha no disponible';
-                // }
-
-                if ($value->created_at) {
-                    $value->proyecto_fechacreacion = $value->created_at->format('Y-m-d - h:i:s a');
+                if (isset($value->created_at) && $value->created_at) {
+                    $value->proyecto_fechacreacion = Carbon::createFromFormat('Y-m-d H:i:s', $value->created_at)->format('Y-m-d - h:i:s a');
                 } else {
                     $value->proyecto_fechacreacion = 'Fecha no disponible';
                 }
 
+    
 
                 // Valida perfil
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto'])) {
@@ -412,7 +407,7 @@ class proyectoController extends Controller
                 }
 
 
-                
+
                 // Valida perfil
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto'])) {
                     $value->perfil = 1;
