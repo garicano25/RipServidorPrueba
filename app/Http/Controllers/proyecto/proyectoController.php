@@ -224,8 +224,6 @@ class proyectoController extends Controller
                     $value->proyecto_fechacreacion = 'Fecha no disponible';
                 }
 
-    
-
                 // Valida perfil
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto'])) {
                     $value->perfil = 1;
@@ -392,21 +390,8 @@ class proyectoController extends Controller
                     $value->servicios = $hi . $ergo . $psico . $seguridad;
                 }
 
-                if (!$value->created_at) {
-                    dd('REGISTRO CON FECHA NULL', $value);
-                }
 
-                // $value->proyecto_fechacreacion = Carbon::createFromFormat('Y-m-d H:i:s', $value->created_at)->format('Y-m-d - h:i:s a');
-
-                if ($value->created_at) {
-                    $value->proyecto_fechacreacion = $value->created_at instanceof \Carbon\Carbon
-                        ? $value->created_at->format('Y-m-d - h:i:s a')
-                        : \Carbon\Carbon::parse($value->created_at)->format('Y-m-d - h:i:s a');
-                } else {
-                    $value->proyecto_fechacreacion = 'Fecha no disponible';
-                }
-
-
+                $value->proyecto_fechacreacion = Carbon::createFromFormat('Y-m-d H:i:s', $value->created_at)->format('Y-m-d - h:i:s a');
 
                 // Valida perfil
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto'])) {
