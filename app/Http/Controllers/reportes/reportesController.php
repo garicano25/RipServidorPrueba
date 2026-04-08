@@ -1517,8 +1517,8 @@ class reportesController extends Controller
             $opciones_menu .= '<option value="3">Temperatura</option>';
             $opciones_menu .= '<option value="4">Iluminación</option>';
             $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            $opciones_menu .= '<option value="9">Agua</option>';
-            $opciones_menu .= '<option value="10">Hielo</option>';
+            // $opciones_menu .= '<option value="9">Agua</option>';
+            // $opciones_menu .= '<option value="10">Hielo</option>';
             $opciones_menu .= '<option value="15">Químicos</option>';
             $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
             $opciones_menu .= '<option value="22">BEI</option>';
