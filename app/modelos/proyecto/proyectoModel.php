@@ -11,6 +11,7 @@ class proyectoModel extends Model
           'contrato_id'
         , 'recsensorial_id'
         , 'reconocimiento_psico_id' 
+        , 'reconocimiento_ergo_id'
         , 'proyecto_folio'
         , 'proyecto_ordenservicio'
         , 'proyecto_cotizacion'

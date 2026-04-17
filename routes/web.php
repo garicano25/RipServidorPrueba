@@ -1929,13 +1929,19 @@ Route::resource('informes', 'HI\informesrecoController');
 // ======================== MODULOS DEL RECONOCIMIENTO DE PSICOSOCIAL =========================================
 
 //RECONOCIMIENTO
+
 Route::resource('reconocimientoPsicosocial', 'PSICO\reconocimientoPsicoController');
+
 Route::get('/estructuraPsico/{FOLIO}', ['as' => 'reconocimientoPsico.estructuraproyectos', 'uses' => 'PSICO\reconocimientoPsicoController@estructuraproyectos']);
+
+
 Route::get('/folioproyectoPsico/{proyecto_folio}', ['as' => 'reconocimientoPsico.folioproyecto', 'uses' => 'PSICO\reconocimientoPsicoController@folioproyecto']);
 
 Route::get('mostrarplanopsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarplanopsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarplanopsico']);
 Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarfotoinstalacionpsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarfotoinstalacionpsico']);
 Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
+
+
 Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
 
 Route::get('mostrartecnicodoc/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrartecnicodoc', 'uses' => 'PSICO\reconocimientoPsicoController@mostrartecnicodoc']);
@@ -1946,10 +1952,14 @@ Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsi
 Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
 //area
 Route::resource('recopsicoarea', 'recsensorial\recsensorialareaController');
+
 Route::get('recopsicoareatabla/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareatabla', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareatabla']);
+
 //areacategorias
 Route::get('recopsicoareacategorias/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareacategorias', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategorias']);
+
 Route::get('recopsicoareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
+
 
 Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
 Route::get('/datosnormativa/{reconocimientopsico_id}', ['as' => 'recopsiconormativa.recopsiconormativadatos', 'uses' => 'PSICO\recopsiconormativaController@recopsiconormativadatos']);
@@ -2096,6 +2106,32 @@ Route::get('vereeppdocumentopdf/{documento_id}', ['as' => 'vereeppdocumentopdf',
 Route::get('vereppfotodocumento/{id}', ['as' => 'vereppfotodocumento', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@vereppfotodocumento']);
 
 Route::get('verepictograma/{id}', ['as' => 'verepictograma', 'uses' => 'SEGURIDADINDUSTRIAL\eppcatalogosController@verepictograma']);
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////// ERGONOMIA /////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::resource('reconocimientoergo', 'ERGO\reconocimientoergoController');
+Route::get('/folioproyectoergp/{proyecto_folio}', ['as' => 'ERGO.folioproyectoergp', 'uses' => 'ERGO\reconocimientoergoController@folioproyectoergp']);
+Route::get('/estructuraproyectosergo/{FOLIO}', ['as' => 'ERGO.estructuraproyectosergo', 'uses' => 'ERGO\reconocimientoergoController@estructuraproyectosergo']);
+Route::get('tablareconocimientoergo', ['as' => 'ERGO.tablareconocimientoergo', 'uses' => 'ERGO\reconocimientoergoController@tablareconocimientoergo']);
+
+
+/////////// CATEGORIA  ///////////
+Route::resource('recoergocategorias', 'ERGO\categoriasergoController');
+Route::get('Tablarecocategoriasergo', ['as' => 'ERGO.Tablarecocategoriasergo', 'uses' => 'ERGO\categoriasergoController@Tablarecocategoriasergo']);
+
+/////////// CATEGORIA  ///////////
+Route::resource('recoergoareas', 'ERGO\areasergoController');
+Route::get('Tablarecoareasergo', ['as' => 'ERGO.Tablarecoareasergo', 'uses' => 'ERGO\areasergoController@Tablarecoareasergo']);
+
+/////////// FICHAS TECNICAS  ///////////
+Route::resource('recoergofichas', 'ERGO\fichasergoController');
+Route::get('getCategoriasErgo', ['as' => 'ERGO.getCategoriasErgo', 'uses' => 'ERGO\fichasergoController@getCategoriasErgo']);
+
 
 
 Route::get('/clear-cache', function () {

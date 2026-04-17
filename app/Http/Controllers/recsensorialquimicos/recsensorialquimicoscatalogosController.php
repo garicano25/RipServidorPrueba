@@ -135,6 +135,7 @@ class recsensorialquimicoscatalogosController extends Controller
         try {
             switch (($num_catalogo + 0)) {
                 case 0: //CATALOGO DE SUSTANCIAS QUIMICAS
+                    
                     // $catalogo = DB::select('SELECT cat.ID_SUSTANCIA_QUIMICA,
                     //                             cat.SUSTANCIA_QUIMICA,
                     //                             cat.ALTERACION_EFECTO,

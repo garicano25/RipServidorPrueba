@@ -140,7 +140,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Factor psicosial -->
                 <div class="row mb-4">
                     <div class="col-4" style="justify-content: start; display:flex; align-items:center">
@@ -218,18 +218,38 @@
                     </div>
                 </div>
 
+
+
                 <!-- Factor ergonomico -->
+
                 <div class="d-flex justify-content-center ml-5">
-                    <a id="btnErgo" class="cta disabled" href="#">
-                        <div class="row circle-one">
-                            <div class="col-12 circle-two">
-                                <img src="/assets/images/modulos/ergonomia.png" class="logos" alt="Modulos de Factor Ergonomico">
-                            </div>
-                            <span class="titulos" style="justify-content: center; margin-top:20px">Factor Ergonómico</span>
-                        </div>
-                    </a>
+
+                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                    <a id="btnErgo" class="cta unauthorized" href="#">
+                        @else
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        <a id="btnErgo" class="cta" href="{{route('reconocimientoergo.index')}}">
+                            @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
+                            <a id="btnErgo" class="cta" href="{{route('reconocimientoergo.index')}}">
+                                @endif
+                                @endif
+
+                                <div class="row circle-one">
+                                    <div class="col-12 circle-two">
+                                        <img src="/assets/images/modulos/ergonomia.png"
+                                            class="logos"
+                                            alt="Modulos de Factor Ergonomico">
+                                    </div>
+                                    <span class="titulos" style="justify-content: center; margin-top:20px">
+                                        Factor Ergonómico
+                                    </span>
+                                </div>
+                            </a>
                 </div>
 
+
+
+               
 
 
 

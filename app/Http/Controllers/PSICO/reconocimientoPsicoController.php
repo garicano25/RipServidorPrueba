@@ -50,17 +50,18 @@ class reconocimientoPsicoController extends Controller
       
     }
 
-    
+
+
     public function folioproyecto($proyecto_folio)
     {
         try {
             $opciones_select = '<option value="">&nbsp;</option>';
 
-            $proyectos = DB::select("SELECT 
+            $proyectos = DB::select(" SELECT 
                                     p.id, 
                                     p.proyecto_folio,
                                     p.proyecto_clienteinstalacion,
-                                    proyecto_clientedireccionservicio,
+                                    p.proyecto_clientedireccionservicio,
                                     p.recsensorial_id
                                 FROM 
                                     proyecto p
@@ -69,8 +70,7 @@ class reconocimientoPsicoController extends Controller
                                 WHERE 
                                     sp.PSICO = 1
                                     AND sp.PSICO_RECONOCIMIENTO = 1
-                                    AND (p.reconocimiento_psico_id IS NULL OR p.proyecto_folio = ?)
-									AND p.id IN (SELECT PROYECTO_ID FROM proyectoUsuarios GROUP BY PROYECTO_ID)", [$proyecto_folio]);
+                                    AND (p.reconocimiento_psico_id IS NULL OR p.proyecto_folio = ?) ", [$proyecto_folio]);
 
             foreach ($proyectos as $key => $value) {
                 $displayText = '[' . htmlspecialchars($value->proyecto_folio) . '] ' . htmlspecialchars($value->proyecto_clienteinstalacion);
@@ -92,6 +92,52 @@ class reconocimientoPsicoController extends Controller
             return response()->json($dato);
         }
     }
+
+
+
+
+    
+    // public function folioproyecto($proyecto_folio)
+    // {
+    //     try {
+    //         $opciones_select = '<option value="">&nbsp;</option>';
+
+    //         $proyectos = DB::select("SELECT 
+    //                                 p.id, 
+    //                                 p.proyecto_folio,
+    //                                 p.proyecto_clienteinstalacion,
+    //                                 proyecto_clientedireccionservicio,
+    //                                 p.recsensorial_id
+    //                             FROM 
+    //                                 proyecto p
+    //                             LEFT JOIN 
+    //                                 serviciosProyecto sp ON p.id = sp.PROYECTO_ID
+    //                             WHERE 
+    //                                 sp.PSICO = 1
+    //                                 AND sp.PSICO_RECONOCIMIENTO = 1
+    //                                 AND (p.reconocimiento_psico_id IS NULL OR p.proyecto_folio = ?)
+	// 								AND p.id IN (SELECT PROYECTO_ID FROM proyectoUsuarios GROUP BY PROYECTO_ID)", [$proyecto_folio]);
+
+    //         foreach ($proyectos as $key => $value) {
+    //             $displayText = '[' . htmlspecialchars($value->proyecto_folio) . '] ' . htmlspecialchars($value->proyecto_clienteinstalacion);
+
+    //             if ($value->proyecto_folio == $proyecto_folio) {
+    //                 $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '" selected>' . $displayText . '</option>';
+    //             } else {
+    //                 $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '">' . $displayText . '</option>';
+    //             }
+    //         }
+
+    //         // // respuesta
+    //         $dato['opciones'] = $opciones_select;
+    //         $dato["msj"] = 'Datos consultados correctamente';
+    //         return response()->json($dato);
+    //     } catch (Exception $e) {
+    //         $dato["msj"] = 'Error ' . $e->getMessage();
+    //         $dato['opciones'] = $opciones_select;
+    //         return response()->json($dato);
+    //     }
+    // }
 
   
     public function estructuraproyectos($FOLIO)

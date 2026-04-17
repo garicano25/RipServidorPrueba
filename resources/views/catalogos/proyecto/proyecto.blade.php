@@ -800,7 +800,7 @@
                                                                                                     <li class="me-2">Reconocimiento </li>
                                                                                                     <div class="switch mx-4 ">
                                                                                                         <label>
-                                                                                                            No<input type="checkbox" id="ergoReconocimiento" value="1" name="ERGO_RECONOCIMIETO">
+                                                                                                            No<input type="checkbox" id="ergoReconocimiento" value="1" name="ERGO_RECONOCIMIENTO">
                                                                                                             <span class=" lever switch-col-light-blue"></span>Si
                                                                                                         </label>
                                                                                                     </div>
