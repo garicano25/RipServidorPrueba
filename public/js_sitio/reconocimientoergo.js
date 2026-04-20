@@ -2290,61 +2290,91 @@ $("#boton_nueva_ficha").click(function (e) {
 
 
 
-let contadorActividades = 0;
-
 function agregarActividad() {
-    contadorActividades++;
+
+    let contenedor = document.getElementById("contenedorActividades");
+
+    let total = contenedor.querySelectorAll('.actividad-item').length + 1;
 
     let html = `
-    <div class="row mt-3 border p-2 rounded" id="actividad_${contadorActividades}">
+    <div class="col-12 actividad-item mt-3" id="actividad_${total}">
         
-        <!-- IZQUIERDA (ACTIVIDAD) -->
-        <div class="col-md-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5>Actividad ${contadorActividades}</h5>
-                <button class="btn btn-danger btn-sm" onclick="eliminarActividad(${contadorActividades})">X</button>
+        <div class="actividad-card p-3">
+
+            <div class="row">
+
+                <!-- IZQUIERDA -->
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="titulo-actividad mb-2">Actividad ${total}</h5>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)">X</button>
+                    </div>
+
+                    <input type="text" 
+                        name="actividades[${total}][nombre]" 
+                        class="form-control mt-2 w-100" 
+                        placeholder="Nombre de la actividad">
+                </div>
+
+                <!-- DERECHA -->
+                <div class="col-md-8">
+                    <div id="tareas_${total}" class="mb-2"></div>
+
+                    <button type="button" 
+                        class="btn btn-primary btn-sm w-100"
+                        onclick="agregarTarea(${total})">
+                        + Agregar tarea
+                    </button>
+                </div>
+
             </div>
 
-            <input type="text" 
-                name="actividades[${contadorActividades}][nombre]" 
-                class="form-control mt-2" 
-                placeholder="Nombre de la actividad">
-        </div>
-
-        <!-- DERECHA (TAREAS) -->
-        <div class="col-md-8">
-            <div id="tareas_${contadorActividades}"></div>
-
-            <button type="button" 
-                class="btn btn-info btn-sm mt-2 w-100"
-                onclick="agregarTarea(${contadorActividades})">
-                + Agregar tarea
-            </button>
         </div>
 
     </div>
     `;
 
-    document.getElementById("contenedorActividades").insertAdjacentHTML('beforeend', html);
+    contenedor.insertAdjacentHTML('beforeend', html);
 }
 
-function eliminarActividad(id) {
-    document.getElementById(`actividad_${id}`).remove();
+
+function eliminarActividad(btn) {
+
+    btn.closest('.actividad-item').remove();
+
+    let actividades = document.querySelectorAll('#contenedorActividades .actividad-item');
+
+    actividades.forEach((el, index) => {
+
+        let num = index + 1;
+
+        el.id = `actividad_${num}`;
+        el.querySelector('.titulo-actividad').innerText = `Actividad ${num}`;
+
+        let input = el.querySelector('input');
+        input.name = `actividades[${num}][nombre]`;
+
+        let btnTarea = el.querySelector('.btn-primary');
+        btnTarea.setAttribute('onclick', `agregarTarea(${num})`);
+
+        let tareasDiv = el.querySelector('[id^="tareas_"]');
+        tareasDiv.id = `tareas_${num}`;
+    });
 }
 
 function agregarTarea(idActividad) {
 
     let contenedor = document.getElementById(`tareas_${idActividad}`);
 
-    // 🔥 CONTADOR REAL (no se rompe)
     let totalTareas = contenedor.querySelectorAll('.tarea-item').length + 1;
 
     let html = `
-    <div class="border p-2 mt-2 tarea-item">
-        
-        <div class="d-flex justify-content-between">
-            <b>Tarea ${totalTareas}</b>
-            <button class="btn btn-danger btn-sm" onclick="eliminarTarea(this, ${idActividad})">X</button>
+    <div class="tarea-item border p-2 mt-2">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <b class="titulo-tarea">Tarea ${totalTareas}</b>
+            <button type="button" class="btn btn-danger btn-sm"
+                onclick="eliminarTarea(this, ${idActividad})">X</button>
         </div>
 
         <input type="text" 
@@ -2366,7 +2396,27 @@ function agregarTarea(idActividad) {
 
     contenedor.insertAdjacentHTML('beforeend', html);
 }
-		
+
+
+
+function eliminarTarea(btn, idActividad) {
+
+    btn.closest('.tarea-item').remove();
+
+    let tareas = document.querySelectorAll(`#tareas_${idActividad} .tarea-item`);
+
+    tareas.forEach((el, index) => {
+        let num = index + 1;
+
+        el.querySelector('.titulo-tarea').innerText = `Tarea ${num}`;
+
+        let inputs = el.querySelectorAll('input');
+
+        inputs[0].name = `actividades[${idActividad}][tareas][${num}][nombre]`;
+        inputs[1].name = `actividades[${idActividad}][tareas][${num}][frecuencia]`;
+        inputs[2].name = `actividades[${idActividad}][tareas][${num}][duracion]`;
+    });
+}
 
 
 function toggleSeccion(id) {

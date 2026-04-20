@@ -932,8 +932,8 @@ use Illuminate\Support\Str;
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
-    <script src="/js_sitio/reconocimientoergo.js"></script>
+
+    <script src="/js_sitio/reconocimientoergo.js?v=1"></script>
     <script src="/js_sitio/funcionesgeneralesergo.js"></script>
     @endif
 

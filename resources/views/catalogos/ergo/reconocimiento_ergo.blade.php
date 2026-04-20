@@ -2787,16 +2787,35 @@
                             </div>
                         </div>
                         <br><br>
-
                         <div class="col-12 mt-2">
                             <button type="button" class="btn btn-danger" onclick="agregarActividad()">
                                 + Agregar Actividad
                             </button>
                         </div>
-                        <div id="contenedorActividades"></div>
+
+                        <div id="contenedorActividades" class="row mt-2"></div>
+
+
                         <br><br>
 
                         <style>
+                            .actividad-card {
+                                border-radius: 10px;
+                                border: 1px solid #dee2e6;
+                                background: #fff;
+                            }
+
+         
+                            .tarea-item {
+                                background: #f8f9fa;
+                                border-radius: 6px;
+                            }
+
+                            #contenedorActividades {
+                                max-height: 400px;
+                                overflow-y: auto;
+                            }
+
                             .custom-container-left {
                                 width: 100%;
                                 max-width: 100%;
