@@ -183,13 +183,13 @@
                                                 <i class="fa fa-file-text-o"></i><br>
                                                 <span>Datos generales</span>
                                             </div>
-                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab2">
-                                                <i class="fa fa-user"></i><br>
-                                                <span>Categorías</span>
-                                            </div>
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab3">
                                                 <i class="fa fa-clone"></i><br>
                                                 <span>Áreas</span>
+                                            </div>
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab2">
+                                                <i class="fa fa-user"></i><br>
+                                                <span>Categorías</span>
                                             </div>
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
                                                 <i class="fa fa-address-card"></i><br>
@@ -660,6 +660,46 @@
                                                     </form>
                                                 </div>
                                             </div>
+
+                                            <!--STEP 3-->
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab3">
+                                                <div class="multisteps-form__content">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
+
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Área instalación</h2>
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light   botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Nueva área" id="boton_nueva_area" style="margin-left: auto;">
+                                                                    Nueva <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Área instalación </h2>
+                                                            </ol>
+                                                            @endif
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-hover stylish-table" width="100%" id="Tablarecoareasergo">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 100px !important;">No.</th>
+                                                                            <th>Área</th>
+                                                                            <th>Proceso del área </th>
+                                                                            <th style="width: 80px!important;">Editar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colspan="5">&nbsp;</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!--STEP 2-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab2">
                                                 <div class="multisteps-form__content">
@@ -700,47 +740,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--STEP 3-->
-                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab3">
-                                                <div class="multisteps-form__content">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
 
-                                                            <ol class="breadcrumb m-b-10">
-                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Área instalación</h2>
-                                                                <button type="button" class="btn btn-secondary waves-effect waves-light   botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Nueva área" id="boton_nueva_area" style="margin-left: auto;">
-                                                                    Nueva <i class="fa fa-plus"></i>
-                                                                </button>
-                                                            </ol>
-                                                            @else
-                                                            <ol class="breadcrumb m-b-10">
-                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Área instalación </h2>
-                                                            </ol>
-                                                            @endif
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered table-hover stylish-table" width="100%" id="Tablarecoareasergo">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th style="width: 100px !important;">No.</th>
-                                                                            <th>Área</th>
-                                                                            <th>Proceso del área </th>
-                                                                            <th style="width: 80px!important;">Editar</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td colspan="5">&nbsp;</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <!--STEP 3-->
+                                            <!--STEP 4-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
                                                 <div class="multisteps-form__content">
                                                     <div class="row">
@@ -2561,7 +2563,7 @@
                                 <input type="text" class="form-control" name="NOMBRE_CATEGORIA_ERGO" id="NOMBRE_CATEGORIA_ERGO" required>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label> Tipo puesto*</label>
                                 <select class="custom-select form-control" id="CAT_TIPOPUESTO" name="CAT_TIPOPUESTO" required>
@@ -2572,7 +2574,12 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>P.Trabajo*</label>
+                                <input type="text" class="form-control" name="PT_CATEGORIA" id="PT_CATEGORIA" required readonly>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Descripcion categoría*</label>
@@ -2582,12 +2589,7 @@
 
                         <div class="row listadodeturno m-2"></div>
 
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>P.Trabajo*</label>
-                                <input type="text" class="form-control" name="PT_CATEGORIA" id="PT_CATEGORIA" required readonly>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
@@ -2805,7 +2807,7 @@
                                 background: #fff;
                             }
 
-         
+
                             .tarea-item {
                                 background: #f8f9fa;
                                 border-radius: 6px;
