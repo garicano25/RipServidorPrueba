@@ -184,9 +184,9 @@ $('input[name="informe_del_cliente"]').change(function () {
 
 	} else if (valor === '0') {
 		///Limpiamos la informacion del cliente
-		$("#recsensorial_empresa").val('');
-		$("#recsensorial_rfc").val('');
-		$("#recsensorial_representantelegal").val('');
+		$("#empresa").val('');
+		$("#rfc").val('');
+		$("#representantelegal").val('');
 
 	}
 });
