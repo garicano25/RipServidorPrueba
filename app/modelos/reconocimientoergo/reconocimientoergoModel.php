@@ -31,6 +31,7 @@ class reconocimientoergoModel extends Model
         'fotoplano',
         'fotoubicacion',
         'fotoinstalacion',
+        'fotomapariesgo',
         'contrato_id',
         'descripcion_contrato',
         'informe_del_cliente',

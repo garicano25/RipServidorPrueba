@@ -33,7 +33,78 @@ $(document).ready(function () {
 	$("#tab_menu4").css('display', 'none');
 
 	
+	$('#inputfotomapa').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+	});
 
+
+		$('#inputfotoplano').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+		});
+	
+	
+		$('#inputfotoinstalacion').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+		});
+	
+	
+		$('#inputfotomapaderiesgo').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+		});
+	
+	
 	// Inicializar tooltip
 	$('[data-toggle="tooltip"]').tooltip();
 });
@@ -174,6 +245,11 @@ $("#boton_nuevo_reconocimiento").click(function () {
 		}
 	});
 
+	$('#inputfotomapa').val('');
+	$('#inputfotomapa').dropify().data('dropify').resetPreview();
+	$('#inputfotomapa').dropify().data('dropify').clearElement();
+
+
 	// inicializar campo FOTO plano instalacion
 	$('#inputfotoplano').dropify({
 		messages: {
@@ -192,6 +268,14 @@ $("#boton_nuevo_reconocimiento").click(function () {
 		}
 	});
 
+
+	
+	$('#inputfotoplano').val('');
+	$('#inputfotoplano').dropify().data('dropify').resetPreview();
+	$('#inputfotoplano').dropify().data('dropify').clearElement();
+
+
+
 	// inicializar campo FOTO plano instalacion
 	$('#inputfotoinstalacion').dropify({
 		messages: {
@@ -209,6 +293,34 @@ $("#boton_nuevo_reconocimiento").click(function () {
 			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
 		}
 	});
+
+	$('#inputfotoinstalacion').val('');
+	$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
+	$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
+
+
+	// inicializar campo FOTO plano instalacion
+	$('#inputfotomapaderiesgo').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+	});
+
+	$('#inputfotomapaderiesgo').val('');
+	$('#inputfotomapaderiesgo').dropify().data('dropify').resetPreview();
+	$('#inputfotomapaderiesgo').dropify().data('dropify').clearElement();
+
 
 	// inicializar campo FOTO mapa ubicacion
 	$('#TECNICO_DOC_IMG').dropify({
@@ -247,11 +359,6 @@ $("#boton_nuevo_reconocimiento").click(function () {
 	});
 
 
-
-
-
-	
-
 	$("#boton_descargarfotoinstalacion").css('display', 'none');
 
 	// BOton evidencia fotografica quimicos
@@ -260,6 +367,7 @@ $("#boton_nuevo_reconocimiento").click(function () {
 	// Desactivar boton descargas FOTO
 	$("#boton_descargarmapaubicacion").css('display', 'none');
 	$("#boton_descargarplanoinstalacion").css('display', 'none');
+	$("#boton_descargarmapaderiesgo").css('display', 'none');
 
 	// Visor quimico PDF
 	$('#visor_pdfquimicos').attr('src', '/assets/images/nada.jpg');
@@ -320,138 +428,252 @@ $("#boton_descargarfotoinstalacion").click(function () {
 	window.open('/mostrarfotoinstalacion/1/' + recsensorial);
 });
 
-$("#boton_guardar_recsensorial").click(function () {
 
-	$('#recsensorial_ordenservicio').attr('required', false);
-	$('#inputfotomapa').attr('required', false);
-	$('#inputfotomapa').prop('required', false);
-
-	if ($('#proyecto_folio').val() != "") {
-
-		// valida campos vacios
-		var valida = this.form.checkValidity();
-		if (valida) {
+$("#boton_descargarmapaderiesgo").click(function () {
+	window.open('/mostrarmapariesgoergo/1/' + recsensorial);
+});
 
 
-				swal({
-					title: "¡Confirme que desea guardar!",
-					text: "Reconocimiento sensorial",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Aceptar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+// $("#boton_guardar_recsensorial").click(function () {
 
-						// enviar datos
-						$('#form_recsensorial').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '/reconocimientoergo',
-							data: {
-								opcion: 1,
-								higiene: HIGIENE,
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Campos Hidden
-								$("#recsensorial_id").val(dato.recsensorial.id);
-								recsensorial = dato.recsensorial.id;
+// 	$('#recsensorial_ordenservicio').attr('required', false);
+// 	$('#inputfotomapa').attr('required', false);
+// 	$('#inputfotomapa').prop('required', false);
 
-								// ocultar menu parametro en el modulo evaluacion
-								menu_parametros_ocultar();
+// 	if ($('#proyecto_folio').val() != "") {
+
+// 		// valida campos vacios
+// 		var valida = this.form.checkValidity();
+// 		if (valida) {
+
+
+// 				swal({
+// 					title: "¡Confirme que desea guardar!",
+// 					text: "Reconocimiento sensorial",
+// 					type: "warning",
+// 					showCancelButton: true,
+// 					confirmButtonColor: "#DD6B55",
+// 					confirmButtonText: "Aceptar!",
+// 					cancelButtonText: "Cancelar!",
+// 					closeOnConfirm: false,
+// 					closeOnCancel: false
+// 				}, function (isConfirm) {
+// 					if (isConfirm) {
+// 						// cerrar msj confirmacion
+// 						swal.close();
+
+// 						// enviar datos
+// 						$('#form_recsensorial').ajaxForm({
+// 							dataType: 'json',
+// 							type: 'POST',
+// 							url: '/reconocimientoergo',
+// 							data: {
+// 								opcion: 1,
+// 								higiene: HIGIENE,
+// 							},
+// 							resetForm: false,
+// 							success: function (dato) {
+// 								// Campos Hidden
+// 								$("#recsensorial_id").val(dato.recsensorial.id);
+// 								recsensorial = dato.recsensorial.id;
+
+// 								// ocultar menu parametro en el modulo evaluacion
+// 								menu_parametros_ocultar();
 
 	
-								activa_stepforms();
+// 								activa_stepforms();
 
 							
 
-								// actualiza tabla general RECSENSORIAL
-								tabla_reconocimientosensorial();
+// 								// actualiza tabla general RECSENSORIAL
+// 								tabla_reconocimientosensorial();
 
-								// mensaje
-								swal({
-									title: "¡El reconocimiento fue guardado exitosamente!.",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 4500,
-									showConfirmButton: false
-								});
+// 								// mensaje
+// 								swal({
+// 									title: "¡El reconocimiento fue guardado exitosamente!.",
+// 									text: "" + dato.msj,
+// 									type: "success", // warning, error, success, info
+// 									buttons: {
+// 										visible: false, // true , false
+// 									},
+// 									timer: 4500,
+// 									showConfirmButton: false
+// 								});
 
-								// actualiza boton
-								$('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
-								return false;
-							},
-							beforeSend: function () {
-								$('#boton_guardar_recsensorial').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
-								// mensaje
-								swal({
-									title: "Error",
-									text: "Error en la acción: " + dato,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
-				return false;
+// 								// actualiza boton
+// 								$('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
+// 								return false;
+// 							},
+// 							beforeSend: function () {
+// 								$('#boton_guardar_recsensorial').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+// 							},
+// 							error: function (dato) {
+// 								// actualiza boton
+// 								$('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
+// 								// mensaje
+// 								swal({
+// 									title: "Error",
+// 									text: "Error en la acción: " + dato,
+// 									type: "error", // warning, error, success, info
+// 									buttons: {
+// 										visible: false, // true , false
+// 									},
+// 									timer: 1500,
+// 									showConfirmButton: false
+// 								});
+// 								return false;
+// 							}
+// 						}).submit();
+// 						return false;
+// 					}
+// 					else {
+// 						// mensaje
+// 						swal({
+// 							title: "Cancelado",
+// 							text: "Acción cancelada",
+// 							type: "error", // warning, error, success, info
+// 							buttons: {
+// 								visible: false, // true , false
+// 							},
+// 							timer: 500,
+// 							showConfirmButton: false
+// 						});
+// 					}
+// 				});
+// 				return false;
 			
-		}
+// 		}
 
 
-	} else {
-		// mensaje
+// 	} else {
+// 		// mensaje
 
-		$('html, body').animate({
-			scrollTop: $("#primeraParte").offset().top
-		}, 1000);
+// 		$('html, body').animate({
+// 			scrollTop: $("#primeraParte").offset().top
+// 		}, 1000);
 
-		swal({
-			title: "Falta seleccionar un FOLIO de proyecto",
-			text: "Es necesario seleccionar este reconocimiento con un FOLIO de proyecto para poder continuar!.",
-			type: "warning", // warning, error, success, info
-			buttons: {
-				visible: false, // true , false
-			},
-			timer: 2000,
-			showConfirmButton: false
-		});
-		return false;
-	}
+// 		swal({
+// 			title: "Falta seleccionar un FOLIO de proyecto",
+// 			text: "Es necesario seleccionar este reconocimiento con un FOLIO de proyecto para poder continuar!.",
+// 			type: "warning", // warning, error, success, info
+// 			buttons: {
+// 				visible: false, // true , false
+// 			},
+// 			timer: 2000,
+// 			showConfirmButton: false
+// 		});
+// 		return false;
+// 	}
+// });
+
+
+
+$("#boton_guardar_recsensorial").click(function () {
+
+    $('#recsensorial_ordenservicio').attr('required', false);
+    $('#inputfotomapa').prop('required', false);
+
+    if ($('#proyecto_folio').val() != "") {
+
+        var valida = this.form.checkValidity();
+
+        if (valida) {
+
+            Swal.fire({
+                title: "¡Confirme que desea guardar!",
+                text: "Reconocimiento sensorial",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    var formData = new FormData($('#form_recsensorial')[0]);
+                    formData.append('opcion', 1);
+                    formData.append('higiene', HIGIENE);
+
+                    $.ajax({
+                        url: '/reconocimientoergo',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+
+                        beforeSend: function () {
+                            $('#boton_guardar_recsensorial').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                        },
+
+                        success: function (dato) {
+
+                            $("#recsensorial_id").val(dato.recsensorial.id);
+                            recsensorial = dato.recsensorial.id;
+
+                            menu_parametros_ocultar();
+                            activa_stepforms();
+                            tabla_reconocimientosensorial();
+
+                            Swal.fire({
+                                icon: "success",
+                                title: "¡El reconocimiento fue guardado exitosamente!",
+                                text: dato.msj,
+                                timer: 2500,
+                                showConfirmButton: false
+                            });
+
+                            $('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
+                        },
+
+                        error: function (xhr) {
+
+                            console.log(xhr.responseText);
+
+                            $('#boton_guardar_recsensorial').html('Guardar <i class="fa fa-save"></i>');
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Error en la petición"
+                            });
+                        }
+                    });
+
+                } else {
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Cancelado",
+                        text: "Acción cancelada",
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+
+                }
+
+            });
+
+            return false;
+
+        }
+
+    } else {
+
+        $('html, body').animate({
+            scrollTop: $("#primeraParte").offset().top
+        }, 1000);
+
+        Swal.fire({
+            icon: "warning",
+            title: "Falta seleccionar un FOLIO de proyecto",
+            text: "Es necesario seleccionar este reconocimiento con un FOLIO de proyecto para poder continuar!",
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        return false;
+    }
 });
-
 
 //-------------------------------------------------------TABLAS---------------------------------------------------------------//
 $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function () {
@@ -541,131 +763,368 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	}
 
-	if (row.data().fotoubicacion){
-		var archivo = row.data().fotoubicacion;
-		var extension = archivo.substring(archivo.lastIndexOf("."));
-		var imagenUrl = '/mostrarmapapsico/0/' + row.data().id + extension;
-		
-		rutaMapa = imagenUrl
-
-		// INPUT FOTO UBICACION
-		if ($('#inputfotomapa').data('dropify'))
-		{
-			$('#inputfotomapa').dropify().data('dropify').destroy();
-			// $('.dropify-wrapper').css('height', 400);
-			$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
-			$('#inputfotomapa').dropify().data('dropify').init();
-		}
-		else
-		{
-			// $('#inputfotomapa').attr('data-height', 400);
-			$('#inputfotomapa').attr('data-default-file', imagenUrl);
-			$('#inputfotomapa').dropify({
-				messages: {
-					'default': 'Arrastre la imagen aquí o haga click',
-					'replace': 'Arrastre la imagen o haga clic para reemplazar',
-					'remove':  'Quitar',
-					'error':   'Ooops, ha ocurrido un error.'
-				},
-				error: {
-					'fileSize': 'Demasiado grande ({{ value }} max).',
-					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-				}
-			});
-		}
-
-		// No requerir campo FOTO
-		$('#inputfotomapa').attr('required', false);
-
-		// Activar boton descarga
-		$("#boton_descargarmapaubicacion").css('display', 'block');
-	}
-	else
-	{
-		$("#boton_descargarmapaubicacion").css('display', 'none');
-	}
-
-	// OBTENER FOTO PLANO
-	if (row.data().fotoplano) {
-		var archivo = row.data().fotoplano;
-		var extension = archivo.substring(archivo.lastIndexOf("."));
-		var imagenUrl = '/mostrarplanopsico/0/' + row.data().id + extension;
-
-		rutaMapa = imagenUrl
 
 
-		// INPUT FOTO PLANO
-		if ($('#inputfotoplano').data('dropify')) {
-			$('#inputfotoplano').dropify().data('dropify').destroy();
-			// $('.dropify-wrapper').css('height', 400);
-			$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
-			$('#inputfotoplano').dropify().data('dropify').init();
+		///////////////// OBTENER FOTO UBICACION /////////////////
+		if (row.data().fotoubicacion) {
+			var archivo = row.data().fotoubicacion;
+			var extension = archivo.substring(archivo.lastIndexOf("."));
+			var imagenUrl = '/mostrarmapaubicacionergo/0/' + row.data().id + extension;
+
+			rutaMapa = imagenUrl
+
+			// INPUT FOTO UBICACION
+			if ($('#inputfotomapa').data('dropify')) {
+				$('#inputfotomapa').dropify().data('dropify').destroy();
+				// $('.dropify-wrapper').css('height', 400);
+				$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
+				$('#inputfotomapa').dropify().data('dropify').init();
+			}
+			else {
+				// $('#inputfotomapa').attr('data-height', 400);
+				$('#inputfotomapa').attr('data-default-file', imagenUrl);
+				$('#inputfotomapa').dropify({
+					messages: {
+						'default': 'Arrastre la imagen aquí o haga click',
+						'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						'remove': 'Quitar',
+						'error': 'Ooops, ha ocurrido un error.'
+					},
+					error: {
+						'fileSize': 'Demasiado grande ({{ value }} max).',
+						'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+					}
+				});
+			}
+
+			// No requerir campo FOTO
+			$('#inputfotomapa').attr('required', false);
+
+			// Activar boton descarga
+			$("#boton_descargarmapaubicacion").css('display', 'block');
 		}
 		else {
-			// $('#inputfotoplano').attr('data-height', 400);
-			$('#inputfotoplano').attr('data-default-file', imagenUrl);
-			$('#inputfotoplano').dropify({
-				messages: {
-					'default': 'Arrastre la imagen aquí o haga click',
-					'replace': 'Arrastre la imagen o haga clic para reemplazar',
-					'remove': 'Quitar',
-					'error': 'Ooops, ha ocurrido un error.'
-				},
-				error: {
-					'fileSize': 'Demasiado grande ({{ value }} max).',
-					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-				}
-			});
+			$("#boton_descargarmapaubicacion").css('display', 'none');
+	}
+	
+
+		// 	var imagenUrl = '';
+
+		// if (row.data().fotoubicacion) {
+		// 	var archivo = row.data().fotoubicacion;
+		// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+		// 	imagenUrl = '/mostrarmapaubicacionergo/0/' + row.data().id + extension;
+
+		// 	rutaMapa = imagenUrl;
+
+		// 	$("#boton_descargarmapaubicacion").css('display', 'block');
+		// } else {
+		// 	$("#boton_descargarmapaubicacion").css('display', 'none');
+		// }
+
+		// var drEvent = $('#inputfotomapa').data('dropify');
+
+		// if (drEvent) {
+		// 	drEvent.destroy();
+		// }
+
+		// $('#inputfotomapa').attr('data-default-file', imagenUrl);
+
+		// // Inicializar SIEMPRE
+		// $('#inputfotomapa').dropify({
+		// 	messages: {
+		// 		'default': 'Arrastre la imagen aquí o haga click',
+		// 		'replace': 'Arrastre la imagen o haga clic para reemplazar',
+		// 		'remove': 'Quitar',
+		// 		'error': 'Ooops, ha ocurrido un error.'
+		// 	},
+		// 	error: {
+		// 		'fileSize': 'Demasiado grande ({{ value }} max).',
+		// 		'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+		// 		'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+		// 		'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+		// 		'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+		// 		'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		// 	}
+		// });
+
+		// 	$('#inputfotomapa').attr('required', false);
+			
+
+
+	
+	///////////// OBTENER PLANO INSTALACION /////////////
+	
+		if (row.data().fotoplano) {
+			var archivo = row.data().fotoplano;
+			var extension = archivo.substring(archivo.lastIndexOf("."));
+			var imagenUrl = '/mostraplanoergo/0/' + row.data().id + extension;
+
+			rutaMapa = imagenUrl
+
+			// INPUT FOTO UBICACION
+			if ($('#inputfotoplano').data('dropify')) {
+				$('#inputfotoplano').dropify().data('dropify').destroy();
+				// $('.dropify-wrapper').css('height', 400);
+				$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
+				$('#inputfotoplano').dropify().data('dropify').init();
+			}
+			else {
+				// $('#inputfotomapa').attr('data-height', 400);
+				$('#inputfotoplano').attr('data-default-file', imagenUrl);
+				$('#inputfotoplano').dropify({
+					messages: {
+						'default': 'Arrastre la imagen aquí o haga click',
+						'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						'remove': 'Quitar',
+						'error': 'Ooops, ha ocurrido un error.'
+					},
+					error: {
+						'fileSize': 'Demasiado grande ({{ value }} max).',
+						'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+					}
+				});
+			}
+
+			// No requerir campo FOTO
+			$('#inputfotoplano').attr('required', false);
+
+			// Activar boton descarga
+			$("#boton_descargarplanoinstalacion").css('display', 'block');
 		}
-
-		// No requerir campo FOTO
-		$('#inputfotoplano').attr('required', false);
-
-		// Activar boton descarga
-		$("#boton_descargarplanoinstalacion").css('display', 'block');
-	}
-	else {
-		$("#boton_descargarplanoinstalacion").css('display', 'none');
+		else {
+			$("#boton_descargarplanoinstalacion").css('display', 'none');
 	}
 
-	// OBTENER FOTO INSTALACION
-	if (row.data().fotoinstalacion)
-		{
+		// var imagenUrl = '';
+
+		// if (row.data().fotoplano) {
+		// 	var archivo = row.data().fotoplano;
+		// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+		// 	imagenUrl = '/mostraplanoergo/0/' + row.data().id + extension;
+
+		// 	rutaMapa = imagenUrl;
+
+		// 	$("#boton_descargarplanoinstalacion").css('display', 'block');
+		// } else {
+		// 	$("#boton_descargarplanoinstalacion").css('display', 'none');
+		// }
+
+		// var drEvent = $('#inputfotoplano').data('dropify');
+
+		// if (drEvent) {
+		// 	drEvent.destroy();
+		// }
+
+		// $('#inputfotoplano').attr('data-default-file', imagenUrl);
+
+		// // Inicializar SIEMPRE
+		// $('#inputfotoplano').dropify({
+		// 	messages: {
+		// 		'default': 'Arrastre la imagen aquí o haga click',
+		// 		'replace': 'Arrastre la imagen o haga clic para reemplazar',
+		// 		'remove': 'Quitar',
+		// 		'error': 'Ooops, ha ocurrido un error.'
+		// 	},
+		// 	error: {
+		// 		'fileSize': 'Demasiado grande ({{ value }} max).',
+		// 		'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+		// 		'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+		// 		'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+		// 		'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+		// 		'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		// 	}
+		// });
+
+		// $('#inputfotoplano').attr('required', false);
+
+	//////////// OBTENER FOTO INSTALACION ////////////
+	
+		if (row.data().fotoinstalacion) {
 			var archivo = row.data().fotoinstalacion;
 			var extension = archivo.substring(archivo.lastIndexOf("."));
-			var imagenUrl = '/mostrarfotoinstalacionpsico/0/'+row.data().id + extension;
-	
-			// INPUT FOTO INSTALACION
-			$('#inputfotoinstalacion').dropify().data('dropify').destroy();
-			// $('.dropify-wrapper').css('height', 400);
-			$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
-			$('#inputfotoinstalacion').dropify().data('dropify').init();
-	
+			var imagenUrl = '/mostrafotoinstalacionergo/0/' + row.data().id + extension;
+
+			rutaMapa = imagenUrl
+
+			// INPUT FOTO UBICACION
+			if ($('#inputfotoinstalacion').data('dropify')) {
+				$('#inputfotoinstalacion').dropify().data('dropify').destroy();
+				// $('.dropify-wrapper').css('height', 400);
+				$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
+				$('#inputfotoinstalacion').dropify().data('dropify').init();
+			}
+			else {
+				// $('#inputfotomapa').attr('data-height', 400);
+				$('#inputfotoinstalacion').attr('data-default-file', imagenUrl);
+				$('#inputfotoinstalacion').dropify({
+					messages: {
+						'default': 'Arrastre la imagen aquí o haga click',
+						'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						'remove': 'Quitar',
+						'error': 'Ooops, ha ocurrido un error.'
+					},
+					error: {
+						'fileSize': 'Demasiado grande ({{ value }} max).',
+						'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+					}
+				});
+			}
+
 			// No requerir campo FOTO
 			$('#inputfotoinstalacion').attr('required', false);
-	
+
 			// Activar boton descarga
 			$("#boton_descargarfotoinstalacion").css('display', 'block');
-		
-		} else {
-	
-			// Resetear campo FOTO INSTALACION
-			$('#inputfotoinstalacion').val('');
-			$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
-			$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
-	
-			// No requerir campo FOTO
-			$('#inputfotoinstalacion').attr('required', false);
-			$("#boton_descargarfotoinstalacion").css('display', 'none');
 		}
+		else {
+			$("#boton_descargarfotoinstalacion").css('display', 'none');
+	}
+
+		// var imagenUrl = '';
+
+		// if (row.data().fotoinstalacion) {
+		// 	var archivo = row.data().fotoinstalacion;
+		// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+		// 	imagenUrl = '/mostrafotoinstalacionergo/0/' + row.data().id + extension;
+
+		// 	rutaMapa = imagenUrl;
+
+		// 	$("#boton_descargarfotoinstalacion").css('display', 'block');
+		// } else {
+		// 	$("#boton_descargarfotoinstalacion").css('display', 'none');
+		// }
+
+		// var drEvent = $('#inputfotoinstalacion').data('dropify');
+
+		// if (drEvent) {
+		// 	drEvent.destroy();
+		// }
+
+		// $('#inputfotoinstalacion').attr('data-default-file', imagenUrl);
+
+		// $('#inputfotoinstalacion').dropify({
+		// 	messages: {
+		// 		'default': 'Arrastre la imagen aquí o haga click',
+		// 		'replace': 'Arrastre la imagen o haga clic para reemplazar',
+		// 		'remove': 'Quitar',
+		// 		'error': 'Ooops, ha ocurrido un error.'
+		// 	},
+		// 	error: {
+		// 		'fileSize': 'Demasiado grande ({{ value }} max).',
+		// 		'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+		// 		'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+		// 		'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+		// 		'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+		// 		'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		// 	}
+		// });
+
+		// $('#inputfotoinstalacion').attr('required', false);
+
+	//////////// OBTENER MAPA DE RIESGO ////////////
+	
+		if (row.data().fotomapariesgo) {
+			var archivo = row.data().fotomapariesgo;
+			var extension = archivo.substring(archivo.lastIndexOf("."));
+			var imagenUrl = '/mostrarmapariesgoergo/0/' + row.data().id + extension;
+
+			rutaMapa = imagenUrl
+
+			if ($('#inputfotomapaderiesgo').data('dropify')) {
+				$('#inputfotomapaderiesgo').dropify().data('dropify').destroy();
+				// $('.dropify-wrapper').css('height', 400);
+				$('#inputfotomapaderiesgo').dropify().data('dropify').settings.defaultFile = imagenUrl;
+				$('#inputfotomapaderiesgo').dropify().data('dropify').init();
+			}
+			else {
+				// $('#inputfotomapa').attr('data-height', 400);
+				$('#inputfotomapaderiesgo').attr('data-default-file', imagenUrl);
+				$('#inputfotomapaderiesgo').dropify({
+					messages: {
+						'default': 'Arrastre la imagen aquí o haga click',
+						'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						'remove': 'Quitar',
+						'error': 'Ooops, ha ocurrido un error.'
+					},
+					error: {
+						'fileSize': 'Demasiado grande ({{ value }} max).',
+						'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+					}
+				});
+			}
+
+			// No requerir campo FOTO
+			$('#inputfotomapaderiesgo').attr('required', false);
+
+			// Activar boton descarga
+			$("#boton_descargarmapaderiesgo").css('display', 'block');
+		}
+		else {
+			$("#boton_descargarmapaderiesgo").css('display', 'none');
+	}
+
+
+
+	// var imagenUrl = '';
+
+	// 	if (row.data().fotomapariesgo) {
+	// 		var archivo = row.data().fotomapariesgo;
+	// 		var extension = archivo.substring(archivo.lastIndexOf("."));
+	// 		imagenUrl = '/mostrarmapariesgoergo/0/' + row.data().id + extension;
+
+	// 		rutaMapa = imagenUrl;
+
+	// 		$("#boton_descargarmapaderiesgo").css('display', 'block');
+	// 	} else {
+	// 		$("#boton_descargarmapaderiesgo").css('display', 'none');
+	// 	}
+
+	// 	var drEvent = $('#inputfotomapaderiesgo').data('dropify');
+
+	// 	if (drEvent) {
+	// 		drEvent.destroy();
+	// 	}
+
+	// 	$('#inputfotomapaderiesgo').attr('data-default-file', imagenUrl);
+
+	// 	$('#inputfotomapaderiesgo').dropify({
+	// 		messages: {
+	// 			'default': 'Arrastre la imagen aquí o haga click',
+	// 			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+	// 			'remove': 'Quitar',
+	// 			'error': 'Ooops, ha ocurrido un error.'
+	// 		},
+	// 		error: {
+	// 			'fileSize': 'Demasiado grande ({{ value }} max).',
+	// 			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+	// 			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+	// 			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+	// 			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+	// 			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+	// 		}
+	// 	});
+
+	// 	// No requerir campo FOTO
+	// $('#inputfotomapaderiesgo').attr('required', false);
+	
+
 
 
 	// Perfil
@@ -1205,6 +1664,23 @@ $("#boton_nueva_categoria").click(function (e) {
     $('#modal_categoria .modal-title').html('Nueva categoría');
 
 
+	 $.ajax({
+        url: 'obtenerPTCategoria',
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            reco_id: recsensorial
+        },
+        success: function (resp) {
+            $('#PT_CATEGORIA').val(resp.pt);
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+
 });
 
 
@@ -1251,7 +1727,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			const divhorarios = document.createElement('div');
 			divhorarios.classList.add('row', 'generarturnos', 'm-2');
 			divhorarios.innerHTML = `
-            <div class="col-lg-12 col-sm-1">
                 <div class="form-group">
                     <h3><i class="fa  fa-clock-o"></i> Agregar turno</h3>                 
                 </div>
@@ -1260,14 +1735,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="col-3">
                         <div class="form-group">
                             <label> Horas jornada *</label>
-                            <input type="number" class="form-control" name="recsensorialcategoria_horasjornada" id="recsensorialcategoria_horasjornada" required>
+                            <input type="number" class="form-control" name="recsensorialcategoria_horasjornada"  required>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label> Horario entrada *</label>
                             <div class="input-group clockpicker">
-                                <input type="time" class="form-control" name="recsensorialcategoria_horarioentrada" id="recsensorialcategoria_horarioentrada" required>
+                                <input type="time" class="form-control" name="recsensorialcategoria_horarioentrada"  required>
                             </div>
                         </div>
                     </div>
@@ -1275,20 +1750,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="form-group">
                             <label> Horario salida *</label>
                             <div class="input-group clockpicker">
-                                <input type="time" class="form-control" name="recsensorialcategoria_horariosalida" id="recsensorialcategoria_horariosalida" required>
+                                <input type="time" class="form-control" name="recsensorialcategoria_horariosalida" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label> Horas de comida </label>
-                            <input type="number" class="form-control" name="recsensorialcategoria_horascomida" id="recsensorialcategoria_horascomida" value=0>
+                            <input type="number" class="form-control" name="recsensorialcategoria_horascomida"  value=0>
                         </div>
                     </div>
 
 					<div class="col-12">
 					  <div class="form-group">
-						<input type="text" class="form-control" name="descripcioncategoria" id="descripcioncategoria" placeholder="Nota del turno..." >
+						<input type="text" class="form-control" name="descripcioncategoria" placeholder="Nota del turno..." >
 					    </div>
 				    </div>
                 </div>
@@ -1298,7 +1773,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button type="button" class="btn btn-danger botonEliminarhorarioturno">Eliminar turno <i class="fa fa-trash"></i></button>
                     </div>
                 </div>
-            </div>
+        
         `;
 			const contenedor = document.querySelector('.listadodeturno');
 			contenedor.appendChild(divhorarios);
@@ -1312,8 +1787,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 
-
-
 $("#boton_guardar_categoria").click(function (e) {
     e.preventDefault();
 
@@ -1321,6 +1794,29 @@ $("#boton_guardar_categoria").click(function (e) {
     formularioValido = validarFormulario3($('#form_categoria'))
 
     if (formularioValido) {
+
+
+		var turnosjson = [];
+        $(".generarturnos ").each(function() {
+			var inputurnos = {
+                'recsensorialcategoria_horasjornada': $(this).find("input[name='recsensorialcategoria_horasjornada']").val(),
+				'recsensorialcategoria_horarioentrada': $(this).find("input[name='recsensorialcategoria_horarioentrada']").val(),
+                'recsensorialcategoria_horariosalida': $(this).find("input[name='recsensorialcategoria_horariosalida']").val(),
+                'recsensorialcategoria_horascomida': $(this).find("input[name='recsensorialcategoria_horascomida']").val(),
+                'descripcioncategoria': $(this).find("input[name='descripcioncategoria']").val(),
+            };
+            turnosjson.push(inputurnos);
+        });
+
+           
+         const requestData = {
+            api: 1,
+            ID_CATEGORIA_ERGO: ID_CATEGORIA_ERGO,
+			JSON_TURNOS: JSON.stringify(turnosjson),
+			RECO_ID: recsensorial, 
+		};
+		
+
 
     if (ID_CATEGORIA_ERGO == 0) {
         
@@ -1331,7 +1827,7 @@ $("#boton_guardar_categoria").click(function (e) {
         },async function () { 
 
             await loaderbtn('boton_guardar_categoria')
-            await ajaxAwaitFormData({ api: 1,RECO_ID: recsensorial, ID_CATEGORIA_ERGO: ID_CATEGORIA_ERGO }, 'recoergocategorias', 'form_categoria', 'boton_guardar_categoria', { callbackAfter: true, callbackBefore: true }, () => {
+            await ajaxAwaitFormData(requestData, 'recoergocategorias', 'form_categoria', 'boton_guardar_categoria', { callbackAfter: true, callbackBefore: true }, () => {
         
                 Swal.fire({
                     icon: 'info',
@@ -1365,7 +1861,7 @@ $("#boton_guardar_categoria").click(function (e) {
         },async function () { 
 
             await loaderbtn('boton_guardar_categoria')
-            await ajaxAwaitFormData({ api: 1, RECO_ID: recsensorial, ID_CATEGORIA_ERGO: ID_CATEGORIA_ERGO }, 'recoergocategorias', 'form_categoria', 'boton_guardar_categoria', { callbackAfter: true, callbackBefore: true }, () => {
+            await ajaxAwaitFormData(requestData, 'recoergocategorias', 'form_categoria', 'boton_guardar_categoria', { callbackAfter: true, callbackBefore: true }, () => {
         
                 Swal.fire({
                     icon: 'info',
@@ -1398,11 +1894,6 @@ $("#boton_guardar_categoria").click(function (e) {
 }
     
 });
-
-
-
-
-
 
 function mostrartablarecocategoriasergo() {
 	try {
@@ -1476,8 +1967,6 @@ function mostrartablarecocategoriasergo() {
 	}
 }
 
-
-
 $('#Tablarecocategoriasergo tbody').on('click', 'td>button.editar', function () {
     var tr = $(this).closest('tr');
     var row = Tablarecocategoriasergo.row(tr);
@@ -1492,9 +1981,95 @@ $('#Tablarecocategoriasergo tbody').on('click', 'td>button.editar', function () 
 
 
 		$(".listadodeturno").empty();
+        mostrarturnos(row);
 
 	
 });
+
+function mostrarturnos(row) {
+
+    const contenedor = document.querySelector('.listadodeturno');
+    contenedor.innerHTML = "";
+
+	let data = row.data().JSON_TURNOS
+		;
+
+    if (!data) return;
+
+    try {
+        data = JSON.parse(data);
+    } catch (e) {
+        data = [];
+    }
+
+    data.forEach((item) => {
+
+        const fila = document.createElement('div');
+        fila.classList.add('row', 'generarturnos', 'm-2');
+
+        const  horasjornada= item.recsensorialcategoria_horasjornada ?? "";
+        const horarioentrada = item.recsensorialcategoria_horarioentrada ?? "";
+        const horariosalida = item.recsensorialcategoria_horariosalida ?? "";
+        const horascomida = item.recsensorialcategoria_horascomida ?? "";
+        const descripcionjornada = item.descripcioncategoria ?? "";
+
+
+        fila.innerHTML = `
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label> Horas jornada *</label>
+                            <input type="number" class="form-control" name="recsensorialcategoria_horasjornada" value="${horasjornada}" required>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label> Horario entrada *</label>
+                            <div class="input-group clockpicker">
+                                <input type="time" class="form-control" name="recsensorialcategoria_horarioentrada"  value="${horarioentrada}"   required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label> Horario salida *</label>
+                            <div class="input-group clockpicker">
+                                <input type="time" class="form-control" name="recsensorialcategoria_horariosalida"  value="${horariosalida}"  required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label> Horas de comida </label>
+                            <input type="number" class="form-control" name="recsensorialcategoria_horascomida"  value="${horascomida}"   required>
+                        </div>
+                    </div>
+
+					<div class="col-12">
+					  <div class="form-group">
+						<input type="text" class="form-control" name="descripcioncategoria" placeholder="Nota del turno..."  value="${descripcionjornada}"  >
+					    </div>
+				    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group" style="text-align: center;">
+                        <button type="button" class="btn btn-danger botonEliminarhorarioturno">Eliminar turno <i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+           
+        `;
+
+        contenedor.appendChild(fila);
+
+        // 🗑 Eliminar fila
+        fila.querySelector('.botonEliminarhorarioturno')
+            .addEventListener('click', function () {
+                fila.remove();
+            });
+    });
+}
+
 
 
 
@@ -1517,8 +2092,6 @@ $("#boton_nueva_area").click(function (e) {
 
 
 });
-
-
 
 $("#boton_guardar_area").click(function (e) {
     e.preventDefault();
@@ -1605,11 +2178,6 @@ $("#boton_guardar_area").click(function (e) {
     
 });
 
-
-
-
-
-
 function mostrartablarecoareasergo() {
 	try {
 		var ruta = "/Tablarecoareasergo";
@@ -1684,8 +2252,6 @@ function mostrartablarecoareasergo() {
 	}
 }
 
-
-
 $('#Tablarecoareasergo tbody').on('click', 'td>button.editar', function () {
     var tr = $(this).closest('tr');
     var row = Tablarecoareasergo.row(tr);
@@ -1711,7 +2277,7 @@ $("#boton_nueva_ficha").click(function (e) {
 
     cargarCategoriasSelect();
 
-    $('[id^="ficha_"]').html('');
+    $('[id^="ficha_"]').empty();
 
     $("#contenedorActividades").empty(); 
 
@@ -1730,23 +2296,32 @@ function agregarActividad() {
     contadorActividades++;
 
     let html = `
-    <div class="card mt-3 p-2" id="actividad_${contadorActividades}">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5>Actividad ${contadorActividades}</h5>
-            <button class="btn btn-danger btn-sm" onclick="eliminarActividad(${contadorActividades})">X</button>
+    <div class="row mt-3 border p-2 rounded" id="actividad_${contadorActividades}">
+        
+        <!-- IZQUIERDA (ACTIVIDAD) -->
+        <div class="col-md-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Actividad ${contadorActividades}</h5>
+                <button class="btn btn-danger btn-sm" onclick="eliminarActividad(${contadorActividades})">X</button>
+            </div>
+
+            <input type="text" 
+                name="actividades[${contadorActividades}][nombre]" 
+                class="form-control mt-2" 
+                placeholder="Nombre de la actividad">
         </div>
 
-        <div class="mt-2">
-            <input type="text" name="actividades[${contadorActividades}][nombre]" 
-                class="form-control mb-2" placeholder="Nombre de la actividad">
+        <!-- DERECHA (TAREAS) -->
+        <div class="col-md-8">
+            <div id="tareas_${contadorActividades}"></div>
+
+            <button type="button" 
+                class="btn btn-info btn-sm mt-2 w-100"
+                onclick="agregarTarea(${contadorActividades})">
+                + Agregar tarea
+            </button>
         </div>
 
-        <div id="tareas_${contadorActividades}"></div>
-
-        <button type="button" class="btn btn-success btn-sm mt-2"
-            onclick="agregarTarea(${contadorActividades})">
-            + Agregar tarea
-        </button>
     </div>
     `;
 
@@ -1758,14 +2333,18 @@ function eliminarActividad(id) {
 }
 
 function agregarTarea(idActividad) {
+
     let contenedor = document.getElementById(`tareas_${idActividad}`);
-    let totalTareas = contenedor.children.length + 1;
+
+    // 🔥 CONTADOR REAL (no se rompe)
+    let totalTareas = contenedor.querySelectorAll('.tarea-item').length + 1;
 
     let html = `
-    <div class="border p-2 mt-2" id="actividad_${idActividad}_tarea_${totalTareas}">
+    <div class="border p-2 mt-2 tarea-item">
+        
         <div class="d-flex justify-content-between">
             <b>Tarea ${totalTareas}</b>
-            <button class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">X</button>
+            <button class="btn btn-danger btn-sm" onclick="eliminarTarea(this, ${idActividad})">X</button>
         </div>
 
         <input type="text" 
@@ -1776,13 +2355,17 @@ function agregarTarea(idActividad) {
         <input type="text" 
             name="actividades[${idActividad}][tareas][${totalTareas}][frecuencia]" 
             class="form-control mt-2" 
-            placeholder="Frecuencia (ej: diaria, semanal, 3 veces)">
+            placeholder="Frecuencia (No. de veces durante la jornada)">
+
+        <input type="number" 
+            name="actividades[${idActividad}][tareas][${totalTareas}][duracion]" 
+            class="form-control mt-2" 
+            placeholder="Duración (minutos)">
     </div>
     `;
 
     contenedor.insertAdjacentHTML('beforeend', html);
 }
-
 		
 
 

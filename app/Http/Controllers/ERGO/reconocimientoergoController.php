@@ -195,6 +195,83 @@ class reconocimientoergoController extends Controller
 
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $recsensorial_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostrarmapaubicacionergo($archivo_opcion, $recsensorial_id)
+    {
+        $recsensorial = reconocimientoergoModel::findOrFail($recsensorial_id);
+
+        if (($archivo_opcion + 0) == 0) {
+            return Storage::response($recsensorial->fotoubicacion);
+        } else {
+            return Storage::download($recsensorial->fotoubicacion);
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $recsensorial_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostraplanoergo($archivo_opcion, $recsensorial_id)
+    {
+        $recsensorial = reconocimientoergoModel::findOrFail($recsensorial_id);
+
+        if (($archivo_opcion + 0) == 0) {
+            return Storage::response($recsensorial->fotoplano);
+        } else {
+            return Storage::download($recsensorial->fotoplano);
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $recsensorial_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostrafotoinstalacionergo($archivo_opcion, $recsensorial_id)
+    {
+        $recsensorial = reconocimientoergoModel::findOrFail($recsensorial_id);
+
+        if (($archivo_opcion + 0) == 0) {
+            return Storage::response($recsensorial->fotoinstalacion);
+        } else {
+            return Storage::download($recsensorial->fotoinstalacion);
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $recsensorial_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostrarmapariesgoergo($archivo_opcion, $recsensorial_id)
+    {
+        $recsensorial = reconocimientoergoModel::findOrFail($recsensorial_id);
+
+        if (($archivo_opcion + 0) == 0) {
+            return Storage::response($recsensorial->fotomapariesgo);
+        } else {
+            return Storage::download($recsensorial->fotomapariesgo);
+        }
+    }
+
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -241,91 +318,256 @@ class reconocimientoergoController extends Controller
 
 
                     // si envia archivo FOTO ubicacion
+
+                    // if ($request->file('inputfotomapa')) {
+                    //     $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
+                    //     $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa', $reconocimientoergo->id . '.' . $extension);
+                    //     $reconocimientoergo->update($request->all());
+                    // } else {
+                    //     $recsensorial_extension = $request['hidden_fotomapa_extension'];
+                    //     $recsensorial_id = $request['hidden_fotomapa'];
+                    //     $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa/' . $recsensorial_id . $recsensorial_extension;
+
+                    //     if (Storage::exists($rutaOriginal)) {
+                    //         // Asegúrate de crear el directorio si no existe
+                    //         $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                    //         Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa');
+
+                    //         // Copiar la imagen a la nueva ubicación
+                    //         Storage::copy($rutaOriginal, $nuevaRuta);
+
+                    //         // Actualiza la base de datos con la nueva ruta
+                    //         $reconocimientoergo->fotoubicacion = $nuevaRuta;
+                    //         $reconocimientoergo->update($request->all());
+                    //     } else {
+                    //         // Manejar caso en el que la imagen original no existe
+                    //         // Puedes lanzar una excepción o asignar un valor predeterminado
+                    //         throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    //     }
+                    // }
+
+
                     if ($request->file('inputfotomapa')) {
+
                         $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
-                        $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa', $reconocimientoergo->id . '.' . $extension);
+
+                        $request['fotoubicacion'] = $request->file('inputfotomapa')
+                            ->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa', $reconocimientoergo->id . '.' . $extension);
+
                         $reconocimientoergo->update($request->all());
                     } else {
-                        $recsensorial_extension = $request['hidden_fotomapa_extension'];
-                        $recsensorial_id = $request['hidden_fotomapa'];
-                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa/' . $recsensorial_id . $recsensorial_extension;
 
-                        if (Storage::exists($rutaOriginal)) {
-                            // Asegúrate de crear el directorio si no existe
-                            $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+                        if (!empty($request['hidden_fotomapa']) && !empty($request['hidden_fotomapa_extension'])) {
 
-                            Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa');
+                            $recsensorial_id = $request['hidden_fotomapa'];
+                            $recsensorial_extension = $request['hidden_fotomapa_extension'];
 
-                            // Copiar la imagen a la nueva ubicación
-                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa/' . $recsensorial_id . $recsensorial_extension;
 
-                            // Actualiza la base de datos con la nueva ruta
-                            $reconocimientoergo->fotoubicacion = $nuevaRuta;
-                            $reconocimientoergo->update($request->all());
-                        } else {
-                            // Manejar caso en el que la imagen original no existe
-                            // Puedes lanzar una excepción o asignar un valor predeterminado
-                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                            if (Storage::exists($rutaOriginal)) {
+
+                                $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                                Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa');
+                                Storage::copy($rutaOriginal, $nuevaRuta);
+
+                                $reconocimientoergo->fotoubicacion = $nuevaRuta;
+                                $reconocimientoergo->save();
+                            }
                         }
                     }
+
+
+
 
                     // si envia archivo FOTO plano
+                    // if ($request->file('inputfotoplano')) {
+                    //     $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
+                    //     $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano', $reconocimientoergo->id . '.' . $extension);
+                    //     $reconocimientoergo->update($request->all());
+                    // } else {
+                    //     $recsensorial_extension = $request['hidden_fotoplano_extension'];
+                    //     $recsensorial_id = $request['hidden_fotoplano'];
+                    //     $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/plano/' . $recsensorial_id . $recsensorial_extension;
+
+                    //     if (Storage::exists($rutaOriginal)) {
+                    //         // Asegúrate de crear el directorio si no existe
+                    //         $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/plano/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                    //         Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano');
+
+                    //         // Copiar la imagen a la nueva ubicación
+                    //         Storage::copy($rutaOriginal, $nuevaRuta);
+
+                    //         // Actualiza la base de datos con la nueva ruta
+                    //         $reconocimientoergo->fotoplano = $nuevaRuta;
+                    //         $reconocimientoergo->update($request->all());
+                    //     } else {
+                    //         // Manejar caso en el que la imagen original no existe
+                    //         // Puedes lanzar una excepción o asignar un valor predeterminado
+                    //         throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    //     }
+                    // }
+
                     if ($request->file('inputfotoplano')) {
+
                         $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
-                        $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano', $reconocimientoergo->id . '.' . $extension);
+
+                        $request['fotoplano'] = $request->file('inputfotoplano')
+                            ->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano', $reconocimientoergo->id . '.' . $extension);
+
                         $reconocimientoergo->update($request->all());
                     } else {
-                        $recsensorial_extension = $request['hidden_fotoplano_extension'];
-                        $recsensorial_id = $request['hidden_fotoplano'];
-                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/plano/' . $recsensorial_id . $recsensorial_extension;
 
-                        if (Storage::exists($rutaOriginal)) {
-                            // Asegúrate de crear el directorio si no existe
-                            $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/plano/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+                        if (!empty($request['hidden_fotoplano']) && !empty($request['hidden_fotoplano_extension'])) {
 
-                            Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano');
+                            $recsensorial_id = $request['hidden_fotoplano'];
+                            $recsensorial_extension = $request['hidden_fotoplano_extension'];
 
-                            // Copiar la imagen a la nueva ubicación
-                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/plano/' . $recsensorial_id . $recsensorial_extension;
 
-                            // Actualiza la base de datos con la nueva ruta
-                            $reconocimientoergo->fotoplano = $nuevaRuta;
-                            $reconocimientoergo->update($request->all());
-                        } else {
-                            // Manejar caso en el que la imagen original no existe
-                            // Puedes lanzar una excepción o asignar un valor predeterminado
-                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                            if (Storage::exists($rutaOriginal)) {
+
+                                $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/plano/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                                Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/plano');
+                                Storage::copy($rutaOriginal, $nuevaRuta);
+
+                                $reconocimientoergo->fotoplano = $nuevaRuta;
+                                $reconocimientoergo->save();
+                            }
                         }
                     }
+
+
 
                     // si envia archivo FOTO instalacion
+
+
+                    // if ($request->file('inputfotoinstalacion')) {
+                    //     $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
+                    //     $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion', $reconocimientoergo->id . '.' . $extension);
+                    //     $reconocimientoergo->update($request->all());
+                    // } else {
+                    //     $recsensorial_extension = $request['hidden_fotoinstalacion_extension'];
+                    //     $recsensorial_id = $request['hidden_fotoinstalacion'];
+                    //     $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/instalacion/' . $recsensorial_id . $recsensorial_extension;
+
+                    //     if (Storage::exists($rutaOriginal)) {
+                    //         // Asegúrate de crear el directorio si no existe
+                    //         $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                    //         Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion');
+
+                    //         // Copiar la imagen a la nueva ubicación
+                    //         Storage::copy($rutaOriginal, $nuevaRuta);
+
+                    //         // Actualiza la base de datos con la nueva ruta
+                    //         $reconocimientoergo->fotoinstalacion = $nuevaRuta;
+                    //         $reconocimientoergo->update($request->all());
+                    //     } else {
+                    //         // Manejar caso en el que la imagen original no existe
+                    //         // Puedes lanzar una excepción o asignar un valor predeterminado
+                    //         throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    //     }
+                    // }
+
+
                     if ($request->file('inputfotoinstalacion')) {
+
                         $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
-                        $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion', $reconocimientoergo->id . '.' . $extension);
+
+                        $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')
+                            ->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion', $reconocimientoergo->id . '.' . $extension);
+
                         $reconocimientoergo->update($request->all());
                     } else {
-                        $recsensorial_extension = $request['hidden_fotoinstalacion_extension'];
-                        $recsensorial_id = $request['hidden_fotoinstalacion'];
-                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/instalacion/' . $recsensorial_id . $recsensorial_extension;
 
-                        if (Storage::exists($rutaOriginal)) {
-                            // Asegúrate de crear el directorio si no existe
-                            $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+                        if (!empty($request['hidden_fotoinstalacion']) && !empty($request['hidden_fotoinstalacion_extension'])) {
 
-                            Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion');
+                            $recsensorial_id = $request['hidden_fotoinstalacion'];
+                            $recsensorial_extension = $request['hidden_fotoinstalacion_extension'];
 
-                            // Copiar la imagen a la nueva ubicación
-                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/instalacion/' . $recsensorial_id . $recsensorial_extension;
 
-                            // Actualiza la base de datos con la nueva ruta
-                            $reconocimientoergo->fotoinstalacion = $nuevaRuta;
-                            $reconocimientoergo->update($request->all());
-                        } else {
-                            // Manejar caso en el que la imagen original no existe
-                            // Puedes lanzar una excepción o asignar un valor predeterminado
-                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                            if (Storage::exists($rutaOriginal)) {
+
+                                $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                                Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/instalacion');
+                                Storage::copy($rutaOriginal, $nuevaRuta);
+
+                                $reconocimientoergo->fotoinstalacion = $nuevaRuta;
+                                $reconocimientoergo->save();
+                            }
                         }
                     }
+
+
+                    // // si envia archivo MAPA DE RIESGO
+
+                    // if ($request->file('inputfotomapaderiesgo')) {
+                    //     $extension = $request->file('inputfotomapaderiesgo')->getClientOriginalExtension();
+                    //     $request['fotomapariesgo'] = $request->file('inputfotomapaderiesgo')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo', $reconocimientoergo->id . '.' . $extension);
+                    //     $reconocimientoergo->update($request->all());
+                    // } else {
+                    //     $recsensorial_extension = $request['hidden_fotomapariesgo_extension'];
+                    //     $recsensorial_id = $request['hidden_fotomapariesgo'];
+                    //     $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa de riesgo/' . $recsensorial_id . $recsensorial_extension;
+
+                    //     if (Storage::exists($rutaOriginal)) {
+                    //         // Asegúrate de crear el directorio si no existe
+                    //         $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                    //         Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo');
+
+                    //         // Copiar la imagen a la nueva ubicación
+                    //         Storage::copy($rutaOriginal, $nuevaRuta);
+
+                    //         // Actualiza la base de datos con la nueva ruta
+                    //         $reconocimientoergo->fotomapariesgo = $nuevaRuta;
+                    //         $reconocimientoergo->update($request->all());
+                    //     } else {
+                    //         // Manejar caso en el que la imagen original no existe
+                    //         // Puedes lanzar una excepción o asignar un valor predeterminado
+                    //         throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    //     }
+                    // }
+
+
+                    if ($request->file('inputfotomapaderiesgo')) {
+
+                        $extension = $request->file('inputfotomapaderiesgo')->getClientOriginalExtension();
+
+                        $request['fotomapariesgo'] = $request->file('inputfotomapaderiesgo')
+                            ->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo', $reconocimientoergo->id . '.' . $extension);
+
+                        $reconocimientoergo->update($request->all());
+                    } else {
+
+                        if (!empty($request['hidden_fotomapariesgo']) && !empty($request['hidden_fotomapariesgo_extension'])) {
+
+                            $recsensorial_id = $request['hidden_fotomapariesgo'];
+                            $recsensorial_extension = $request['hidden_fotomapariesgo_extension'];
+
+                            $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa de riesgo/' . $recsensorial_id . $recsensorial_extension;
+
+                            if (Storage::exists($rutaOriginal)) {
+
+                                $nuevaRuta = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo/' . $reconocimientoergo->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+
+                                Storage::makeDirectory('reconocimiento_ergo/' . $reconocimientoergo->id . '/mapa de riesgo');
+                                Storage::copy($rutaOriginal, $nuevaRuta);
+
+                                $reconocimientoergo->fotomapariesgo = $nuevaRuta;
+                                $reconocimientoergo->save();
+                            }
+                        }
+                    }
+
+
+
                 } else { //EDITAR 
 
                     // Obtener registro
@@ -417,19 +659,30 @@ class reconocimientoergoController extends Controller
                         $reconocimientoergo->update($request->all());
                     }
 
+                    // // Para el archivo FOTO instalación
+                    if ($request->file('inputfotomapaderiesgo')) {
+                        $extension = $request->file('inputfotomapaderiesgo')->getClientOriginalExtension();
+                        $folder = 'mapa de riesgo';
+                        $path = 'reconocimiento_ergo/' . $reconocimientoergo->id . '/' . $folder . '/' . $reconocimientoergo->id . '.' . $extension;
 
+                        eliminarArchivoAntiguo($reconocimientoergo->id, $folder);
+
+                        $request['fotomapariesgo'] = $request->file('inputfotomapaderiesgo')->storeAs('reconocimiento_ergo/' . $reconocimientoergo->id . '/' . $folder, $reconocimientoergo->id . '.' . $extension);
+                        $reconocimientoergo->update($request->all());
+                    }
+                    
                     // mensaje
                     $dato["msj"] = 'Información modificada correctamente';
                 }
-
-
-
 
 
                 // respuesta
                 $dato['recsensorial_activo'] = $recsensorial_activo;
                 $dato['recsensorial'] = $reconocimientoergo;
             }
+
+
+
             if (($request->opcion + 0) == 3) // RESPONSABLES DEL RECONOCIMIENTO
             {
 

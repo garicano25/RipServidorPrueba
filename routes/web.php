@@ -2120,9 +2120,19 @@ Route::get('/estructuraproyectosergo/{FOLIO}', ['as' => 'ERGO.estructuraproyecto
 Route::get('tablareconocimientoergo', ['as' => 'ERGO.tablareconocimientoergo', 'uses' => 'ERGO\reconocimientoergoController@tablareconocimientoergo']);
 
 
+Route::get('mostrarmapaubicacionergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostrarmapaubicacionergo']);
+Route::get('mostraplanoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostraplanoergo']);
+Route::get('mostrafotoinstalacionergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostrafotoinstalacionergo']);
+Route::get('mostrarmapariesgoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostrarmapariesgoergo']);
+
+
+
 /////////// CATEGORIA  ///////////
 Route::resource('recoergocategorias', 'ERGO\categoriasergoController');
 Route::get('Tablarecocategoriasergo', ['as' => 'ERGO.Tablarecocategoriasergo', 'uses' => 'ERGO\categoriasergoController@Tablarecocategoriasergo']);
+
+
+Route::post('obtenerPTCategoria', ['as' => 'ERGO.obtenerPTCategoria', 'uses' => 'ERGO\categoriasergoController@obtenerPTCategoria']);
 
 /////////// CATEGORIA  ///////////
 Route::resource('recoergoareas', 'ERGO\areasergoController');

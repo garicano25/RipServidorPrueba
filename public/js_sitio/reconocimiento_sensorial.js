@@ -1756,6 +1756,7 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 		}
 	}
 
+	
 	// Si el reconocimiento contiene quimicos
 	if (recsensorial_alcancequimico > 0) {
 		// Llenar campos

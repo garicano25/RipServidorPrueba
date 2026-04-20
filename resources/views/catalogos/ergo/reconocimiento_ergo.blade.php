@@ -578,7 +578,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar plano instalación" id="boton_descargarplanoinstalacion"></i>
-                                                                                <h4 class="card-title">Plano instalación *</h4>
+                                                                                <h4 class="card-title">Plano instalación <br> con áreas *</h4>
                                                                                 <div class="row">
                                                                                     <div class="col-12 clienteblock">
                                                                                         <div class="form-group">
@@ -589,8 +589,6 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
-
-
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -618,6 +616,28 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-12 clienteblock" id="seccion_foto_mapaderiesgo">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar mapa de riesgo" id="boton_descargarmapaderiesgo"></i>
+                                                                                <h4 class="card-title">Mapa de peligro <br> y riesgo ergonómico *</h4>
+                                                                                <div class="row">
+                                                                                    <div class="col-12 clienteblock">
+                                                                                        <div class="form-group">
+                                                                                            <style type="text/css" media="screen">
+                                                                                                .dropify-wrapper {
+                                                                                                    height: 300px !important;
+                                                                                                    /*tamaño estatico del campo foto*/
+                                                                                                }
+                                                                                            </style>
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapaderiesgo" name="inputfotomapaderiesgo" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
                                                                 </div>
                                                             </div>
 
@@ -932,7 +952,7 @@
                             padding: 0px !important;
                         }
 
-                       
+
                         div.informacion_estatica {
                             font-size: 14px;
                             line-height: 14px !important;
@@ -992,7 +1012,7 @@
                                     <a href="#3_2" class="list-group-item submenu">3.2.- Objetivos específicos <i class="fa fa-times" id="menureporte_3_2"></i></a>
                                     <a href="#4" class="list-group-item">4.- Metodología</a>
                                     <a href="#4_1" class="list-group-item submenu">4.1.- Reconocimiento de los agentes y factores <i class="fa fa-times" id="menureporte_4_1"></i></a>
-                                    <a href="#4_2" class="list-group-item submenu">4.2.- Método de evaluación de los niveles de  <i class="fa fa-times" id="menureporte_4_2"></i></a>
+                                    <a href="#4_2" class="list-group-item submenu">4.2.- Método de evaluación de los niveles de <i class="fa fa-times" id="menureporte_4_2"></i></a>
                                     <a href="#4_2_1" class="list-group-item subsubmenu">4.2.1.- Cálculo del índice de áreas <i class="fa fa-times" id="menureporte_4_2_1"></i></a>
                                     <a href="#4_2_2" class="list-group-item subsubmenu">4.2.2.- Evaluación del factor de reflexión <i class="fa fa-times" id="menureporte_4_2_2"></i></a>
                                     <a href="#5" class="list-group-item">5.- Resultados</a>
@@ -1136,7 +1156,7 @@
                                                     <label>Gerencia</label>
                                                     <select class="custom-select form-control" id="reporteiluminacion_catgerencia_id" name="reporteiluminacion_catgerencia_id" disabled>
                                                         <option value=""></option>
-                                                       
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -1258,14 +1278,7 @@
                                                             <label>Año</label>
                                                             <select class="custom-select form-control" id="reporteiluminacion_fecha" name="reporteiluminacion_fecha">
                                                                 <option value="" selected disabled></option>
-                                                                <script>
-                                                                    $(document).ready(function() {
-                                                                        const currentYear = new Date().getFullYear();
-                                                                        for (let year = currentYear; year >= 2017; year--) {
-                                                                            $('#reporteiluminacion_fecha').append(new Option(year, year));
-                                                                        }
-                                                                    });
-                                                                </script>
+
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1396,7 +1409,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="informacion_estatica">
-                                                   
+
                                                 </div>
                                             </div>
                                             <div class="col-12" style="text-align: right;">
@@ -1535,12 +1548,12 @@
                                     </div>
                                     <h4 class="card-title" id="5_4">5.4.- Actividades del personal expuesto</h4>
                                     <div class="row">
-                                      
+
                                     </div>
                                     <h4 class="card-title" id="5_5">5.5.- Descripción del área </h4>
                                     <div class="row">
                                         <div class="col-12">
-                                          
+
                                         </div>
                                         <div class="col-12">
                                             <div class="informacion_estatica">
@@ -2567,7 +2580,7 @@
                             </div>
                         </div>
 
-                        <div class="row listadodeturno"></div>
+                        <div class="row listadodeturno m-2"></div>
 
                         <div class="col-4">
                             <div class="form-group">
@@ -2767,6 +2780,12 @@
                             </div>
                         </div>
 
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>En promedio, ¿cuántas horas a la semana trabaja?</label>
+                                <input type="number" class="form-control" placeholder="Horas" name="HORAS_SEMANA" id="HORAS_SEMANA">
+                            </div>
+                        </div>
                         <br><br>
 
                         <div class="col-12 mt-2">
@@ -2786,7 +2805,6 @@
                                 padding-right: !important;
                             }
 
-                            /* 🚀 quitar padding cuando quieras full */
                             .no-padding {
                                 padding-left: !important;
                                 padding-right: !important;
@@ -2823,7 +2841,7 @@
 
                                 <div id="contenido1" style="display:block;">
 
-                                    <div class="row">
+                                    <div class="row m-2">
 
 
                                         <div class="col-4">
@@ -2881,7 +2899,7 @@
                                 </div>
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido2')" id="LEVANTAMIENTO_CARGA" style="display: block;">
+                                    onclick="toggleSeccion('contenido2')" id="LEVANTAMIENTO_CARGA" style="display:block !important;">
                                     <div class="text-center">
                                         <b>2.Levantamiento de cargas</b><br>
                                     </div>
@@ -2902,7 +2920,7 @@
 
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido3')" id="TRANSPORTE_CARGAS" style="display: block;">
+                                    onclick="toggleSeccion('contenido3')" id="TRANSPORTE_CARGAS" style="display:block !important;">
                                     <div class="text-center">
                                         <b>3.Transporte de cargas</b><br>
                                     </div>
@@ -2922,7 +2940,7 @@
 
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido4')" id="EMPUJE_TRACCION" style="display: block;">
+                                    onclick="toggleSeccion('contenido4')" id="EMPUJE_TRACCION" style="display:block !important;">
                                     <div class="text-center">
                                         <b>4.Empuje y tracción de cargas</b><br>
                                     </div>
@@ -2953,7 +2971,7 @@
                                 </div>
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido5')">
+                                    onclick="toggleSeccion('contenido5')" style="display:block !important;">
                                     <div class="text-center">
                                         <b>5.Movimientos repetitivos de la extremidad superior</b><br>
                                     </div>
@@ -2983,7 +3001,7 @@
                                 </div>
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido6')">
+                                    onclick="toggleSeccion('contenido6')" style="display:block !important;">
                                     <div class="text-center">
                                         <b>6.Posturas estáticas forzadas</b><br>
                                     </div>
@@ -3012,7 +3030,7 @@
                                 </div>
 
                                 <div class="mt-2 card-header header-res d-flex justify-content-between align-items-center cursor-pointer"
-                                    onclick="toggleSeccion('contenido7')">
+                                    onclick="toggleSeccion('contenido7')" style="display:block !important;">
                                     <div class="text-center">
                                         <b>7.Posturas dinámicas forzadas</b><br>
                                     </div>
@@ -3048,9 +3066,9 @@
                                 width: 100%;
                             }
 
-                            .card {
+                            /* .card {
                                 width: 100%;
-                            }
+                            } */
 
                             .table td.texto-pregunta {
                                 font-size: 17px !important;
@@ -3122,25 +3140,25 @@
                                 color: #000 !important;
                             }
 
-                            .card {
+                            /* .card {
                                 border-radius: 6px;
                             }
 
                             .card-header {
                                 font-weight: bold;
-                            }
+                            } */
 
-                            .card-body {
+                            /* .card-body {
                                 padding: 0;
-                            }
+                            } */
 
                             .table td {
                                 vertical-align: middle;
                             }
 
-                            .card {
+                            /* .card {
                                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                            }
+                            } */
                         </style>
 
 
@@ -3248,4 +3266,3 @@
 <script src="/js_sitio/html2canvas.js"></script>
 
 @endsection
-
