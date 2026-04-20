@@ -2635,7 +2635,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label>Proceso del área * *</label>
+                                <label>Proceso del área *</label>
                                 <textarea class="form-control" name="DESCRIPCION_AREA_ERGO" id="DESCRIPCION_AREA_ERGO" rows="4" required></textarea>
                             </div>
                         </div>
