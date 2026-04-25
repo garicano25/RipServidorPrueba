@@ -205,279 +205,364 @@
 					<h4 class="modal-title">Sustancia</h4>
 				</div>
 				<div class="modal-body">
-					<div class="row">
-						{!! csrf_field() !!}
-						<div class="col-12">
-							<input type="hidden" class="form-control" id="sustancia_id" name="sustancia_id" value="0">
-							<input type="hidden" class="form-control" id="catsustancia_activo" name="catsustancia_activo" value="1">
-							<input type="hidden" class="form-control" id="catsustacia_catalogo" name="catalogo" value="0">
-						</div>
-						<div class="row m-2">
-							<div class="col-8">
-								<div class="row">
-									<div class="col-12">
-										<div class="form-group mt-2">
-											<label>Nombre Sustancia/Producto (mezcla) *</label>
-											<input type="text" class="form-control" id="catsustancia_nombre" name="catsustancia_nombre" required>
-										</div>
-									</div>
-									<div class="col-6">
-										<div class="form-group mt-2">
-											<label>Nombre común </label>
-											<input type="text" class="form-control" id="catsustancia_nombreComun" name="catsustancia_nombreComun">
-										</div>
-									</div>
 
-									<div class="col-6 mt-2">
-										<div class="form-group">
-											<label>Nombre del fabricante *</label>
-											<input type="text" class="form-control" id="catsustancia_fabricante" name="catsustancia_fabricante" required>
-										</div>
-									</div>
-
-									<div class="col-6">
-										<div class="form-group">
-											<label>Vía ingreso al organismo (mezcla) *</label>
-											<select class="custom-select form-control" id="catviaingresoorganismo_id" name="catviaingresoorganismo_id" required>
-												<option value=""></option>
-												@foreach($catviaingresoorganismo as $dato)
-												<option value="{{$dato->id}}">{{$dato->catviaingresoorganismo_viaingreso}}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-
-									<div class="col-6">
-										<div class="form-group">
-											<label>Estado físico (mezcla) *</label>
-											<select class="custom-select form-control" id="catestadofisicosustancia_id" name="catestadofisicosustancia_id" required>
-												<option value=""></option>
-												@foreach($catestadofisicosustancia as $dato)
-												<option value="{{$dato->id}}">{{$dato->catestadofisicosustancia_estado}}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
+					<ul class="nav nav-tabs profile-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" id="tab1-info" href="#contenido-info" role="tab">Información de la hoja</a>
+						</li>
+						@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" id="tab2-cambios" href="#contenido-cambios" role="tab">Bitácora de cambios</a>
+						</li>
+						@endif
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" id="tab3-uso" href="#contenido-uso" role="tab">Bitácora de usó</a>
+						</li>
 
 
-									<div class="col-6" id="divPuntoEbullicion">
-										<div class="form-group">
-											<label>Punto de ebullición </label>
-											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
-											<input type="text" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
-										</div>
-									</div>
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="contenido-info" role="tabpanel">
 
 
-									<div class="col-6" id="divTipoSolido" style="display: none;">
-										<div class="form-group">
-											<label>Tipo *</label>
-											<select class="custom-select form-control" id="catsustancia_solidoTipo" name="catsustancia_solidoTipo">
-												<option value=""></option>
-												<option value="Polvo" title="[Volatilidad: Media] Sustancias sólidas cristalinas o granulares. Cuando son usadas, se observa producción de polvo que se disipa o deposita rápidamente sobre superficies después del uso. p.ej. jabón en polvo, entre otros.
-												">Polvo</option>
-												<option value="Humo" title="[Volatilidad: Alta] Sustancias en forma de pellets que no tienen tendencia a romperse. No se aprecia producción de polvo durante su empleo. p.ej. pellets de cloruro de polivinilo, escamas enceradas, entre otras.">Humo</option>
-												<option value="Fibra" title="[Volatilidad: Baja] Sustancias en forma de pellets que no tienen tendencia a romperse. No se aprecia producción de polvo durante su empleo. p.ej. pellets de cloruro de polivinilo, escamas enceradas, entre otras.">Fibra</option>
-											</select>
-										</div>
-									</div>
-
-									<div class="col-6">
-										<div class="form-group">
-											<label>Volatilidad (mezcla) *</label>
-											<select class="custom-select form-control" id="catvolatilidad_id" name="catvolatilidad_id" required>
-												<option value=""></option>
-												@foreach($catvolatilidad as $dato)
-												<option value="{{$dato->id}}">{{$dato->catvolatilidad_tipo}}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-
-									<div class="col-6 mt-2">
-										<div class="form-group">
-											<label>Hoja de seguridad (PDF)</label>
-											<div class="fileinput fileinput-new input-group" data-provides="fileinput">
-												<div class="form-control" data-trigger="fileinput" id="campo_file_pdf">
-													<i class="fa fa-file fileinput-exists"></i>
-													<span class="fileinput-filename"></span>
-												</div>
-												<span class="input-group-addon btn btn-secondary btn-file">
-													<span class="fileinput-new">Seleccione</span>
-													<span class="fileinput-exists">Cambiar</span>
-													<input type="file" name="hojaseguridadpdf" id="hojaseguridadpdf"> {{-- required --}}
-												</span>
-												<a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
-											</div>
-										</div>
-									</div>
-									<div class="col-6">
-										<div class="form-group">
-											<label>Temperatura de Operación (°C)</label>
-											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de operación a °C una vez insertada en °F" onclick="cambiarGrados('catTemOperacion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
-											<input type="number" class="form-control" id="catTemOperacion" name="catTemOperacion">
-										</div>
-									</div>
+							<div class="row">
+								{!! csrf_field() !!}
+								<div class="col-12">
+									<input type="hidden" class="form-control" id="sustancia_id" name="sustancia_id" value="0">
+									<input type="hidden" class="form-control" id="catsustancia_activo" name="catsustancia_activo" value="1">
+									<input type="hidden" class="form-control" id="catsustacia_catalogo" name="catalogo" value="0">
+									<input type="hidden" class="form-control" id="FINALIZADO" name="FINALIZADO" value="">
 
 								</div>
-							</div>
+								<div class="row m-2">
+									<div class="col-8">
+										<div class="row">
+											<div class="col-12">
+												<div class="form-group mt-2">
+													<label>Nombre Sustancia/Producto (mezcla) *</label>
+													<input type="text" class="form-control" id="catsustancia_nombre" name="catsustancia_nombre" required>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="form-group mt-2">
+													<label>Nombre común </label>
+													<input type="text" class="form-control" id="catsustancia_nombreComun" name="catsustancia_nombreComun">
+												</div>
+											</div>
 
-							<div class="col-4">
-								<div class="row">
+											<div class="col-6 mt-2">
+												<div class="form-group">
+													<label>Nombre del fabricante *</label>
+													<input type="text" class="form-control" id="catsustancia_fabricante" name="catsustancia_fabricante" required>
+												</div>
+											</div>
 
-									<div class="col-12">
-										<h3>¿Cuenta con una Categoría de Peligro para la Salud NMX-R-019-SCFI-2011?</h3>
-										<div class="form-check mx-4 mt-3">
-											<input class="form-check-input" type="radio" name="catTipoClasificacion" id="catTipoClasificacion_cat" value="1" checked>
-											<label class="form-check-label" for="catTipoClasificacion_cat">
-												Si
-											</label>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Vía ingreso al organismo (mezcla) *</label>
+													<select class="custom-select form-control" id="catviaingresoorganismo_id" name="catviaingresoorganismo_id" required>
+														<option value=""></option>
+														@foreach($catviaingresoorganismo as $dato)
+														<option value="{{$dato->id}}">{{$dato->catviaingresoorganismo_viaingreso}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
 
-											<input class="form-check-input mx-5" type="radio" name="catTipoClasificacion" id="catTipoClasificacion_grado" value="0">
-											<label class="form-check-label mx-5" for="catTipoClasificacion_grado">
-												No
-											</label>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Estado físico (mezcla) *</label>
+													<select class="custom-select form-control" id="catestadofisicosustancia_id" name="catestadofisicosustancia_id" required>
+														<option value=""></option>
+														@foreach($catestadofisicosustancia as $dato)
+														<option value="{{$dato->id}}">{{$dato->catestadofisicosustancia_estado}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+
+
+											<div class="col-6" id="divPuntoEbullicion">
+												<div class="form-group">
+													<label>Punto de ebullición </label>
+													<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
+													<input type="text" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
+												</div>
+											</div>
+
+
+											<div class="col-6" id="divTipoSolido" style="display: none;">
+												<div class="form-group">
+													<label>Tipo *</label>
+													<select class="custom-select form-control" id="catsustancia_solidoTipo" name="catsustancia_solidoTipo">
+														<option value=""></option>
+														<option value="Polvo" title="[Volatilidad: Media] Sustancias sólidas cristalinas o granulares. Cuando son usadas, se observa producción de polvo que se disipa o deposita rápidamente sobre superficies después del uso. p.ej. jabón en polvo, entre otros.
+													">Polvo</option>
+														<option value="Humo" title="[Volatilidad: Alta] Sustancias en forma de pellets que no tienen tendencia a romperse. No se aprecia producción de polvo durante su empleo. p.ej. pellets de cloruro de polivinilo, escamas enceradas, entre otras.">Humo</option>
+														<option value="Fibra" title="[Volatilidad: Baja] Sustancias en forma de pellets que no tienen tendencia a romperse. No se aprecia producción de polvo durante su empleo. p.ej. pellets de cloruro de polivinilo, escamas enceradas, entre otras.">Fibra</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="col-6">
+												<div class="form-group">
+													<label>Volatilidad (mezcla) *</label>
+													<select class="custom-select form-control" id="catvolatilidad_id" name="catvolatilidad_id" required>
+														<option value=""></option>
+														@foreach($catvolatilidad as $dato)
+														<option value="{{$dato->id}}">{{$dato->catvolatilidad_tipo}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+
+											<div class="col-6 mt-2">
+												<div class="form-group">
+													<label>Hoja de seguridad (PDF)</label>
+													<div class="fileinput fileinput-new input-group" data-provides="fileinput">
+														<div class="form-control" data-trigger="fileinput" id="campo_file_pdf">
+															<i class="fa fa-file fileinput-exists"></i>
+															<span class="fileinput-filename"></span>
+														</div>
+														<span class="input-group-addon btn btn-secondary btn-file">
+															<span class="fileinput-new">Seleccione</span>
+															<span class="fileinput-exists">Cambiar</span>
+															<input type="file" name="hojaseguridadpdf" id="hojaseguridadpdf"> {{-- required --}}
+														</span>
+														<a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Temperatura de Operación (°C)</label>
+													<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de operación a °C una vez insertada en °F" onclick="cambiarGrados('catTemOperacion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
+													<input type="number" class="form-control" id="catTemOperacion" name="catTemOperacion">
+												</div>
+											</div>
+
 										</div>
 									</div>
 
-									<style type="text/css">
-										.tooltip-inner {
-											max-width: 320px;
-											/*tooltip tamaño*/
-											padding: 6px 8px;
-											color: #fff;
-											text-align: justify;
-											background-color: #000;
-											border-radius: 0.25rem;
-											line-height: 16px;
+									<div class="col-4">
+										<div class="row">
+
+											<div class="col-12">
+												<h3>¿Cuenta con una Categoría de Peligro para la Salud NMX-R-019-SCFI-2011?</h3>
+												<div class="form-check mx-4 mt-3">
+													<input class="form-check-input" type="radio" name="catTipoClasificacion" id="catTipoClasificacion_cat" value="1" checked>
+													<label class="form-check-label" for="catTipoClasificacion_cat">
+														Si
+													</label>
+
+													<input class="form-check-input mx-5" type="radio" name="catTipoClasificacion" id="catTipoClasificacion_grado" value="0">
+													<label class="form-check-label mx-5" for="catTipoClasificacion_grado">
+														No
+													</label>
+												</div>
+											</div>
+
+											<style type="text/css">
+												.tooltip-inner {
+													max-width: 320px;
+													/*tooltip tamaño*/
+													padding: 6px 8px;
+													color: #fff;
+													text-align: justify;
+													background-color: #000;
+													border-radius: 0.25rem;
+													line-height: 16px;
+												}
+
+												#rol_lista:hover label {
+													color: #000000;
+													font-weight: bold;
+												}
+											</style>
+
+											<div class="col-12 mt-4" id="divCategoriaSaludHoja">
+												<h4 class="mx-3">Categoría de peligro a la salud (mezcla) *</h4>
+												@foreach($catcategoriapeligrosalud as $dato)
+												<div class="col-12" id="rol_lista_{{$dato->id}}" data-toggle="tooltip" title="{{$dato->catcategoriapeligrosalud_descripcion}}">
+													<div class="form-check">
+														<input class="form-check-input catHoja" type="radio" name="catcategoriapeligrosalud_id" id="opcion_{{$dato->id}}" value="{{$dato->id}}" data-riesgo_cat="{{$dato->CLASIFICACION_RIESGO_CATEGORIA}}">
+														<label class=" form-check-label" for="opcion_{{$dato->id}}">
+															[{{$dato->id}}] {{$dato->catcategoriapeligrosalud_codigo}}
+														</label>
+													</div>
+												</div>
+												@endforeach
+											</div>
+
+											<div class="col-12 mt-4" id="divGradoSaludHoja" style="display: none;">
+												<h4 class="mx-3 mb-3">Grado de riesgo a la salud según NOM-018-STPS-2000 *</h4>
+												@foreach($catgradoriesgosalud as $dato)
+												<div class="col-12 mb-3">
+													<div class="form-check">
+														<input class="form-check-input gradoHoja" type="radio" name="catgradoriesgosalud_id" id="catgradoriesgosalud_{{$dato->id}}" value="{{$dato->id}}" data-riesgo_grado="{{$dato->CLASIFICACION_RIESGO_GRADO}}">
+														<label class="form-check-label" for="catgradoriesgosalud_{{$dato->id}}">
+															[Grado {{$dato->id}}] {{$dato->catgradoriesgosalud_clasificacion}}
+														</label>
+													</div>
+												</div>
+												@endforeach
+											</div>
+
+
+											<div class="col-12 mt-3">
+												<ol class="breadcrumb mb-2 p-2" style="background-color: #94B732 !important;">
+													<h3 style="color: #ffff; margin: 0;" class="mx-4 mt-1">Clasificación de Riesgo: </h3>
+													<h2 style="color: #ffff; margin: 0;" class="mx-2" id="clasificacion_riesgo_text_hoja"></h2>
+													<input type="hidden" class="form-control" id="catClasificacionRiesgo" name="catClasificacionRiesgo">
+
+												</ol>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-12 mt-2">
+									<ol class="breadcrumb mb-4">
+										<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
+
+										<div class="col-4 d-flex">
+											<label class="text-light">¿Contiene ingredientes peligrosos? </label>
+											<div class="switch mx-3">
+												<label class="text-light">
+													Si<input type="checkbox" id="validarSustancias" name="validarSustancias">
+													<span style="background-color: #94B732;" class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>No
+												</label>
+											</div>
+										</div>
+									</ol>
+
+									<style>
+										/* Estilos para el elemento select */
+										.select2-selection__choice {
+											color: #000;
 										}
 
-										#rol_lista:hover label {
-											color: #000000;
-											font-weight: bold;
+										.select2-container--default .select2-selection--multiple .select2-selection__choice {
+											background-color: #bee24f;
+										}
+
+										.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+											background-color: #fff;
 										}
 									</style>
 
-									<div class="col-12 mt-4" id="divCategoriaSaludHoja">
-										<h4 class="mx-3">Categoría de peligro a la salud (mezcla) *</h4>
-										@foreach($catcategoriapeligrosalud as $dato)
-										<div class="col-12" id="rol_lista_{{$dato->id}}" data-toggle="tooltip" title="{{$dato->catcategoriapeligrosalud_descripcion}}">
-											<div class="form-check">
-												<input class="form-check-input catHoja" type="radio" name="catcategoriapeligrosalud_id" id="opcion_{{$dato->id}}" value="{{$dato->id}}" data-riesgo_cat="{{$dato->CLASIFICACION_RIESGO_CATEGORIA}}">
-												<label class=" form-check-label" for="opcion_{{$dato->id}}">
-													[{{$dato->id}}] {{$dato->catcategoriapeligrosalud_codigo}}
-												</label>
-											</div>
-										</div>
+									<select class="custom-select form-control" id="sustancias_quimicias" name="sustancias_quimicias[]" multiple="multiple" style="width: 100%" required>
+										@foreach($catSustanciasQuimicas as $dato)
+										<option value="{{$dato->ID_SUSTANCIA_QUIMICA}}">[{{$dato->NUM_CAS}}] {{$dato->SUSTANCIA_QUIMICA}} </option>
 										@endforeach
-									</div>
+									</select>
 
-									<div class="col-12 mt-4" id="divGradoSaludHoja" style="display: none;">
-										<h4 class="mx-3 mb-3">Grado de riesgo a la salud según NOM-018-STPS-2000 *</h4>
-										@foreach($catgradoriesgosalud as $dato)
-										<div class="col-12 mb-3">
-											<div class="form-check">
-												<input class="form-check-input gradoHoja" type="radio" name="catgradoriesgosalud_id" id="catgradoriesgosalud_{{$dato->id}}" value="{{$dato->id}}" data-riesgo_grado="{{$dato->CLASIFICACION_RIESGO_GRADO}}">
-												<label class="form-check-label" for="catgradoriesgosalud_{{$dato->id}}">
-													[Grado {{$dato->id}}] {{$dato->catgradoriesgosalud_clasificacion}}
-												</label>
-											</div>
+									<h4 class="mt-3 mx-5" id="textPorcentajes" style="display: none;">Ingrese el % del Componente. El (*) se considera como un porcentaje normal</h4>
+									<div class=" col-12 mt-3" id="sustancias_seleccionadas">
+										<style type="text/css">
+											#tablaSustanciasSeleccionadas td,
+											#tablaSustanciasSeleccionadas th {
+												padding: 0.5rem;
+											}
+
+											#tablaSustanciasSeleccionadas input,
+											#tablaSustanciasSeleccionadas select {
+												width: 100%;
+											}
+										</style>
+										<table class="table table-bordered mt-4" style="width: 100%;" id="tablaSustanciasSeleccionadas">
+											<thead>
+												<tr>
+													<th>Componente</th>
+													<th>Tipo</th>
+													<th>Operador</th>
+													<th>Porcentaje</th>
+													<th>Estado Fisico</th>
+													<th>Forma</th>
+													<th>Tem. de ebullición (°C)</th>
+													<th>Volatilidad</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div> <!-- FIN ROW -->
+						</div> <!-- FIN TAB 1 -->
+
+
+						<div class="tab-pane" id="contenido-cambios" role="tabpanel">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12">
+										<ol class="breadcrumb m-b-10">
+											<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-wpforms" aria-hidden="true"></i>&nbsp; Bitácora de cambios</h2>
+										</ol><br>
+										<div class="table-responsive">
+											<table class="table table-hover stylish-table" id="tabla_cambioshojadeseguridad" width="100%">
+												<thead>
+													<thead>
+														<tr>
+															<th>No</th>
+															<th>Usuario</th>
+															<th>Fecha</th>
+														</tr>
+													</thead>
+												<tbody></tbody>
+											</table>
 										</div>
-										@endforeach
 									</div>
+								</div>
+							</div>
+						</div>
 
-
-									<div class="col-12 mt-3">
-										<ol class="breadcrumb mb-2 p-2" style="background-color: #94B732 !important;">
-											<h3 style="color: #ffff; margin: 0;" class="mx-4 mt-1">Clasificación de Riesgo: </h3>
-											<h2 style="color: #ffff; margin: 0;" class="mx-2" id="clasificacion_riesgo_text_hoja"></h2>
-											<input type="hidden" class="form-control" id="catClasificacionRiesgo" name="catClasificacionRiesgo">
-
-										</ol>
+						<div class="tab-pane" id="contenido-uso" role="tabpanel">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12">
+										<ol class="breadcrumb m-b-10">
+											<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-wpforms" aria-hidden="true"></i>&nbsp; Bitácora de usó</h2>
+										</ol><br>
+										<div class="table-responsive">
+											<table class="table table-hover stylish-table" id="tabla_foliosreconocimiento" width="100%">
+												<thead>
+													<tr>
+														<th>No</th>
+														<th>Folio reconocimiento</th>
+													</tr>
+												</thead>
+												<tbody></tbody>
+											</table>
+										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
 
 
-						<div class="col-12 mt-2">
-							<ol class="breadcrumb mb-4">
-								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
-
-								<div class="col-4 d-flex">
-									<label class="text-light">¿Contiene ingredientes peligrosos? </label>
-									<div class="switch mx-3">
-										<label class="text-light">
-											Si<input type="checkbox" id="validarSustancias" name="validarSustancias">
-											<span style="background-color: #94B732;" class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>No
-										</label>
-									</div>
-								</div>
-							</ol>
-
-							<style>
-								/* Estilos para el elemento select */
-								.select2-selection__choice {
-									color: #000;
-								}
-
-								.select2-container--default .select2-selection--multiple .select2-selection__choice {
-									background-color: #bee24f;
-								}
-
-								.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-									background-color: #fff;
-								}
-							</style>
-
-							<select class="custom-select form-control" id="sustancias_quimicias" name="sustancias_quimicias[]" multiple="multiple" style="width: 100%" required>
-								@foreach($catSustanciasQuimicas as $dato)
-								<option value="{{$dato->ID_SUSTANCIA_QUIMICA}}">[{{$dato->NUM_CAS}}] {{$dato->SUSTANCIA_QUIMICA}} </option>
-								@endforeach
-							</select>
-
-							<h4 class="mt-3 mx-5" id="textPorcentajes" style="display: none;">Ingrese el % del Componente. El (*) se considera como un porcentaje normal</h4>
-							<div class=" col-12 mt-3" id="sustancias_seleccionadas">
-								<style type="text/css">
-									#tablaSustanciasSeleccionadas td,
-									#tablaSustanciasSeleccionadas th {
-										padding: 0.5rem;
-									}
-
-									#tablaSustanciasSeleccionadas input,
-									#tablaSustanciasSeleccionadas select {
-										width: 100%;
-									}
-								</style>
-								<table class="table table-bordered mt-4" style="width: 100%;" id="tablaSustanciasSeleccionadas">
-									<thead>
-										<tr>
-											<th>Componente</th>
-											<th>Tipo</th>
-											<th>Operador</th>
-											<th>Porcentaje</th>
-											<th>Estado Fisico</th>
-											<th>Forma</th>
-											<th>Tem. de ebullición (°C)</th>
-											<th>Volatilidad</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-							</div>
-
-						</div>
 					</div>
-				</div>
+				</div> <!-- FINAL BODY -->
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
 					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Capturista']))
-					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia">
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_finalizar_hojaseguridad" style="display: none;">
+						Finalizar <i class="fa fa-check-square"></i>
+					</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia" style="display: block;">
 						Guardar <i class="fa fa-save"></i>
 					</button>
 					@endif
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia_nueva" style="display: none;">
+						Guardar nuevamente <i class="fa fa-save"></i>
+					</button>
+					@endif
+
 				</div>
 			</form>
 		</div>

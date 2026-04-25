@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecoergoarea extends Migration
+class CreateCambiosCathojaseguridad extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateRecoergoarea extends Migration
      */
     public function up()
     {
-        Schema::create('recoergoareas', function (Blueprint $table) {
-            $table->increments('ID_AREA_ERGO');
-            $table->text('RECO_ID')->nullable();
-            $table->text('NOMBRE_AREA_ERGO')->nullable();
-            $table->text('DESCRIPCION_AREA_ERGO')->nullable();
+        Schema::create('cambios_cathojaseguridad', function (Blueprint $table) {
+            $table->increments('ID_CAMBIOS_CATHOJA');
+            $table->text('HOJA_ID')->nullable();
+            $table->text('USUARIO_ID')->nullable();
             $table->boolean('ACTIVO')->default(1);
             $table->timestamps();
         });

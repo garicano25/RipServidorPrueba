@@ -24,8 +24,10 @@ use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 use App\modelos\recsensorialquimicos\metodosSustanciasQuimicasModel;
 use App\modelos\recsensorialquimicos\sustanciasEntidadBeisModel;
 use App\modelos\recsensorialquimicos\catRecomendacionesModel;
+use App\modelos\recsensorialquimicos\cambioshojaseguridad;
 
 
+use Illuminate\Support\Facades\Auth;
 
 
 use DB;
@@ -254,35 +256,18 @@ class recsensorialquimicoscatalogosController extends Controller
 
                     break;
                 case 1: // CATALOGO SUSTANCIAS
-                    // $lista = catsustanciaModel::all();
-                    // $catalogo = catsustanciaModel::with([ 'catestadofisicosustancia', 'catvolatilidad', 'catviaingresoorganismo', 'catcategoriapeligrosalud', 'catgradoriesgosalud'])
-                    //                             // ->where('recsensorial_id', $recsensorial_id)
-                    //                             ->orderBy('id', 'ASC')
-                    //                             ->get();
+
+                  
 
 
                     $catalogo = DB::select('CALL sp_obtener_hojas_seguridad_b()');
 
-                    // crear campos NOMBRE Y ESTADO
                     foreach ($catalogo as $key => $value) {
                         // Registro
                         $value->numero_registro = $numero_registro;
                         $numero_registro += 1;
 
-                        // // componentes
-                        // $componentes = DB::select('SELECT sus.SUSTANCIA_QUIMICA
-                        //                             FROM catHojasSeguridad_SustanciasQuimicas relacion
-                        //                             LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
-                        //                             LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
-                        //                             WHERE relacion.HOJA_SEGURIDAD_ID = 674 ');
-
-
-                        // $lista = "";
-                        //     foreach ($componentes as $key => $val) {
-                        //         $lista .= "<li>" . $val->SUSTANCIA_QUIMICA . "</li>";
-                        //     }
-                        // $value['componentes'] = $componentes;
-
+    
                         // campo PDF
                         if ($value->catsustancia_hojaseguridadpdf) {
                             $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle" onclick="mostrar_pdf();"><i class="fa fa-file-pdf-o"></i></button>';
@@ -292,6 +277,8 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         $value->boton_editar = '<button type="button" class="btn btn-danger btn-circle" onclick="selecciona_sustancia();"><i class="fa fa-pencil"></i></button>';
 
+                        $value->boton_ver = '<button type="button" class="btn btn-info btn-circle VER" onclick="ver_hoja();"><i class="fa fa-eye" aria-hidden="true"></i></button>';
+
                         // Checkbox estado
                         if ($value->catsustancia_activo == 1) {
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->id . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
@@ -299,11 +286,7 @@ class recsensorialquimicoscatalogosController extends Controller
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->id . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
 
-                        // Valida perfil
-                        // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-
-
-
+                
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador', 'Capturista'])) {
                             $value->perfil = 1;
                         } else {
@@ -634,6 +617,123 @@ class recsensorialquimicoscatalogosController extends Controller
     //     }
     // }
 
+
+    public function hojasrecofolios($id)
+    {
+        try {
+
+            $catalogo = DB::select("
+            SELECT DISTINCT r.recsensorial_folioquimico
+            FROM recsensorialmaquinaria m
+            INNER JOIN recsensorial r 
+                ON r.id = m.recsensorial_id
+            WHERE m.recsensorialmaquinaria_quimica = ?
+            ", [$id]);
+
+            $numero_registro = 1;
+
+            foreach ($catalogo as $key => $value) {
+                $value->numero_registro = $numero_registro;
+                $numero_registro++;
+            }
+
+            $dato['data'] = $catalogo;
+            return response()->json($dato);
+        } catch (\Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['data'] = [];
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function finalizarhojaseguridad(Request $request)
+    {
+        try {
+
+            $hoja_id = $request->hoja_id;
+
+            if (!$hoja_id) {
+                return response()->json([
+                    "code" => 0,
+                    "msj" => "ID inválido"
+                ]);
+            }
+
+            $hoja = catsustanciaModel::find($hoja_id);
+
+            if (!$hoja) {
+                return response()->json([
+                    "code" => 0,
+                    "msj" => "No se encontró la hoja"
+                ]);
+            }
+
+            if ($hoja->FINALIZADO == 1) {
+                return response()->json([
+                    "code" => 0,
+                    "msj" => "Esta hoja ya fue finalizada"
+                ]);
+            }
+
+            $hoja->FINALIZADO = 1;
+            $hoja->save();
+
+            cambioshojaseguridad::create([
+                'HOJA_ID' => $hoja_id,
+                'USUARIO_ID' => Auth::user()->id,
+                'ACTIVO' => 1
+            ]);
+
+            return response()->json([
+                "code" => 1,
+                "msj" => "La hoja de seguridad fue finalizada correctamente"
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "code" => 0,
+                "msj" => $e->getMessage()
+            ]);
+        }
+    }
+
+  
+
+    public function cambioshojaseguridad($id)
+    {
+        try {
+
+            $catalogo = DB::select("
+            SELECT 
+                CONCAT(e.empleado_nombre, ' ', e.empleado_apellidopaterno, ' ', e.empleado_apellidomaterno) AS usuario,
+                c.created_at as fecha
+            FROM cambios_cathojaseguridad c
+            LEFT JOIN usuario u 
+                ON u.id = c.USUARIO_ID
+            LEFT JOIN empleado e 
+                ON e.id = u.empleado_id
+            WHERE c.HOJA_ID = ?
+        ", [$id]);
+
+            $numero_registro = 1;
+
+            foreach ($catalogo as $key => $value) {
+                $value->numero_registro = $numero_registro;
+                $numero_registro++;
+            }
+
+            $dato['data'] = $catalogo;
+            return response()->json($dato);
+        } catch (\Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['data'] = [];
+            return response()->json($dato);
+        }
+    }
 
 
     public function tablasustanciasEntidad($SUSTANCIA_QUIMICA_ID)
@@ -1080,6 +1180,7 @@ class recsensorialquimicoscatalogosController extends Controller
                     }
 
                     break;
+
                 case 1:
                     if ($request['sustancia_id'] == 0) {
                         // AUTO_INCREMENT
@@ -1190,7 +1291,26 @@ class recsensorialquimicoscatalogosController extends Controller
                         $request['catsustancia_hojaseguridadpdf'] = $request->file('hojaseguridadpdf')->storeAs('catalogos/catsustancias', 'hoja_de_seguridad_' . $catalogo->id . '.' . $extension);
                         $catalogo->update($request->all());
                     }
+
+                    if ($catalogo->FINALIZADO == 1) {
+
+                        cambioshojaseguridad::create([
+                            'HOJA_ID' => $catalogo->id,
+                            'USUARIO_ID' => Auth::user()->id,
+                            'ACTIVO' => 1
+                        ]);
+                    }
+
+                    $dato["code"] = 1;
+                    $dato["msj"] = "Guardado correctamente";
+                    $dato["id"] = $catalogo->id;
+
+                    return response()->json($dato);
+
                     break;
+
+
+
                 case 2:
                     if ($request['id'] == 0) {
                         // $sql = DB::select('ALTER TABLE catestadofisicosustancia AUTO_INCREMENT=1');

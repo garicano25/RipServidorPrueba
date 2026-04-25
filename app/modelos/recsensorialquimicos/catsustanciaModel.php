@@ -22,7 +22,8 @@ class catsustanciaModel extends Model
         'catsustancia_solidoTipo',
         'catTipoClasificacion',
         'catClasificacionRiesgo',
-        'catTemOperacion'
+        'catTemOperacion',
+        'FINALIZADO'
     ];
 
     //=============== RELACION OTROS CATALOGOS ===================

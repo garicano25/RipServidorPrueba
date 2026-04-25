@@ -802,7 +802,13 @@ Route::get('mostarNotacionesSelccionadas/{ID_ENTIDAD}/{ID_BEI}', ['as' => 'mosta
 
 Route::get('recsensorialsustanciasquimicoscatalogostabla/{num_catalogo}', ['as' => 'recsensorialquimicoscatalogos.recsensorialsustanciasquimicoscatalogostabla', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@recsensorialsustanciasquimicoscatalogostabla']);
 
+Route::get('hojasrecofolios/{id}', ['as' => 'hojasrecofolios', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@hojasrecofolios']);
 
+
+Route::post('finalizarhojaseguridad', ['as' => 'finalizarhojaseguridad', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@finalizarhojaseguridad']);
+
+
+Route::get('cambioshojaseguridad/{id}', ['as' => 'cambioshojaseguridad', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@cambioshojaseguridad']);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////RESUMEN///////////////////////////////////////////////////////////////////
