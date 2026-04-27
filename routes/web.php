@@ -2137,7 +2137,6 @@ Route::get('mostrarmapariesgoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 
 Route::resource('recoergocategorias', 'ERGO\categoriasergoController');
 Route::get('Tablarecocategoriasergo', ['as' => 'ERGO.Tablarecocategoriasergo', 'uses' => 'ERGO\categoriasergoController@Tablarecocategoriasergo']);
 Route::post('obtenerPTCategoria', ['as' => 'ERGO.obtenerPTCategoria', 'uses' => 'ERGO\categoriasergoController@obtenerPTCategoria']);
-
 Route::get('obtenerareasergo', ['as' => 'ERGO.obtenerareasergo', 'uses' => 'ERGO\categoriasergoController@obtenerareasergo']);
 
 
@@ -2146,8 +2145,11 @@ Route::resource('recoergoareas', 'ERGO\areasergoController');
 Route::get('Tablarecoareasergo', ['as' => 'ERGO.Tablarecoareasergo', 'uses' => 'ERGO\areasergoController@Tablarecoareasergo']);
 
 /////////// FICHAS TECNICAS  ///////////
+
+
 Route::resource('recoergofichas', 'ERGO\fichasergoController');
 Route::get('getCategoriasErgo', ['as' => 'ERGO.getCategoriasErgo', 'uses' => 'ERGO\fichasergoController@getCategoriasErgo']);
+Route::get('Tablarecofichasergo', ['as' => 'ERGO.Tablarecofichasergo', 'uses' => 'ERGO\fichasergoController@Tablarecofichasergo']);
 
 
 

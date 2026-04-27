@@ -16,11 +16,12 @@ var HIGIENE = 1;
 
 var Tablarecocategoriasergo = null;
 var Tablarecoareasergo = null;
+var Tablarecofichasergo = null;
+
 
 ID_CATEGORIA_ERGO = 0;
 ID_AREA_ERGO = 0;
-ID_FICHAS_ERGO = 0;
-
+ID_FICHAS_TECNICAS = 0;
 
 //--------------------------------------------------CARGA PRINCIPAL---------------------------------------------------------//
 $(document).ready(function () {
@@ -166,7 +167,8 @@ $('.multisteps-form__progress-btn').click(function () {
             mostrartablarecoareasergo();
 		break;
 		case "steps_menu_tab4":
-		
+			recsensorial = $("#recsensorial_id").val(); 
+            mostrarTablarecofichasergo();
 		break;
 		default:
 		break;
@@ -1677,17 +1679,49 @@ $("#boton_nueva_categoria").click(function (e) {
         }
     });
 
+
 	cargarareaSelect();
 
+	$('#CAT_TIPOPUESTO').val('').trigger('change');
+  	selectAreas.clear();
 
-	var selectareas = $('#CATEGORIA_AREAS_ID').selectize({
-		placeholder: 'Seleccione una o varias opciones',
-		allowEmptyOption: true,
-		closeAfterSelect: false,
-	})[0].selectize;
-		
 
-    selectareas.clear();
+});
+
+
+let selectAreas;
+
+$(document).ready(function () {
+
+    selectAreas = $('#CATEGORIA_AREAS_ID').selectize({
+        placeholder: 'Seleccione una o varias opciones',
+        maxItems: null,
+    })[0].selectize;
+
+});
+
+$('#CAT_TIPOPUESTO').on('change', function () {
+
+    let valor = $(this).val();
+
+    if (valor == 1) {
+
+        selectAreas.settings.maxItems = 1;
+
+        let valores = selectAreas.getValue();
+
+        if (!Array.isArray(valores)) {
+            valores = valores ? [valores] : [];
+        }
+
+        if (valores.length > 1) {
+            selectAreas.setValue([valores[0]]);
+        }
+
+    } else if (valor == 2) {
+
+        selectAreas.settings.maxItems = null;
+    }
 
 });
 
@@ -1991,28 +2025,15 @@ $('#Tablarecocategoriasergo tbody').on('click', 'td>button.editar', function () 
 	$(".listadodeturno").empty();
 	mostrarturnos(row);
 
+ 	let valoresAreas = row.data().CATEGORIA_AREAS_ID;
 
-	 if (!$('#CATEGORIA_AREAS_ID')[0].selectize) {
-            $('#CATEGORIA_AREAS_ID').selectize({
-                placeholder: 'Seleccione una o varias opciones',
-                maxItems: null
-            });
-        }
+    if (typeof valoresAreas === "string") {
+        try { valoresAreas = JSON.parse(valoresAreas); } 
+        catch (e) { valoresAreas = []; }
+    }
 
-        let selAreas = $('#CATEGORIA_AREAS_ID')[0].selectize;
-        selAreas.clear();
+    cargarareaSelect(valoresAreas);
 
-        let valoresAreas = row.data().CATEGORIA_AREAS_ID;
-
-        if (typeof valoresAreas === "string") {
-            try { valoresAreas = JSON.parse(valoresAreas); } catch (e) { valoresAreas = []; }
-        }
-
-        if (Array.isArray(valoresAreas)) {
-            selAreas.setValue(valoresAreas);
-        }
-
-	
 });
 
 function mostrarturnos(row) {
@@ -2099,10 +2120,13 @@ function mostrarturnos(row) {
     });
 }
 
-
-function cargarareaSelect() {
+function cargarareaSelect(valoresSeleccionados = []) {
 
     let reco_id = $("#recsensorial_id").val(); 
+    let selectize = $('#CATEGORIA_AREAS_ID')[0].selectize;
+
+    selectize.clearOptions();
+    selectize.clear();
 
     $.ajax({
         url: '/obtenerareasergo',
@@ -2110,30 +2134,29 @@ function cargarareaSelect() {
         data: { reco_id: reco_id },
         success: function (response) {
 
-            let select = $('#CATEGORIA_AREAS_ID');
-            select.empty();
-
-            select.append('<option value="">Selecciona un tipo de valor</option>');
-
             response.data.forEach(function (item) {
-                select.append(`
-                    <option 
-                        value="${item.ID_AREA_ERGO}"
-                    >
-                        ${item.NOMBRE_AREA_ERGO}
-                    </option>
-                `);
+                selectize.addOption({
+                    value: item.ID_AREA_ERGO,
+                    text: item.NOMBRE_AREA_ERGO
+                });
             });
 
-        },
-        error: function () {
-            console.log('Error cargando categorías');
+            let tipo = $('#CAT_TIPOPUESTO').val();
+
+            if (!Array.isArray(valoresSeleccionados)) {
+                valoresSeleccionados = valoresSeleccionados ? [valoresSeleccionados] : [];
+            }
+
+            if (tipo == 1 && valoresSeleccionados.length > 1) {
+                valoresSeleccionados = [valoresSeleccionados[0]];
+            }
+
+            selectize.setValue(valoresSeleccionados);
+
+            selectize.refreshOptions(false);
         }
     });
-
 }
-
-
 
 
 ////// AREAS  /////////////////
@@ -2341,50 +2364,162 @@ $("#boton_nueva_ficha").click(function (e) {
     $("#contenedorActividades").empty(); 
     $('#contenido2, #contenido3, #contenido4, #contenido5, #contenido6, #contenido7').hide();
 
-    $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').show();
+   $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
+    .attr('style', 'display:block !important;');
 
     $("#modal_fichas").modal("show");
 
-    $('#modal_fichas .modal-title').html('Nueva ficha');
+	$('#modal_fichas .modal-title').html('Nueva ficha');
+	
+    $('#JSON_ACTIVIDADES').val('')
+
+
+	selectAreasFichas.clear();
 });
 
 
 
+
+
+let selectAreasFichas;
+
+$(document).ready(function () {
+
+    selectAreasFichas = $('#CAT_AREAS_FICHA').selectize({
+        placeholder: 'Seleccione una o varias opciones',
+        maxItems: null,
+    })[0].selectize;
+
+});
+
+
+
+function cargarCategoriasSelect(callback = null) {
+
+    let reco_id = $("#recsensorial_id").val(); 
+
+    $.ajax({
+        url: '/getCategoriasErgo',
+        type: 'GET',
+        data: { reco_id: reco_id },
+        success: function (response) {
+
+            let select = $('#CATEGORIA_ID_FICHA');
+            select.empty();
+
+            select.append('<option value="">Selecciona un tipo de valor</option>');
+
+            response.data.forEach(function (item) {
+
+                let areas = JSON.stringify(item.CATEGORIA_AREAS_ID || []);
+
+                select.append(`
+                    <option 
+                        value="${item.ID_CATEGORIA_ERGO}"
+                        data-departamento="${item.CAT_DEPARTAMENTO}"
+                        data-areas='${areas}'
+                    >
+                        ${item.NOMBRE_CATEGORIA_ERGO}
+                    </option>
+                `);
+            });
+            if (callback) callback();
+        }
+    });
+}
+
+$(document).on('change', '#CATEGORIA_ID_FICHA', function () {
+
+    let selected = $(this).find(':selected');
+
+    let departamento = selected.data('departamento');
+    let areas = selected.data('areas');
+
+    if (departamento) {
+        $('#CAT_DEPARTAMENTO_FICHA').val(departamento).trigger('change');
+    } else {
+        $('#CAT_DEPARTAMENTO_FICHA').val('');
+    }
+
+    if (typeof areas === "string") {
+        try { areas = JSON.parse(areas); } 
+        catch (e) { areas = []; }
+    }
+
+    if (!Array.isArray(areas)) {
+        areas = [];
+    }
+
+    cargarAreasFicha(areas);
+});
+
+
+function cargarAreasFicha(valoresSeleccionados = []) {
+
+    let reco_id = $("#recsensorial_id").val(); 
+
+    selectAreasFichas.clearOptions();
+    selectAreasFichas.clear();
+
+    $.ajax({
+        url: '/obtenerareasergo',
+        type: 'GET',
+        data: { reco_id: reco_id },
+        success: function (response) {
+
+            response.data.forEach(function (item) {
+                selectAreasFichas.addOption({
+                    value: item.ID_AREA_ERGO,
+                    text: item.NOMBRE_AREA_ERGO
+                });
+            });
+
+            selectAreasFichas.setValue(valoresSeleccionados);
+
+            selectAreasFichas.refreshOptions(false);
+        },
+        error: function () {
+            console.log('Error cargando áreas');
+        }
+    });
+}
+
 function agregarActividad() {
 
     let contenedor = document.getElementById("contenedorActividades");
-
     let total = contenedor.querySelectorAll('.actividad-item').length + 1;
 
     let html = `
-    <div class="col-12 actividad-item mt-3" id="actividad_${total}">
+    <div class="actividad-item" id="actividad_${total}">
         
-        <div class="actividad-card p-3">
+        <div class="actividad-card">
 
-            <div class="row">
+            <div class="d-flex justify-content-between mb-2">
+                <strong>Actividad ${total}</strong>
+                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)"><i class="fa fa-trash"></i></button>
+            </div>
+
+            <div class="actividad-row">
 
                 <!-- IZQUIERDA -->
-                <div class="col-md-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="titulo-actividad mb-2">Actividad ${total}</h5>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)">X</button>
-                    </div>
-
+                <div class="actividad-left">
                     <input type="text" 
                         name="actividades[${total}][nombre]" 
-                        class="form-control mt-2 w-100" 
+                        class="form-control" 
                         placeholder="Nombre de la actividad">
                 </div>
 
                 <!-- DERECHA -->
-                <div class="col-md-8">
-                    <div id="tareas_${total}" class="mb-2"></div>
+                <div class="actividad-right">
 
                     <button type="button" 
-                        class="btn btn-primary btn-sm w-100"
+                        class="btn btn-agregar-tarea"
                         onclick="agregarTarea(${total})">
                         + Agregar tarea
                     </button>
+
+                    <div id="tareas_${total}"></div>
+
                 </div>
 
             </div>
@@ -2395,12 +2530,16 @@ function agregarActividad() {
     `;
 
     contenedor.insertAdjacentHTML('beforeend', html);
-}
-
+}	
 
 function eliminarActividad(btn) {
 
     btn.closest('.actividad-item').remove();
+
+    reindexarActividades();
+}
+
+function reindexarActividades() {
 
     let actividades = document.querySelectorAll('#contenedorActividades .actividad-item');
 
@@ -2409,66 +2548,79 @@ function eliminarActividad(btn) {
         let num = index + 1;
 
         el.id = `actividad_${num}`;
-        el.querySelector('.titulo-actividad').innerText = `Actividad ${num}`;
 
-        let input = el.querySelector('input');
+        el.querySelector('strong').innerText = `Actividad ${num}`;
+
+        let input = el.querySelector('.actividad-left input');
         input.name = `actividades[${num}][nombre]`;
 
-        let btnTarea = el.querySelector('.btn-primary');
+        let btnTarea = el.querySelector('.btn-agregar-tarea');
         btnTarea.setAttribute('onclick', `agregarTarea(${num})`);
 
+     
         let tareasDiv = el.querySelector('[id^="tareas_"]');
         tareasDiv.id = `tareas_${num}`;
+
+       
+        reindexarTareasActividad(tareasDiv, num);
     });
 }
 
 function agregarTarea(idActividad) {
 
     let contenedor = document.getElementById(`tareas_${idActividad}`);
-
-    let totalTareas = contenedor.querySelectorAll('.tarea-item').length + 1;
+    let total = contenedor.querySelectorAll('.tarea-item').length + 1;
 
     let html = `
-    <div class="tarea-item border p-2 mt-2">
+    <div class="tarea-item">
 
-        <div class="d-flex justify-content-between align-items-center">
-            <b class="titulo-tarea">Tarea ${totalTareas}</b>
+        <div class="d-flex justify-content-between">
+            <small>Tarea ${total}</small>
             <button type="button" class="btn btn-danger btn-sm"
-                onclick="eliminarTarea(this, ${idActividad})">X</button>
+                onclick="eliminarTarea(this, ${idActividad})"><i class="fa fa-trash"></i></button>
         </div>
 
         <input type="text" 
-            name="actividades[${idActividad}][tareas][${totalTareas}][nombre]" 
-            class="form-control mt-2" 
-            placeholder="Nombre de la tarea">
+            name="actividades[${idActividad}][tareas][${total}][nombre]" 
+            class="form-control mt-1" placeholder="Nombre">
 
         <input type="text" 
-            name="actividades[${idActividad}][tareas][${totalTareas}][frecuencia]" 
-            class="form-control mt-2" 
-            placeholder="Frecuencia (No. de veces durante la jornada)">
+            name="actividades[${idActividad}][tareas][${total}][frecuencia]" 
+            class="form-control mt-1" placeholder="Frecuencia (No de veces durante la jornada)">
 
-        <input type="number" 
-            name="actividades[${idActividad}][tareas][${totalTareas}][duracion]" 
-            class="form-control mt-2" 
-            placeholder="Duración (minutos)">
+        <input type="text" 
+            name="actividades[${idActividad}][tareas][${total}][duracion]" 
+            class="form-control mt-1" placeholder="Duración (tiempo en Min)">
+
     </div>
     `;
 
     contenedor.insertAdjacentHTML('beforeend', html);
 }
 
+function eliminarTarea(btn) {
 
+    let tareaItem = btn.closest('.tarea-item');
+    let contenedor = tareaItem.parentElement;
 
-function eliminarTarea(btn, idActividad) {
+    tareaItem.remove();
 
-    btn.closest('.tarea-item').remove();
+    let idActividad = contenedor.id.split('_')[1];
 
-    let tareas = document.querySelectorAll(`#tareas_${idActividad} .tarea-item`);
+    reindexarTareasActividad(contenedor, idActividad);
+}
+
+function reindexarTareasActividad(contenedor, idActividad) {
+
+    let tareas = contenedor.querySelectorAll('.tarea-item');
 
     tareas.forEach((el, index) => {
+
         let num = index + 1;
 
-        el.querySelector('.titulo-tarea').innerText = `Tarea ${num}`;
+     
+        let titulo = el.querySelector('small');
+        if (titulo) titulo.innerText = `Tarea ${num}`;
 
         let inputs = el.querySelectorAll('input');
 
@@ -2477,7 +2629,6 @@ function eliminarTarea(btn, idActividad) {
         inputs[2].name = `actividades[${idActividad}][tareas][${num}][duracion]`;
     });
 }
-
 
 function toggleSeccion(id) {
 
@@ -2520,53 +2671,6 @@ function toggleSeccion(id) {
         }
     }
 }
-
-function cargarCategoriasSelect() {
-
-    let reco_id = $("#recsensorial_id").val(); 
-
-    $.ajax({
-        url: '/getCategoriasErgo',
-        type: 'GET',
-        data: { reco_id: reco_id },
-        success: function (response) {
-
-            let select = $('#CATEGORIA_ID_FICHA');
-            select.empty();
-
-            select.append('<option value="">Selecciona un tipo de valor</option>');
-
-            response.data.forEach(function (item) {
-                select.append(`
-                    <option 
-                        value="${item.ID_CATEGORIA_ERGO}"
-                        data-departamento="${item.CAT_DEPARTAMENTO}"
-                    >
-                        ${item.NOMBRE_CATEGORIA_ERGO}
-                    </option>
-                `);
-            });
-
-        },
-        error: function () {
-            console.log('Error cargando categorías');
-        }
-    });
-
-}
-
-$(document).on('change', '#CATEGORIA_ID_FICHA', function () {
-
-    let departamento = $(this).find(':selected').data('departamento');
-
-    if (departamento) {
-        $('#CAT_DEPARTAMENTO_FICHA').val(departamento).trigger('change');
-    } else {
-        $('#CAT_DEPARTAMENTO_FICHA').val('');
-    }
-
-});
-
 
 
 const fichas = {
@@ -3504,262 +3608,254 @@ $('input[name^="d"]').change(evaluarFicha_4_2);
 
 };
 
-
 ///////  EVALUACION FICHAS 
 function evaluarFicha_1_1() {
 
-let a = $('input[name="a"]:checked').val();
-let b = $('input[name="b"]:checked').val();
-let c = $('input[name="c"]:checked').val();
-let d = $('input[name="d"]:checked').val();
-let e = $('input[name="e"]:checked').val();
+	let a = $('input[name="a"]:checked').val();
+	let b = $('input[name="b"]:checked').val();
+	let c = $('input[name="c"]:checked').val();
+	let d = $('input[name="d"]:checked').val();
+	let e = $('input[name="e"]:checked').val();
 
-if (!a || !b || !c || !d || !e) return;
+	if (!a || !b || !c || !d || !e) return;
 
-let ok = (a==="SI" && b==="SI" && c==="SI" && d==="SI" && e==="SI");
+	let ok = (a==="SI" && b==="SI" && c==="SI" && d==="SI" && e==="SI");
 
-if (!ok) {
-    $('#ficha_1_4').html("");
-    fichas["1.4"].render();  
-} else {
-    $('#ficha_1_4').html("");
+	if (!ok) {
+		$('#ficha_1_4').html("");
+		fichas["1.4"].render();  
+	} else {
+		$('#ficha_1_4').html("");
+	}
+
 }
-
-}
-
 
 function evaluarFicha_1_2() {
 
-let a = $('input[name="a2"]:checked').val();
-let b = $('input[name="b2"]:checked').val();
-let c = $('input[name="c2"]:checked').val();
+	let a = $('input[name="a2"]:checked').val();
+	let b = $('input[name="b2"]:checked').val();
+	let c = $('input[name="c2"]:checked').val();
 
-// si no ha contestado todo → no hace nada
-if (!a || !b || !c) return;
+	// si no ha contestado todo → no hace nada
+	if (!a || !b || !c) return;
 
-// 🔥 lógica real
-let ok = ((a === "SI" || b === "SI") && c === "SI");
+	// 🔥 lógica real
+	let ok = ((a === "SI" || b === "SI") && c === "SI");
 
-    if (!ok) {
-    $('#ficha_1_5').html(""); // limpia
-    fichas["1.5"].render();  // muestra
-} else {
-    $('#ficha_1_5').html(""); // 🔥 la oculta si corrige
+		if (!ok) {
+		$('#ficha_1_5').html(""); // limpia
+		fichas["1.5"].render();  // muestra
+	} else {
+		$('#ficha_1_5').html(""); // 🔥 la oculta si corrige
+	}
+
+
 }
-
-
-}
-
 
 function evaluarFicha_1_3() {
 
-let respuestas = [];
+	let respuestas = [];
 
-for (let i = 1; i <= 9; i++) {
-    let val = $(`input[name="f${i}"]:checked`).val();
-    if (!val) return;
-    respuestas.push(val);
+	for (let i = 1; i <= 9; i++) {
+		let val = $(`input[name="f${i}"]:checked`).val();
+		if (!val) return;
+		respuestas.push(val);
+	}
+
+	let todasNO = respuestas.every(r => r === "NO");
+
+	if (todasNO) {
+		$('#resultadoFicha13').html(`
+			<div class="alert alert-success">
+			Si a todas las preguntas ha contestado “NO”, no hay presencia de factores adicionales al riesgo.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha13').html(`
+			<div class="alert alert-warning">
+			Si una o más respuestas son “SI”, los factores de riesgo adicionales deben ser considerados.
+			</div>
+		`);
+	}
+
 }
-
-let todasNO = respuestas.every(r => r === "NO");
-
-if (todasNO) {
-    $('#resultadoFicha13').html(`
-        <div class="alert alert-success">
-        Si a todas las preguntas ha contestado “NO”, no hay presencia de factores adicionales al riesgo.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha13').html(`
-        <div class="alert alert-warning">
-        Si una o más respuestas son “SI”, los factores de riesgo adicionales deben ser considerados.
-        </div>
-    `);
-}
-
-}
-
 
 function evaluarFicha_1_4() {
 
-let respuestas = [];
+	let respuestas = [];
 
-for (let i = 1; i <= 11; i++) {
-    let val = $(`input[name="r${i}"]:checked`).val();
-    if (!val) return;
-    respuestas.push(val);
-}
+	for (let i = 1; i <= 11; i++) {
+		let val = $(`input[name="r${i}"]:checked`).val();
+		if (!val) return;
+		respuestas.push(val);
+	}
 
-// 🔥 lógica real
-let algunaSI = respuestas.some(r => r === "SI");
-let todasNO = respuestas.every(r => r === "NO");
+	let algunaSI = respuestas.some(r => r === "SI");
+	let todasNO = respuestas.every(r => r === "NO");
 
-if (algunaSI) {
+	if (algunaSI) {
 
-    $('#resultadoFicha14').html(`
-        <div class="alert alert-danger">
-        Si alguna de las respuestas es “SI”, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.<br>
-        Se recomienda realizar la evaluación específica del riesgo.
-        </div>
-    `);
+		$('#resultadoFicha14').html(`
+			<div class="alert alert-danger">
+			Si alguna de las respuestas es “SI”, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.<br>
+			Se recomienda realizar la evaluación específica del riesgo.
+			</div>
+		`);
 
-} else if (todasNO) {
+	} else if (todasNO) {
 
-    $('#resultadoFicha14').html(`
-        <div class="alert alert-info">
-        Si todas las respuestas son “NO”, no es posible discriminar el nivel de riesgo de forma rápida y se requiere evaluación específica.
-        </div>
-    `);
+		$('#resultadoFicha14').html(`
+			<div class="alert alert-info">
+			Si todas las respuestas son “NO”, no es posible discriminar el nivel de riesgo de forma rápida y se requiere evaluación específica.
+			</div>
+		`);
 
-}
+	}
 
 }
 
 function evaluarFicha_1_5() {
 
-let a = $('input[name="t1"]:checked').val();
-let b = $('input[name="t2"]:checked').val();
+	let a = $('input[name="t1"]:checked').val();
+	let b = $('input[name="t2"]:checked').val();
 
-if (!a || !b) return;
+	if (!a || !b) return;
 
-// lógica real
-let algunaSI = (a === "SI" || b === "SI");
-let todasNO = (a === "NO" && b === "NO");
+	// lógica real
+	let algunaSI = (a === "SI" || b === "SI");
+	let todasNO = (a === "NO" && b === "NO");
 
-if (algunaSI) {
+	if (algunaSI) {
 
-    $('#resultadoFicha15').html(`
-        <div class="alert alert-danger">
-        Si alguna de las respuestas es “SI”, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.<br>
-        Se recomienda realizar la evaluación específica del riesgo de la tarea por manipulación manual de cargas para definir la intervención.
-        </div>
-    `);
+		$('#resultadoFicha15').html(`
+			<div class="alert alert-danger">
+			Si alguna de las respuestas es “SI”, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.<br>
+			Se recomienda realizar la evaluación específica del riesgo de la tarea por manipulación manual de cargas para definir la intervención.
+			</div>
+		`);
 
-} else if (todasNO) {
+	} else if (todasNO) {
 
-    $('#resultadoFicha15').html(`
-        <div class="alert alert-info">
-        Si todas las respuestas son “NO”, no es posible discriminar el nivel de riesgo de forma rápida y por tanto, es necesario realizar la evaluación específica.
-        </div>
-    `);
+		$('#resultadoFicha15').html(`
+			<div class="alert alert-info">
+			Si todas las respuestas son “NO”, no es posible discriminar el nivel de riesgo de forma rápida y por tanto, es necesario realizar la evaluación específica.
+			</div>
+		`);
+
+	}
 
 }
-
-}
-
 
 function evaluarFicha_2_1() {
 
-let a = $('input[name="a21"]:checked').val();
-let b = $('input[name="b21"]:checked').val();
-let c = $('input[name="c21"]:checked').val();
-let d = $('input[name="d21"]:checked').val();
+	let a = $('input[name="a21"]:checked').val();
+	let b = $('input[name="b21"]:checked').val();
+	let c = $('input[name="c21"]:checked').val();
+	let d = $('input[name="d21"]:checked').val();
 
-// si no ha contestado todo → no hace nada
-if (!a || !b || !c || !d) return;
+	// si no ha contestado todo → no hace nada
+	if (!a || !b || !c || !d) return;
 
-// lógica real
-let ok = (a==="SI" && b==="SI" && c==="SI" && d==="SI");
+	// lógica real
+	let ok = (a==="SI" && b==="SI" && c==="SI" && d==="SI");
 
-if (!ok) {
-    $('#ficha_2_3').html(""); 
-    fichas["2.3"].render();  
-} else {
-    $('#ficha_2_3').html(""); 
+	if (!ok) {
+		$('#ficha_2_3').html(""); 
+		fichas["2.3"].render();  
+	} else {
+		$('#ficha_2_3').html(""); 
+	}
+
 }
-
-}
-
 
 function evaluarFicha_2_2() {
 
-let total = $('input[name^="f22_"]:checked').length;
+	let total = $('input[name^="f22_"]:checked').length;
 
-if (total < 14) return;
+	if (total < 14) return;
 
-let haySI = false;
+	let haySI = false;
 
-$('input[name^="f22_"]:checked').each(function () {
-    if ($(this).val() === "SI") {
-        haySI = true;
-    }
-});
+	$('input[name^="f22_"]:checked').each(function () {
+		if ($(this).val() === "SI") {
+			haySI = true;
+		}
+	});
 
-if (haySI) {
-    $('#resultadoFicha22').html(`
-        <div class="alert alert-warning">
-        Si una o más respuestas son <b>“SI”</b>, los riesgos específicos adicionales deben ser cuidadosamente considerados para garantizar la ausencia del riesgo.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha22').html(`
-        <div class="alert alert-success">
-        Si a todas las preguntas ha contestado <b>“NO”</b>, no hay presencia de factores adicionales al riesgo por empuje y tracción.
-        </div>
-    `);
-}
+	if (haySI) {
+		$('#resultadoFicha22').html(`
+			<div class="alert alert-warning">
+			Si una o más respuestas son <b>“SI”</b>, los riesgos específicos adicionales deben ser cuidadosamente considerados para garantizar la ausencia del riesgo.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha22').html(`
+			<div class="alert alert-success">
+			Si a todas las preguntas ha contestado <b>“NO”</b>, no hay presencia de factores adicionales al riesgo por empuje y tracción.
+			</div>
+		`);
+	}
 
 }
 
 function evaluarFicha_2_3() {
 
-let total = $('input[name^="r23_"]:checked').length;
+	let total = $('input[name^="r23_"]:checked').length;
 
-if (total < 4) return;
+	if (total < 4) return;
 
-let haySI = false;
+	let haySI = false;
 
-$('input[name^="r23_"]:checked').each(function () {
-    if ($(this).val() === "SI") {
-        haySI = true;
-    }
-});
+	$('input[name^="r23_"]:checked').each(function () {
+		if ($(this).val() === "SI") {
+			haySI = true;
+		}
+	});
 
-if (haySI) {
-    $('#resultadoFicha23').html(`
-        <div class="alert alert-danger">
-        Si alguna de las respuestas es <b>“SI”</b>, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable. Se recomienda realizar la evaluación específica del riesgo.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha23').html(`
-        <div class="alert alert-secondary">
-        Si todas las respuestas son <b>“NO”</b>, no es posible discriminar el nivel de riesgo de forma rápida y es necesario realizar la evaluación específica.
-        </div>
-    `);
-}
+	if (haySI) {
+		$('#resultadoFicha23').html(`
+			<div class="alert alert-danger">
+			Si alguna de las respuestas es <b>“SI”</b>, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable. Se recomienda realizar la evaluación específica del riesgo.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha23').html(`
+			<div class="alert alert-secondary">
+			Si todas las respuestas son <b>“NO”</b>, no es posible discriminar el nivel de riesgo de forma rápida y es necesario realizar la evaluación específica.
+			</div>
+		`);
+	}
 
 }
 
 function evaluarFicha_3_1() {
 
-let m1 = $('input[name="m1"]:checked').val();
-let m2 = $('input[name="m2"]:checked').val();
-let m3 = $('input[name="m3"]:checked').val();
-let m4 = $('input[name="m4"]:checked').val();
-let m5 = $('input[name="m5"]:checked').val();
-let m6 = $('input[name="m6"]:checked').val();
+	let m1 = $('input[name="m1"]:checked').val();
+	let m2 = $('input[name="m2"]:checked').val();
+	let m3 = $('input[name="m3"]:checked').val();
+	let m4 = $('input[name="m4"]:checked').val();
+	let m5 = $('input[name="m5"]:checked').val();
+	let m6 = $('input[name="m6"]:checked').val();
 
-if (!m1 || !m2 || !m3 || !m4 || !m5 || !m6) return;
+	if (!m1 || !m2 || !m3 || !m4 || !m5 || !m6) return;
 
-let ok = (
-    m1 === "SI" &&
-    m2 === "SI" &&
-    m3 === "SI" &&
-    m4 === "SI" &&
-    m5 === "SI" &&
-    m6 === "SI"
-);
+	let ok = (
+		m1 === "SI" &&
+		m2 === "SI" &&
+		m3 === "SI" &&
+		m4 === "SI" &&
+		m5 === "SI" &&
+		m6 === "SI"
+	);
 
-if (!ok) {
-    $('#ficha_3_2').html("");
-    fichas["3.2"].render();
-} else {
-    $('#ficha_3_2').html("");
+	if (!ok) {
+		$('#ficha_3_2').html("");
+		fichas["3.2"].render();
+	} else {
+		$('#ficha_3_2').html("");
+	}
+
 }
-
-}
-
 
 function evaluarFicha_3_2() {
 
@@ -3790,7 +3886,6 @@ if (haySI) {
 }
 
 }
-
 
 function evaluarFicha_4_1() {
 
@@ -3852,7 +3947,7 @@ if (todasSI) {
 
 }
 
-///// FILAS
+///// FILAS ///// 
 function fila13(name, texto) {
     return `
     <tr>
@@ -3894,10 +3989,6 @@ function fila14(name, letra, texto) {
     `;
 }
 
-
-
-
-
 function fila15(name, letra, texto) {
     return `
     <tr>
@@ -3919,7 +4010,6 @@ function fila15(name, letra, texto) {
     `;
 }
 
-
 function fila22(name, texto) {
     return `
     <tr>
@@ -3939,7 +4029,6 @@ function fila22(name, texto) {
     </tr>
     `;
 }
-
 
 function fila23(name, letra, texto) {
     return `
@@ -4025,30 +4114,286 @@ function fila42(name, letra, texto) {
     `;
 }
 
-
-
-
-
 $(document).ready(function(){
 
-    $('[name="P1_CARGA_MAYOR_3KG"], [name="P2_FRECUENCIA_CARGA"], [name="P3_MANIPULACION_CARGA"]').on('change', function(){
+    $('[name="P1_CARGA_MAYOR_3KG"]').on('change', function(){
 
-        let p1 = $('[name="P1_CARGA_MAYOR_3KG"]').val();
-        let p2 = $('[name="P2_FRECUENCIA_CARGA"]').val();
-        let p3 = $('[name="P3_MANIPULACION_CARGA"]').val();
+        let p1 = $(this).val();
 
-        if (p1 === "SI" || p2 === "SI" || p3 === "SI") {
+        if (p1 === "SI") {
 
-            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
-                .attr('style', 'display:block !important;');
+            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:block !important;');
 
-        } else if (p1 === "NO" && p2 === "NO" && p3 === "NO") {
+            $('[name="P2_FRECUENCIA_CARGA"]').val("SI");
+            $('[name="P3_MANIPULACION_CARGA"]').val("SI");
 
-            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
-                .attr('style', 'display:none !important;');
+        } else if (p1 === "NO") {
 
-        }
+            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:none !important;');
+
+            $('[name="P2_FRECUENCIA_CARGA"]').val("NO");
+			$('[name="P3_MANIPULACION_CARGA"]').val("NO");
+			
+		} else {
+			
+  			$('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:block !important;');
+ 			$('[name="P2_FRECUENCIA_CARGA"]').val("");
+			$('[name="P3_MANIPULACION_CARGA"]').val("");
+		}
 
     });
+
+});
+
+
+
+function obtenerActividadesJSON() {
+
+    let actividades = [];
+
+    $('#contenedorActividades .actividad-item').each(function () {
+
+        let nombreActividad = $(this).find('.actividad-left input').val();
+
+        let tareas = [];
+
+        $(this).find('.tarea-item').each(function () {
+
+            let inputs = $(this).find('input');
+
+            tareas.push({
+                nombre: $(inputs[0]).val(),
+                frecuencia: $(inputs[1]).val(),
+                duracion: $(inputs[2]).val()
+            });
+
+        });
+
+        actividades.push({
+            nombre: nombreActividad,
+            tareas: tareas
+        });
+
+    });
+
+    return actividades;
+}
+
+
+
+$("#boton_guardar_fichastecnicas").click(function (e) {
+    e.preventDefault();
+
+
+    formularioValido = validarFormulario3($('#form_fichas'))
+
+    if (formularioValido) {
+
+
+		  let actividadesJSON = obtenerActividadesJSON();
+		$('#JSON_ACTIVIDADES').val(JSON.stringify(actividadesJSON));
+		
+
+		
+    if (ID_FICHAS_TECNICAS == 0) {
+        
+        alertMensajeConfirm({
+            title: "¿Desea guardar la información?",
+            text: "Al guardarla, se podra usar",
+            icon: "question",
+        },async function () { 
+
+            await loaderbtn('boton_guardar_fichastecnicas')
+            await ajaxAwaitFormData({ api: 1,RECO_ID: recsensorial, ID_FICHAS_TECNICAS: ID_FICHAS_TECNICAS }, 'recoergofichas', 'form_fichas', 'boton_guardar_fichastecnicas', { callbackAfter: true, callbackBefore: true }, () => {
+        
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Espere un momento',
+                    text: 'Estamos guardando la información',
+                    showConfirmButton: false
+                })
+
+                $('.swal2-popup').addClass('ld ld-breath')
+        
+                
+            }, function (data) {
+                    
+                    ID_FICHAS_TECNICAS = data.fichas.ID_FICHAS_TECNICAS
+                    alertMensaje('success','Información guardada correctamente', 'Esta información esta lista para usarse',null,null, 1500)
+                     $('#modal_fichas').modal('hide')
+                    document.getElementById('form_fichas').reset();
+                    Tablarecofichasergo.ajax.reload()
+                
+            })
+            
+            
+            
+        }, 1)
+        
+    } else {
+            alertMensajeConfirm({
+            title: "¿Desea editar la información de este formulario?",
+            text: "Al guardarla, se podra usar",
+            icon: "question",
+        },async function () { 
+
+            await loaderbtn('boton_guardar_fichastecnicas')
+            await ajaxAwaitFormData({ api: 1, RECO_ID: recsensorial, ID_FICHAS_TECNICAS: ID_FICHAS_TECNICAS }, 'recoergofichas', 'form_fichas', 'boton_guardar_fichastecnicas', { callbackAfter: true, callbackBefore: true }, () => {
+        
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Espere un momento',
+                    text: 'Estamos guardando la información',
+                    showConfirmButton: false
+                })
+
+                $('.swal2-popup').addClass('ld ld-breath')
+        
+                
+            }, function (data) {
+                    
+                setTimeout(() => {
+
+                    ID_FICHAS_TECNICAS = data.fichas.ID_FICHAS_TECNICAS
+                    alertMensaje('success', 'Información editada correctamente', 'Información guardada')
+                     $('#modal_fichas').modal('hide')
+                    document.getElementById('form_fichas').reset();
+                    Tablarecofichasergo.ajax.reload()
+
+                }, 300);  
+            })
+        }, 1)
+    }
+
+} else {
+    alertToast('Por favor, complete todos los campos del formulario.', 'error', 2000)
+
+}
+    
+});
+
+
+function mostrarTablarecofichasergo() {
+	try {
+		var ruta = "/Tablarecofichasergo";
+
+		if (Tablarecofichasergo != null) {
+			Tablarecofichasergo.destroy();
+		}
+
+		Tablarecofichasergo = $('#Tablarecofichasergo').DataTable({
+			"ajax": {
+				"url": ruta,
+				"type": "get",
+				"cache": false,
+				"data": {
+					ergoid: recsensorial 
+				},
+				"error": function (xhr, error, code) {
+					console.log('error en Tablarecofichasergo');
+				}
+			},
+			"columns": [
+				{
+					data: null,
+					render: function (data, type, row, meta) {
+						return meta.row + 1;
+					}
+				},
+				{
+					"data": "NOMBRE_EMPLEADO_FICHA",
+					"defaultContent": "-"
+				},
+				{
+					"data": "NO_EMPLEADO_FICHA",
+					"defaultContent": "-"
+				},
+				{ 
+					data: 'BTN_EDITAR',
+					orderable: false,
+					searchable: false
+				},
+			],
+			"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+			"order": [[0, "DESC"]],
+			"ordering": true,
+			"processing": true,
+			"responsive": true,
+			"language": {
+				"lengthMenu": "Mostrar _MENU_ Registros",
+				"zeroRecords": "No se encontraron registros",
+				"info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
+				"infoEmpty": "No se encontraron registros",
+				"infoFiltered": "(Filtrado de _MAX_ registros)",
+				"emptyTable": "No hay datos disponibles en la tabla",
+				"loadingRecords": "Cargando datos....",
+				"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+				"search": "Buscar",
+				"paginate": {
+					"first": "Primera",
+					"last": "Última",
+					"next": "Siguiente",
+					"previous": "Anterior"
+				}
+			}
+		});
+
+		Tablarecofichasergo.on('draw', function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+	} catch (exception) {
+		console.error("Error en Tablarecofichasergo:", exception);
+	}
+}
+
+
+
+$('#Tablarecofichasergo tbody').on('click', 'td>button.editar', function () {
+
+    var tr = $(this).closest('tr');
+    var row = Tablarecofichasergo.row(tr);
+
+    let data = row.data();
+
+    ID_FICHAS_TECNICAS = data.ID_FICHAS_TECNICAS;
+
+    editarDatoTabla(data, 'form_fichas', 'modal_fichas',1);
+
+    $('#modal_fichas .modal-title').html(data.NOMBRE_EMPLEADO_FICHA);
+
+
+	if (row.data().P1_CARGA_MAYOR_3KG === "SI") {
+            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:block !important;');
+    } else  {
+            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:none !important;');
+	}
+	
+
+
+    let areasGuardadas = data.CAT_AREAS_FICHA;
+
+    if (typeof areasGuardadas === "string") {
+        try { areasGuardadas = JSON.parse(areasGuardadas); } 
+        catch (e) { areasGuardadas = []; }
+    }
+
+    if (!Array.isArray(areasGuardadas)) {
+        areasGuardadas = [];
+    }
+
+    cargarCategoriasSelect(function () {
+
+        $('#CATEGORIA_ID_FICHA')
+            .val(data.CATEGORIA_ID_FICHA)
+            .trigger('change');
+
+        setTimeout(() => {
+            cargarAreasFicha(areasGuardadas);
+        }, 300);
+
+    });
+
+
 
 });

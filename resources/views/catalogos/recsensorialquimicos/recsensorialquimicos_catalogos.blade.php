@@ -218,8 +218,6 @@
 						<li class="nav-item">
 							<a class="nav-link" data-toggle="tab" id="tab3-uso" href="#contenido-uso" role="tab">Bitácora de usó</a>
 						</li>
-
-
 					</ul>
 
 					<div class="tab-content">

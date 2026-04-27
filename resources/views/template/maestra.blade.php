@@ -933,7 +933,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-    <script src="/js_sitio/reconocimientoergo.js?v=2"></script>
+    <script src="/js_sitio/reconocimientoergo.js?v=3"></script>
     <script src="/js_sitio/funcionesgeneralesergo.js"></script>
     @endif
 
@@ -963,7 +963,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=10.7"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=10.8"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>

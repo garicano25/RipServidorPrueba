@@ -588,7 +588,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -609,7 +609,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoinstalacion" name="inputfotoinstalacion" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoinstalacion" name="inputfotoinstalacion" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -630,7 +630,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapaderiesgo" name="inputfotomapaderiesgo" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapaderiesgo" name="inputfotomapaderiesgo" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -761,12 +761,12 @@
                                                             </ol>
                                                             @endif
                                                             <div class="table-responsive">
-                                                                <table class="table table-bordered table-hover stylish-table" width="100%" id="Tablarecoareasergo">
+                                                                <table class="table table-bordered table-hover stylish-table" width="100%" id="Tablarecofichasergo">
                                                                     <thead>
                                                                         <tr>
                                                                             <th style="width: 60px!important;">No.</th>
-                                                                            <th></th>
-                                                                            <th></th>
+                                                                            <th>Nombre del empleado </th>
+                                                                            <th>Ficha / No empleado</th>
                                                                             <th style="width: 80px!important;">Editar</th>
                                                                         </tr>
                                                                     </thead>
@@ -2587,10 +2587,10 @@
                             </div>
                         </div>
 
-                          <div class="col-12">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label>Areás *</label>
-                                <select class="custom-select form-control" id="CATEGORIA_AREAS_ID" name="CATEGORIA_AREAS_ID[]" multiple required>
+                                <select class="custom-select form-control" id="CATEGORIA_AREAS_ID" name="CATEGORIA_AREAS_ID[]" multiple >
                                 </select>
                             </div>
                         </div>
@@ -2689,9 +2689,10 @@
 
 
 
+                        <input type="hidden" name="JSON_ACTIVIDADES" id="JSON_ACTIVIDADES">
 
                         <!-- CATEGORÍA -->
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label>Categoría *</label>
                                 <select class="form-control" id="CATEGORIA_ID_FICHA" name="CATEGORIA_ID_FICHA" required>
@@ -2699,7 +2700,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label> Departamento *</label>
                                 <select class="custom-select form-control" id="CAT_DEPARTAMENTO_FICHA" name="CAT_DEPARTAMENTO_FICHA" required style="pointer-events:none; background-color:#e9ecef;">
@@ -2710,30 +2711,35 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Áreas *</label>
+                                <select class="custom-select form-control" id="CAT_AREAS_FICHA" name="CAT_AREAS_FICHA[]" multiple>
+                                </select>
+                            </div>
+                        </div>
+
+
                         <!-- NOMBRE -->
-                        <div class="col-6">
+                        <div class="col-8">
                             <div class="form-group">
                                 <label>Nombre del empleado *</label>
                                 <input type="text" class="form-control" name="NOMBRE_EMPLEADO_FICHA" id="NOMBRE_EMPLEADO_FICHA" required>
                             </div>
                         </div>
 
-                        <!-- FECHA EVALUACIÓN -->
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Fecha de evaluación *</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_EVALUACION" name="FECHA_EVALUACION" required>
-                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                </div>
+                                <label>Ficha / No empleado </label>
+                                <input type="text" class="form-control" name="NO_EMPLEADO_FICHA" id="NO_EMPLEADO_FICHA">
                             </div>
                         </div>
-
                         <!-- SEXO -->
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Sexo *</label>
-                                <select class="form-control" name="SEXO" id="SEXO" required>
+                                <select class="form-control" name="SEXO_EMPLEADO_FICHA" id="SEXO_EMPLEADO_FICHA" required>
                                     <option value="">Seleccionar</option>
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
@@ -2752,51 +2758,71 @@
                             </div>
                         </div>
 
-                        <!-- PESO -->
-                        <div class="col-3">
+                        <div class="col-4">
                             <div class="form-group">
-                                <label>Peso (kg) *</label>
-                                <input type="number" class="form-control" name="PESO" id="PESO" step="0.1" required>
-                            </div>
-                        </div>
-
-                        <!-- TALLA -->
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label>Talla (cm) *</label>
-                                <input type="number" class="form-control" name="TALLA" id="TALLA" required>
-                            </div>
-                        </div>
-
-                        <!-- ANTIGÜEDAD -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>¿Cuánto tiempo lleva realizando el mismo tipo de trabajo?</label>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <input type="number" class="form-control" placeholder="Años" name="ANTIGUEDAD_ANIOS" id="ANTIGUEDAD_ANIOS">
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="number" class="form-control" placeholder="Meses" name="ANTIGUEDAD_MESES" id="ANTIGUEDAD_MESES">
-                                    </div>
+                                <label>Edad *</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="EDAD_EMPLEADO_FICHA" id="EDAD_EMPLEADO_FICHA">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- HORAS SEMANA -->
+                        <!-- PESO -->
                         <div class="col-6">
                             <div class="form-group">
-                                <label>En promedio, ¿cuántas horas a la semana trabaja?</label>
-                                <input type="number" class="form-control" placeholder="Horas" name="HORAS_SEMANA" id="HORAS_SEMANA">
+                                <label>Peso (kg) </label>
+                                <input type="number" class="form-control" name="PESO_FICHA" id="PESO_FICHA" step="0.1">
+                            </div>
+                        </div>
+
+                        <!-- TALLA -->
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Talla (cm) </label>
+                                <input type="number" class="form-control" name="TALLA_FICHA" id="TALLA_FICHA">
+                            </div>
+                        </div>
+
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Régimen Contractual </label>
+                                <input type="text" class="form-control" name="REGIMEN_CONTRACTUAL_FICHA" id="REGIMEN_CONTRACTUAL_FICHA">
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Jornada </label>
+                                <input type="text" class="form-control" name="JORNADA_EMPLEADO_FICHA" id="JORNADA_EMPLEADO_FICHA">
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Turno </label>
+                                <input type="text" class="form-control" name="TURNO_EMPLEADO_FICHA" id="TURNO_EMPLEADO_FICHA">
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label>En promedio, ¿cuántas horas a la semana trabaja?</label>
-                                <input type="number" class="form-control" placeholder="Horas" name="HORAS_SEMANA" id="HORAS_SEMANA">
+                                <label>¿Cuánto tiempo lleva en la empresa?</label>
+                                <input type="text" class="form-control" name="TIEMPO_EMPRESA_FICHA" id="TIEMPO_EMPRESA_FICHA">
                             </div>
                         </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Antigüedad en la categoría</label>
+                                <input type="text" class="form-control" name="ANTIGUEDAD_CATEOGORIA_FICHA" id="ANTIGUEDAD_CATEOGORIA_FICHA">
+                            </div>
+                        </div>
+
+
+
+
+
                         <br><br>
                         <div class="col-12 mt-2">
                             <button type="button" class="btn btn-danger" onclick="agregarActividad()">
@@ -2804,29 +2830,61 @@
                             </button>
                         </div>
 
-                        <div id="contenedorActividades" class="row mt-2"></div>
+                        <div id="contenedorActividades" class="mt-2"></div>
+
+
 
 
                         <br><br>
 
                         <style>
+                            /* ACTIVIDADES */
+
+                            #contenedorActividades {
+                                width: 100%;
+                            }
+
                             .actividad-card {
+                                width: 100%;
+                                border: 1px solid #ddd;
                                 border-radius: 10px;
-                                border: 1px solid #dee2e6;
+                                padding: 15px;
+                                margin-bottom: 10px;
                                 background: #fff;
                             }
 
+                            .actividad-row {
+                                display: flex;
+                                gap: 15px;
+                                align-items: flex-start;
+                            }
+
+                            .actividad-left {
+                                width: 30%;
+                            }
+
+                            .actividad-right {
+                                width: 70%;
+                            }
+
+                            .btn-agregar-tarea {
+                                width: 20%;
+                                background: linear-gradient(90deg, #6dd6e4, #6dd6e4);
+                                color: white;
+                                border: none;
+                            }
 
                             .tarea-item {
-                                background: #f8f9fa;
-                                border-radius: 6px;
+                                border: 1px solid #e5e7eb;
+                                border-radius: 8px;
+                                padding: 10px;
+                                margin-top: 8px;
+                                background: #f9fafb;
                             }
 
-                            #contenedorActividades {
-                                max-height: 400px;
-                                overflow-y: auto;
-                            }
 
+
+                            /* FICHAS */
                             .custom-container-left {
                                 width: 100%;
                                 max-width: 100%;
@@ -2879,7 +2937,7 @@
                                                 <label>
                                                     1. Durante su jornada laboral, ¿levanta, baja, manipula objetos o materiales con un peso mayor a 3 Kg?
                                                 </label>
-                                                <select class="form-control" name="P1_CARGA_MAYOR_3KG" required>
+                                                <select class="form-control" name="P1_CARGA_MAYOR_3KG" id="P1_CARGA_MAYOR_3KG" required>
                                                     <option value="">Seleccione</option>
                                                     <option value="SI">Sí</option>
                                                     <option value="NO">No</option>
@@ -2892,7 +2950,7 @@
                                                 <label>
                                                     2. ¿Con qué frecuencia realiza actividades que involucren el manejo manual de cargas (más de una vez al día)?
                                                 </label>
-                                                <select class="form-control" name="P2_FRECUENCIA_CARGA" required>
+                                                <select class="form-control" name="P2_FRECUENCIA_CARGA" id="P2_FRECUENCIA_CARGA" required style="pointer-events:none; background-color:#e9ecef;">
                                                     <option value="">Seleccione</option>
                                                     <option value="SI">Sí</option>
                                                     <option value="NO">No</option>
@@ -2905,7 +2963,7 @@
                                                 <label>
                                                     3. ¿Tiene que levantar, bajar, transportar, empujar, jalar y/o estibar objetos o materiales como parte de su trabajo?
                                                 </label>
-                                                <select class="form-control" name="P3_MANIPULACION_CARGA" required>
+                                                <select class="form-control" name="P3_MANIPULACION_CARGA" id="P3_MANIPULACION_CARGA" required style="pointer-events:none; background-color:#e9ecef;">
                                                     <option value="">Seleccione</option>
                                                     <option value="SI">Sí</option>
                                                     <option value="NO">No</option>
@@ -3199,8 +3257,8 @@
                     <div>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_area">
-                            Finalizar <i class="fa fa-save"></i>
+                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_fichastecnicas">
+                            Guardar <i class="fa fa-save"></i>
                         </button>
                         @endif
                     </div>

@@ -164,7 +164,7 @@ class categoriasergoController extends Controller
                     return response()->json($response);
             }
         } catch (Exception $e) {
-            return response()->json('Error al guardar el género');
+            return response()->json('Error al guardar ');
         }
     }
 
