@@ -2136,11 +2136,12 @@ Route::get('mostrarmapariesgoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 
 /////////// CATEGORIA  ///////////
 Route::resource('recoergocategorias', 'ERGO\categoriasergoController');
 Route::get('Tablarecocategoriasergo', ['as' => 'ERGO.Tablarecocategoriasergo', 'uses' => 'ERGO\categoriasergoController@Tablarecocategoriasergo']);
-
-
 Route::post('obtenerPTCategoria', ['as' => 'ERGO.obtenerPTCategoria', 'uses' => 'ERGO\categoriasergoController@obtenerPTCategoria']);
 
-/////////// CATEGORIA  ///////////
+Route::get('obtenerareasergo', ['as' => 'ERGO.obtenerareasergo', 'uses' => 'ERGO\categoriasergoController@obtenerareasergo']);
+
+
+/////////// AREAS  ///////////
 Route::resource('recoergoareas', 'ERGO\areasergoController');
 Route::get('Tablarecoareasergo', ['as' => 'ERGO.Tablarecoareasergo', 'uses' => 'ERGO\areasergoController@Tablarecoareasergo']);
 

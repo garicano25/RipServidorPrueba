@@ -1648,10 +1648,7 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 $("#boton_nueva_categoria").click(function (e) {
     e.preventDefault();
 
-
     ID_CATEGORIA_ERGO = 0;
-       
-
 
     $('#form_categoria').each(function(){
         this.reset();
@@ -1663,8 +1660,7 @@ $("#boton_nueva_categoria").click(function (e) {
 
     $('#modal_categoria .modal-title').html('Nueva categoría');
 
-
-	 $.ajax({
+	$.ajax({
         url: 'obtenerPTCategoria',
         type: 'POST',
         headers: {
@@ -1680,6 +1676,18 @@ $("#boton_nueva_categoria").click(function (e) {
             console.log(xhr.responseText);
         }
     });
+
+	cargarareaSelect();
+
+
+	var selectareas = $('#CATEGORIA_AREAS_ID').selectize({
+		placeholder: 'Seleccione una o varias opciones',
+		allowEmptyOption: true,
+		closeAfterSelect: false,
+	})[0].selectize;
+		
+
+    selectareas.clear();
 
 });
 
@@ -1980,8 +1988,29 @@ $('#Tablarecocategoriasergo tbody').on('click', 'td>button.editar', function () 
     $('#modal_categoria .modal-title').html(row.data().NOMBRE_CATEGORIA_ERGO);
 
 
-		$(".listadodeturno").empty();
-        mostrarturnos(row);
+	$(".listadodeturno").empty();
+	mostrarturnos(row);
+
+
+	 if (!$('#CATEGORIA_AREAS_ID')[0].selectize) {
+            $('#CATEGORIA_AREAS_ID').selectize({
+                placeholder: 'Seleccione una o varias opciones',
+                maxItems: null
+            });
+        }
+
+        let selAreas = $('#CATEGORIA_AREAS_ID')[0].selectize;
+        selAreas.clear();
+
+        let valoresAreas = row.data().CATEGORIA_AREAS_ID;
+
+        if (typeof valoresAreas === "string") {
+            try { valoresAreas = JSON.parse(valoresAreas); } catch (e) { valoresAreas = []; }
+        }
+
+        if (Array.isArray(valoresAreas)) {
+            selAreas.setValue(valoresAreas);
+        }
 
 	
 });
@@ -2071,6 +2100,39 @@ function mostrarturnos(row) {
 }
 
 
+function cargarareaSelect() {
+
+    let reco_id = $("#recsensorial_id").val(); 
+
+    $.ajax({
+        url: '/obtenerareasergo',
+        type: 'GET',
+        data: { reco_id: reco_id },
+        success: function (response) {
+
+            let select = $('#CATEGORIA_AREAS_ID');
+            select.empty();
+
+            select.append('<option value="">Selecciona un tipo de valor</option>');
+
+            response.data.forEach(function (item) {
+                select.append(`
+                    <option 
+                        value="${item.ID_AREA_ERGO}"
+                    >
+                        ${item.NOMBRE_AREA_ERGO}
+                    </option>
+                `);
+            });
+
+        },
+        error: function () {
+            console.log('Error cargando categorías');
+        }
+    });
+
+}
+
 
 
 
@@ -2089,8 +2151,6 @@ $("#boton_nueva_area").click(function (e) {
     $("#modal_area").modal("show");
 
     $('#modal_area .modal-title').html('Nueva área');
-
-
 });
 
 $("#boton_guardar_area").click(function (e) {
@@ -2256,7 +2316,6 @@ $('#Tablarecoareasergo tbody').on('click', 'td>button.editar', function () {
     var tr = $(this).closest('tr');
     var row = Tablarecoareasergo.row(tr);
 
-
     ID_AREA_ERGO = row.data().ID_AREA_ERGO;
 
     editarDatoTabla(row.data(), 'form_area', 'modal_area',1);
@@ -2280,6 +2339,7 @@ $("#boton_nueva_ficha").click(function (e) {
     $('[id^="ficha_"]').empty();
 
     $("#contenedorActividades").empty(); 
+    $('#contenido2, #contenido3, #contenido4, #contenido5, #contenido6, #contenido7').hide();
 
     $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').show();
 
@@ -2428,45 +2488,38 @@ function toggleSeccion(id) {
     if (cont.is(':visible')) {
 
         if (id === "contenido2") {
-            if ($('#ficha_1_1').is(':empty')) {
-                fichas["1.1"].render();
-                fichas["1.3"].render();
-            }
+            $('#ficha_1_1, #ficha_1_3').empty();
+            fichas["1.1"].render();
+            fichas["1.3"].render();
         }
 
         if (id === "contenido3") {
-            if ($('#ficha_1_2').is(':empty')) {
-                fichas["1.2"].render();
-            }
+            $('#ficha_1_2').empty();
+            fichas["1.2"].render();
         }
 
         if (id === "contenido4") {
-            if ($('#ficha_2_1').is(':empty')) {
-                fichas["2.1"].render();
-                fichas["2.2"].render();
-            }
+            $('#ficha_2_1, #ficha_2_2').empty();
+            fichas["2.1"].render();
+            fichas["2.2"].render();
         }
 
         if (id === "contenido5") {
-            if ($('#ficha_3_1').is(':empty')) {
-                fichas["3.1"].render();
-            }
+            $('#ficha_3_1').empty();
+            fichas["3.1"].render();
         }
 
         if (id === "contenido6") {
-            if ($('#ficha_4_1').is(':empty')) {
-                fichas["4.1"].render();
-            }
+            $('#ficha_4_1').empty();
+            fichas["4.1"].render();
         }
 
         if (id === "contenido7") {
-            if ($('#ficha_4_2').is(':empty')) {
-                fichas["4.2"].render();
-            }
+            $('#ficha_4_2').empty();
+            fichas["4.2"].render();
         }
     }
 }
-
 
 function cargarCategoriasSelect() {
 

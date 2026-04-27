@@ -557,7 +557,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar mapa ubicación" id="boton_descargarmapaubicacion"></i>
-                                                                                <h4 class="card-title">Mapa ubicación *</h4>
+                                                                                <h4 class="card-title">Mapa ubicación </h4>
                                                                                 <div class="row">
                                                                                     <div class="col-12 clienteblock">
                                                                                         <div class="form-group">
@@ -578,7 +578,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar plano instalación" id="boton_descargarplanoinstalacion"></i>
-                                                                                <h4 class="card-title">Plano instalación <br> con áreas *</h4>
+                                                                                <h4 class="card-title">Plano instalación <br> con áreas </h4>
                                                                                 <div class="row">
                                                                                     <div class="col-12 clienteblock">
                                                                                         <div class="form-group">
@@ -588,7 +588,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -599,7 +599,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto instalación" id="boton_descargarfotoinstalacion"></i>
-                                                                                <h4 class="card-title">Foto instalación *</h4>
+                                                                                <h4 class="card-title">Foto instalación </h4>
                                                                                 <div class="row">
                                                                                     <div class="col-12 clienteblock">
                                                                                         <div class="form-group">
@@ -609,7 +609,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoinstalacion" name="inputfotoinstalacion" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoinstalacion" name="inputfotoinstalacion" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -620,7 +620,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: -4px; margin-left: 160px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar mapa de riesgo" id="boton_descargarmapaderiesgo"></i>
-                                                                                <h4 class="card-title">Mapa de peligro <br> y riesgo ergonómico *</h4>
+                                                                                <h4 class="card-title">Mapa de peligro <br> y riesgo ergonómico </h4>
                                                                                 <div class="row">
                                                                                     <div class="col-12 clienteblock">
                                                                                         <div class="form-group">
@@ -630,7 +630,7 @@
                                                                                                     /*tamaño estatico del campo foto*/
                                                                                                 }
                                                                                             </style>
-                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapaderiesgo" name="inputfotomapaderiesgo" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                            <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapaderiesgo" name="inputfotomapaderiesgo" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file=""  />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -2587,6 +2587,15 @@
                             </div>
                         </div>
 
+                          <div class="col-12">
+                            <div class="form-group">
+                                <label>Areás *</label>
+                                <select class="custom-select form-control" id="CATEGORIA_AREAS_ID" name="CATEGORIA_AREAS_ID[]" multiple required>
+                                </select>
+                            </div>
+                        </div>
+
+
                         <div class="row listadodeturno m-2"></div>
 
 
@@ -2693,7 +2702,7 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label> Departamento *</label>
-                                <select class="custom-select form-control" id="CAT_DEPARTAMENTO_FICHA" name="CAT_DEPARTAMENTO_FICHA" required disabled>
+                                <select class="custom-select form-control" id="CAT_DEPARTAMENTO_FICHA" name="CAT_DEPARTAMENTO_FICHA" required style="pointer-events:none; background-color:#e9ecef;">
                                     <option value=""></option>
                                     @foreach($catdepartamento as $dato)
                                     <option value="{{$dato->id}}">{{$dato->catdepartamento_nombre}}</option>

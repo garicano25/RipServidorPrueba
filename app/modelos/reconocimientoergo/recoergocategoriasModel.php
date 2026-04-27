@@ -16,6 +16,13 @@ class recoergocategoriasModel extends Model
         'DESCRIPCION_CATEGORIA_ERGO',
         'JSON_TURNOS',
         'PT_CATEGORIA',
+        'CATEGORIA_AREAS_ID',
         'ACTIVO'
     ];
+
+
+    protected $casts = [
+        'CATEGORIA_AREAS_ID' => 'array'        
+    ];
+ 
 }

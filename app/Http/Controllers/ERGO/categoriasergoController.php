@@ -17,15 +17,12 @@ use Illuminate\Support\Facades\Log;
 
 
 use App\modelos\reconocimientoergo\recoergocategoriasModel;
+use App\modelos\reconocimientoergo\recoergoareasModel;
 
 
 
 class categoriasergoController extends Controller
 {
-
-
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -33,9 +30,6 @@ class categoriasergoController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-
-
-
 
 
     public function Tablarecocategoriasergo(Request $request)
@@ -95,15 +89,51 @@ class categoriasergoController extends Controller
     }
 
 
+ public function obtenerareasergo(Request $request)
+    {
+        try {
+            $reco_id = $request->get('reco_id');
+
+            $areas = recoergoareasModel::where('RECO_ID', $reco_id)
+                ->where('ACTIVO', 1)
+                ->get(['ID_AREA_ERGO', 'NOMBRE_AREA_ERGO']);
+
+            return response()->json([
+                'data' => $areas
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => [],
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
 
     public function store(Request $request)
     {
         try {
             switch (intval($request->api)) {
                 case 1:
+
+
+                        $camposArray = [
+                            'CATEGORIA_AREAS_ID'
+                        ];
+
+                        foreach ($camposArray as $campo) {
+                            if (!isset($request[$campo]) || empty($request[$campo])) {
+                                $request[$campo] = null;
+                            }
+                        }
+
+
                     if ($request->ID_CATEGORIA_ERGO == 0) {
                         DB::statement('ALTER TABLE recoergocategorias AUTO_INCREMENT=1;');
                         $categorias = recoergocategoriasModel::create($request->all());
+
+
+
                     } else {
 
                         if (isset($request->ELIMINAR)) {
