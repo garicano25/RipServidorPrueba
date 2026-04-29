@@ -2353,7 +2353,7 @@ $('#Tablarecoareasergo tbody').on('click', 'td>button.editar', function () {
 $("#boton_nueva_ficha").click(function (e) {
     e.preventDefault();
 
-    ID_FICHAS_ERGO = 0;
+    ID_FICHAS_TECNICAS = 0;
 
     $('#form_fichas')[0].reset();
 
@@ -2379,7 +2379,29 @@ $("#boton_nueva_ficha").click(function (e) {
 
 
 
+$('#modal_fichas').on('hidden.bs.modal', function (e) {
 
+     ID_FICHAS_TECNICAS = 0;
+
+    $('#form_fichas')[0].reset();
+
+    cargarCategoriasSelect();
+
+    $('[id^="ficha_"]').empty();
+
+    $("#contenedorActividades").empty(); 
+    $('#contenido2, #contenido3, #contenido4, #contenido5, #contenido6, #contenido7').hide();
+
+   $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
+    .attr('style', 'display:block !important;');
+
+    $('#JSON_ACTIVIDADES').val('')
+
+
+	selectAreasFichas.clear();
+   
+
+})
 
 let selectAreasFichas;
 
@@ -2496,20 +2518,19 @@ function agregarActividad() {
 
             <div class="d-flex justify-content-between mb-2">
                 <strong>Actividad ${total}</strong>
-                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)"><i class="fa fa-trash"></i></button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)">
+                    <i class="fa fa-trash"></i>
+                </button>
             </div>
 
             <div class="actividad-row">
 
-                <!-- IZQUIERDA -->
                 <div class="actividad-left">
                     <input type="text" 
-                        name="actividades[${total}][nombre]" 
-                        class="form-control" 
+                        class="form-control actividad-nombre" 
                         placeholder="Nombre de la actividad">
                 </div>
 
-                <!-- DERECHA -->
                 <div class="actividad-right">
 
                     <button type="button" 
@@ -2530,7 +2551,7 @@ function agregarActividad() {
     `;
 
     contenedor.insertAdjacentHTML('beforeend', html);
-}	
+}
 
 function eliminarActividad(btn) {
 
@@ -2577,20 +2598,22 @@ function agregarTarea(idActividad) {
         <div class="d-flex justify-content-between">
             <small>Tarea ${total}</small>
             <button type="button" class="btn btn-danger btn-sm"
-                onclick="eliminarTarea(this, ${idActividad})"><i class="fa fa-trash"></i></button>
+                onclick="eliminarTarea(this)">
+                <i class="fa fa-trash"></i>
+            </button>
         </div>
 
         <input type="text" 
-            name="actividades[${idActividad}][tareas][${total}][nombre]" 
-            class="form-control mt-1" placeholder="Nombre">
+            class="form-control mt-1 tarea-nombre" 
+            placeholder="Nombre">
 
         <input type="text" 
-            name="actividades[${idActividad}][tareas][${total}][frecuencia]" 
-            class="form-control mt-1" placeholder="Frecuencia (No de veces durante la jornada)">
+            class="form-control mt-1 tarea-frecuencia" 
+            placeholder="Frecuencia (No de veces durante la jornada)">
 
         <input type="text" 
-            name="actividades[${idActividad}][tareas][${total}][duracion]" 
-            class="form-control mt-1" placeholder="Duración (tiempo en Min)">
+            class="form-control mt-1 tarea-duracion" 
+            placeholder="Duración (tiempo en Min)">
 
     </div>
     `;
@@ -2972,7 +2995,6 @@ ${fila13("f9","¿La tarea de levantamiento o transporte manual de cargas se real
             $('#ficha_1_3').html(html);
 
 
-// 🔥 evento automático
 $('input[name^="f"]').change(evaluarFicha_1_3);
 
 },
@@ -3019,7 +3041,6 @@ ${fila14("r11","k.","¿Hombres (<18 o >45 años) y carga > 20 kg?")}
 
             $('#ficha_1_4').html(html);
 
-// 🔥 evento automático
 $('input[name^="r"]').change(evaluarFicha_1_4);
 
 }
@@ -3057,7 +3078,6 @@ ${fila15("t2","b.","¿Se manipula una masa acumulada (peso total de todas las ca
 
             $('#ficha_1_5').html(html);
 
-// 🔥 evento automático
 $('input[name^="t"]').change(evaluarFicha_1_5);
 
 }
@@ -3175,9 +3195,8 @@ Si alguna de las respuestas es “NO”, compruebe si se trata de una tarea con 
 </div>
 `;
 
-            $('#ficha_2_1').html(html);
+$('#ficha_2_1').html(html);
 
-// 🔥 evaluación automática (como 1.1 y 1.2)
 $('input[name="a21"], input[name="b21"], input[name="c21"], input[name="d21"]')
 .change(evaluarFicha_2_1);
 
@@ -3246,7 +3265,6 @@ ${fila22("f22_14","¿La tarea requiere el uso de las manos por detrás del cuerp
 
 $('#ficha_2_2').html(html);
 
-// 🔥 MISMO EVENTO QUE 1.3 PERO CON f22
 $('input[name^="f22_"]').change(evaluarFicha_2_2);
 
 }
@@ -3288,7 +3306,6 @@ ${fila23("r23_4","d.","¿Se realiza la tarea de empuje o tracción durante más 
 
 $('#ficha_2_3').html(html);
 
-// 🔥 evento automático
 $('input[name^="r23_"]').change(evaluarFicha_2_3);
 
 }
@@ -3446,7 +3463,6 @@ Si alguna de las respuestas es “NO”, compruebe si se trata de una tarea con 
 
 $('#ficha_3_1').html(html);
 
-// 🔥 evento automático
 $('input[name="m1"], input[name="m2"], input[name="m3"], input[name="m4"], input[name="m5"], input[name="m6"]')
 .change(evaluarFicha_3_1);
 
@@ -3493,7 +3509,6 @@ ${fila32("r32_6","f.","¿El trabajo repetitivo es superior a 8 horas en el turno
 
 $('#ficha_3_2').html(html);
 
-// 🔥 evento automático
 $('input[name^="r32_"]').change(evaluarFicha_3_2);
 
 }
@@ -3559,7 +3574,6 @@ ${fila41("p11","k.","Si está sentado, ¿el ángulo de rodilla está entre 90° 
 
 $('#ficha_4_1').html(html);
 
-// 🔥 evento automático
 $('input[name^="p"]').change(evaluarFicha_4_1);
 
 }
@@ -3599,7 +3613,6 @@ ${fila42("d6","f.","¿Los brazos están neutros, o realizan flexión o abducció
 
 $('#ficha_4_2').html(html);
 
-// 🔥 evento automático
 $('input[name^="d"]').change(evaluarFicha_4_2);
 
 }
@@ -3636,17 +3649,15 @@ function evaluarFicha_1_2() {
 	let b = $('input[name="b2"]:checked').val();
 	let c = $('input[name="c2"]:checked').val();
 
-	// si no ha contestado todo → no hace nada
 	if (!a || !b || !c) return;
 
-	// 🔥 lógica real
 	let ok = ((a === "SI" || b === "SI") && c === "SI");
 
 		if (!ok) {
-		$('#ficha_1_5').html(""); // limpia
-		fichas["1.5"].render();  // muestra
+		$('#ficha_1_5').html(""); 
+		fichas["1.5"].render();  
 	} else {
-		$('#ficha_1_5').html(""); // 🔥 la oculta si corrige
+		$('#ficha_1_5').html(""); 
 	}
 
 
@@ -3721,7 +3732,6 @@ function evaluarFicha_1_5() {
 
 	if (!a || !b) return;
 
-	// lógica real
 	let algunaSI = (a === "SI" || b === "SI");
 	let todasNO = (a === "NO" && b === "NO");
 
@@ -3753,10 +3763,8 @@ function evaluarFicha_2_1() {
 	let c = $('input[name="c21"]:checked').val();
 	let d = $('input[name="d21"]:checked').val();
 
-	// si no ha contestado todo → no hace nada
 	if (!a || !b || !c || !d) return;
 
-	// lógica real
 	let ok = (a==="SI" && b==="SI" && c==="SI" && d==="SI");
 
 	if (!ok) {
@@ -3859,91 +3867,91 @@ function evaluarFicha_3_1() {
 
 function evaluarFicha_3_2() {
 
-let total = $('input[name^="r32_"]:checked').length;
+	let total = $('input[name^="r32_"]:checked').length;
 
-if (total < 6) return;
+	if (total < 6) return;
 
-let haySI = false;
+	let haySI = false;
 
-$('input[name^="r32_"]:checked').each(function () {
-    if ($(this).val() === "SI") {
-        haySI = true;
-    }
-});
+	$('input[name^="r32_"]:checked').each(function () {
+		if ($(this).val() === "SI") {
+			haySI = true;
+		}
+	});
 
-if (haySI) {
-    $('#resultadoFicha32').html(`
-        <div class="alert alert-danger">
-        Si alguna de las respuestas es <b>“SI”</b>, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha32').html(`
-        <div class="alert alert-warning">
-        Si todas las respuestas son <b>“NO”</b>, no es posible discriminar el riesgo rápidamente y se requiere evaluación específica.
-        </div>
-    `);
-}
+	if (haySI) {
+		$('#resultadoFicha32').html(`
+			<div class="alert alert-danger">
+			Si alguna de las respuestas es <b>“SI”</b>, la tarea probablemente está en la <b>Zona Roja</b> y tiene un nivel de riesgo inaceptable.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha32').html(`
+			<div class="alert alert-warning">
+			Si todas las respuestas son <b>“NO”</b>, no es posible discriminar el riesgo rápidamente y se requiere evaluación específica.
+			</div>
+		`);
+	}
 
 }
 
 function evaluarFicha_4_1() {
 
-let total = $('input[name^="p"]:checked').length;
+	let total = $('input[name^="p"]:checked').length;
 
-if (total < 11) return;
+	if (total < 11) return;
 
-let todasSI = true;
+	let todasSI = true;
 
-$('input[name^="p"]:checked').each(function () {
-    if ($(this).val() !== "SI") {
-        todasSI = false;
-    }
-});
+	$('input[name^="p"]:checked').each(function () {
+		if ($(this).val() !== "SI") {
+			todasSI = false;
+		}
+	});
 
-if (todasSI) {
-    $('#resultadoFicha41').html(`
-        <div class="alert alert-success">
-        Si a todas las preguntas ha contestado <b>“SI”</b>, la tarea tiene un riesgo aceptable y está en la <b>Zona Verde</b>.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha41').html(`
-        <div class="alert alert-warning">
-        Si una o más respuestas son <b>“NO”</b>, se recomienda realizar la evaluación específica del riesgo por postura estática.
-        </div>
-    `);
-}
+	if (todasSI) {
+		$('#resultadoFicha41').html(`
+			<div class="alert alert-success">
+			Si a todas las preguntas ha contestado <b>“SI”</b>, la tarea tiene un riesgo aceptable y está en la <b>Zona Verde</b>.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha41').html(`
+			<div class="alert alert-warning">
+			Si una o más respuestas son <b>“NO”</b>, se recomienda realizar la evaluación específica del riesgo por postura estática.
+			</div>
+		`);
+	}
 
 }
 
 function evaluarFicha_4_2() {
 
-let total = $('input[name^="d"]:checked').length;
+	let total = $('input[name^="d"]:checked').length;
 
-if (total < 6) return;
+	if (total < 6) return;
 
-let todasSI = true;
+	let todasSI = true;
 
-$('input[name^="d"]:checked').each(function () {
-    if ($(this).val() !== "SI") {
-        todasSI = false;
-    }
-});
+	$('input[name^="d"]:checked').each(function () {
+		if ($(this).val() !== "SI") {
+			todasSI = false;
+		}
+	});
 
-if (todasSI) {
-    $('#resultadoFicha42').html(`
-        <div class="alert alert-success">
-        Si a todas las preguntas ha contestado <b>“SI”</b>, la tarea tiene un riesgo aceptable y está en la <b>Zona Verde</b>.
-        </div>
-    `);
-} else {
-    $('#resultadoFicha42').html(`
-        <div class="alert alert-warning">
-        Si una o más respuestas son <b>“NO”</b>, se recomienda realizar la evaluación específica del riesgo por postura dinámica.
-        </div>
-    `);
-}
+	if (todasSI) {
+		$('#resultadoFicha42').html(`
+			<div class="alert alert-success">
+			Si a todas las preguntas ha contestado <b>“SI”</b>, la tarea tiene un riesgo aceptable y está en la <b>Zona Verde</b>.
+			</div>
+		`);
+	} else {
+		$('#resultadoFicha42').html(`
+			<div class="alert alert-warning">
+			Si una o más respuestas son <b>“NO”</b>, se recomienda realizar la evaluación específica del riesgo por postura dinámica.
+			</div>
+		`);
+	}
 
 }
 
@@ -4124,8 +4132,6 @@ $(document).ready(function(){
 
             $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:block !important;');
 
-            $('[name="P2_FRECUENCIA_CARGA"]').val("SI");
-            $('[name="P3_MANIPULACION_CARGA"]').val("SI");
 
         } else if (p1 === "NO") {
 
@@ -4147,38 +4153,82 @@ $(document).ready(function(){
 
 
 
-function obtenerActividadesJSON() {
+function generarJSONActividades() {
 
-    let actividades = [];
+    let data = [];
 
     $('#contenedorActividades .actividad-item').each(function () {
 
-        let nombreActividad = $(this).find('.actividad-left input').val();
-
-        let tareas = [];
+        let actividad = {
+            nombre: $(this).find('.actividad-nombre').val(),
+            tareas: []
+        };
 
         $(this).find('.tarea-item').each(function () {
 
-            let inputs = $(this).find('input');
-
-            tareas.push({
-                nombre: $(inputs[0]).val(),
-                frecuencia: $(inputs[1]).val(),
-                duracion: $(inputs[2]).val()
+            actividad.tareas.push({
+                nombre: $(this).find('.tarea-nombre').val(),
+                frecuencia: $(this).find('.tarea-frecuencia').val(),
+                duracion: $(this).find('.tarea-duracion').val()
             });
 
         });
 
-        actividades.push({
-            nombre: nombreActividad,
-            tareas: tareas
+        data.push(actividad);
+    });
+
+    return JSON.stringify(data);
+}
+
+function generarJSONFichas() {
+
+    let resultado = [];
+
+    $('[id^="ficha_"]').each(function () {
+
+        let id = $(this).attr('id'); 
+        let ficha = id.replace('ficha_', '').replace('_', '.'); 
+
+        let preguntas = [];
+
+        $(this).find('tr').each(function () {
+
+            let texto = $(this).find('.texto-pregunta').text().trim();
+            let radio = $(this).find('input[type="radio"]:checked');
+
+            if (radio.length > 0) {
+
+                preguntas.push({
+                    name: radio.attr('name'),
+                    texto: texto,
+                    respuesta: radio.val()
+                });
+            }
+
         });
+
+        if (preguntas.length > 0) {
+
+            resultado.push({
+                ficha: ficha,
+                preguntas: preguntas,
+                resultado: calcularResultadoFicha(ficha, preguntas)
+            });
+        }
 
     });
 
-    return actividades;
+    return JSON.stringify(resultado);
 }
 
+function calcularResultadoFicha(ficha, preguntas) {
+
+    let respuestas = preguntas.map(p => p.respuesta);
+
+    if (respuestas.includes("NO")) return "ROJO";
+
+    return "VERDE";
+}
 
 
 $("#boton_guardar_fichastecnicas").click(function (e) {
@@ -4190,10 +4240,21 @@ $("#boton_guardar_fichastecnicas").click(function (e) {
     if (formularioValido) {
 
 
-		  let actividadesJSON = obtenerActividadesJSON();
-		$('#JSON_ACTIVIDADES').val(JSON.stringify(actividadesJSON));
-		
+		let json = generarJSONActividades();
 
+		if (!$('#JSON_ACTIVIDADES').length) {
+			$('#form_fichas').append('<input type="hidden" name="JSON_ACTIVIDADES" id="JSON_ACTIVIDADES">');
+		}
+
+		$('#JSON_ACTIVIDADES').val(json);
+
+		let jsonFichas = generarJSONFichas();
+
+		if (!$('#JSON_FICHAS').length) {
+			$('#form_fichas').append('<input type="hidden" name="JSON_FICHAS" id="JSON_FICHAS">');
+		}
+
+		$('#JSON_FICHAS').val(jsonFichas);
 		
     if (ID_FICHAS_TECNICAS == 0) {
         
@@ -4349,6 +4410,113 @@ function mostrarTablarecofichasergo() {
 
 
 
+function pintarActividades(json) {
+
+    let contenedor = $('#contenedorActividades');
+    contenedor.empty();
+
+    if (!json) return;
+
+    let data;
+
+    if (typeof json === "string") {
+        try {
+            data = JSON.parse(json);
+        } catch (e) {
+            data = [];
+        }
+    } else {
+        data = json;
+    }
+
+    if (!Array.isArray(data)) return;
+
+    data.forEach((actividad, index) => {
+
+        let num = index + 1;
+
+        let htmlActividad = `
+        <div class="actividad-item" id="actividad_${num}">
+            
+            <div class="actividad-card">
+
+                <div class="d-flex justify-content-between mb-2">
+                    <strong>Actividad ${num}</strong>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarActividad(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+                <div class="actividad-row">
+
+                    <div class="actividad-left">
+                        <input type="text" 
+                            class="form-control actividad-nombre" 
+                            value="${actividad.nombre || ''}">
+                    </div>
+
+                    <div class="actividad-right">
+
+                        <button type="button" 
+                            class="btn btn-agregar-tarea"
+                            onclick="agregarTarea(${num})">
+                            + Agregar tarea
+                        </button>
+
+                        <div id="tareas_${num}"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+        contenedor.append(htmlActividad);
+
+        if (Array.isArray(actividad.tareas)) {
+
+            actividad.tareas.forEach((tarea, i) => {
+
+                let numT = i + 1;
+
+                let htmlTarea = `
+                <div class="tarea-item">
+
+                    <div class="d-flex justify-content-between">
+                        <small>Tarea ${numT}</small>
+                        <button type="button" class="btn btn-danger btn-sm"
+                            onclick="eliminarTarea(this)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <input type="text" 
+                        class="form-control mt-1 tarea-nombre" 
+                        value="${tarea.nombre || ''}">
+
+                    <input type="text" 
+                        class="form-control mt-1 tarea-frecuencia" 
+                        value="${tarea.frecuencia || ''}">
+
+                    <input type="text" 
+                        class="form-control mt-1 tarea-duracion" 
+                        value="${tarea.duracion || ''}">
+
+                </div>
+                `;
+
+                $(`#tareas_${num}`).append(htmlTarea);
+
+            });
+
+        }
+
+    });
+}
+
 $('#Tablarecofichasergo tbody').on('click', 'td>button.editar', function () {
 
     var tr = $(this).closest('tr');
@@ -4362,15 +4530,8 @@ $('#Tablarecofichasergo tbody').on('click', 'td>button.editar', function () {
 
     $('#modal_fichas .modal-title').html(data.NOMBRE_EMPLEADO_FICHA);
 
-
-	if (row.data().P1_CARGA_MAYOR_3KG === "SI") {
-            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:block !important;');
-    } else  {
-            $('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION').attr('style', 'display:none !important;');
-	}
 	
-
-
+	
     let areasGuardadas = data.CAT_AREAS_FICHA;
 
     if (typeof areasGuardadas === "string") {
@@ -4394,6 +4555,148 @@ $('#Tablarecofichasergo tbody').on('click', 'td>button.editar', function () {
 
     });
 
+    $("#contenedorActividades").empty(); 
+	pintarActividades(data.JSON_ACTIVIDADES);
+
+	setTimeout(() => {
+
+		limpiarTodasLasFichas();
+
+	
+		if (data.P1_CARGA_MAYOR_3KG !== "SI") {
+			$('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
+				.attr('style', 'display:none !important;');
+		} else {
+			$('#TEXTO_MANIPULACION, #LEVANTAMIENTO_CARGA, #TRANSPORTE_CARGAS, #EMPUJE_TRACCION')
+				.attr('style', 'display:block !important;');
+		}
+
+		fichas["1.1"].render();
+		fichas["1.3"].render();
+		fichas["1.2"].render();
+		fichas["2.1"].render();
+		fichas["2.2"].render();
+		fichas["3.1"].render();
+		fichas["4.1"].render();
+		fichas["4.2"].render();
+
+		pintarFichasBase(data.JSON_FICHAS);
+
+		activarLogicaFichas();
+
+		setTimeout(() => {
+
+		pintarFichasDependientes(data.JSON_FICHAS);
+
+		abrirSeccionesSegunJSON(data.JSON_FICHAS);
+
+		}, 200);
+
+	}, 300);
 
 
 });
+
+
+function limpiarTodasLasFichas() {
+
+    $('[id^="ficha_"]').each(function () {
+        $(this).html('');
+    });
+
+    $('[id^="resultadoFicha"]').html('');
+}
+
+
+function abrirSeccionesSegunJSON(json) {
+
+    let data = typeof json === "string" ? JSON.parse(json) : json;
+
+    let abrir2 = false;
+    let abrir3 = false;
+    let abrir4 = false;
+    let abrir5 = false;
+    let abrir6 = false;
+    let abrir7 = false;
+
+    data.forEach(f => {
+
+        let ficha = f.ficha;
+
+        if (["1.1","1.3","1.4"].includes(ficha)) abrir2 = true;
+
+        if (["1.2","1.5"].includes(ficha)) abrir3 = true;
+
+        if (ficha.startsWith("2.")) abrir4 = true;
+
+        if (ficha.startsWith("3.")) abrir5 = true;
+
+        if (ficha === "4.1") abrir6 = true;
+
+        if (ficha === "4.2") abrir7 = true;
+
+    });
+
+    if (abrir2) $('#contenido2').show();
+    if (abrir3) $('#contenido3').show();
+    if (abrir4) $('#contenido4').show();
+    if (abrir5) $('#contenido5').show();
+    if (abrir6) $('#contenido6').show();
+    if (abrir7) $('#contenido7').show();
+}
+
+
+
+function pintarFichasBase(json) {
+
+    let data = typeof json === "string" ? JSON.parse(json) : json;
+
+    data.forEach(f => {
+
+        if (["1.1","1.2","2.1","3.1","4.1"].includes(f.ficha)) {
+
+            f.preguntas.forEach(p => {
+                $(`input[name="${p.name}"][value="${p.respuesta}"]`).prop('checked', true);
+            });
+
+        }
+
+    });
+}
+
+function pintarFichasDependientes(json) {
+
+    let data = typeof json === "string" ? JSON.parse(json) : json;
+
+    data.forEach(f => {
+
+        if (!["1.1","1.2","2.1","3.1","4.1"].includes(f.ficha)) {
+
+            f.preguntas.forEach(p => {
+                $(`input[name="${p.name}"][value="${p.respuesta}"]`).prop('checked', true);
+            });
+
+        }
+
+    });
+}
+
+
+function activarLogicaFichas() {
+
+    evaluarFicha_1_1();
+    evaluarFicha_1_2();
+    evaluarFicha_1_3();
+    evaluarFicha_1_4();
+    evaluarFicha_1_5();
+
+    evaluarFicha_2_1();
+    evaluarFicha_2_2();
+    evaluarFicha_2_3();
+
+    evaluarFicha_3_1();
+    evaluarFicha_3_2();
+
+    evaluarFicha_4_1();
+    evaluarFicha_4_2();
+}

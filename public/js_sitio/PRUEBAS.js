@@ -1,124 +1,12 @@
-$("#boton_nueva_area").click(function (e) {
-    e.preventDefault();
-
-
-    ID_AREA_ERGO = 0;
-       
-
-
-    $('#form_area').each(function(){
-        this.reset();
-    });
-
-
-    $("#modal_area").modal("show");
-
-    $('#modal_area .modal-title').html('Nueva área');
-
-
-});
-
-
-
-$("#boton_guardar_area").click(function (e) {
-    e.preventDefault();
-
-
-    formularioValido = validarFormulario3($('#form_area'))
-
-    if (formularioValido) {
-
-    if (ID_AREA_ERGO == 0) {
-        
-        alertMensajeConfirm({
-            title: "¿Desea guardar la información?",
-            text: "Al guardarla, se podra usar",
-            icon: "question",
-        },async function () { 
-
-            await loaderbtn('boton_guardar_area')
-            await ajaxAwaitFormData({ api: 1,RECO_ID: recsensorial, ID_AREA_ERGO: ID_AREA_ERGO }, 'recoergoareas', 'form_area', 'boton_guardar_area', { callbackAfter: true, callbackBefore: true }, () => {
-        
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Espere un momento',
-                    text: 'Estamos guardando la información',
-                    showConfirmButton: false
-                })
-
-                $('.swal2-popup').addClass('ld ld-breath')
-        
-                
-            }, function (data) {
-                    
-                    ID_AREA_ERGO = data.areas.ID_AREA_ERGO
-                    alertMensaje('success','Información guardada correctamente', 'Esta información esta lista para usarse',null,null, 1500)
-                     $('#modal_area').modal('hide')
-                    document.getElementById('form_area').reset();
-                    Tablarecoareasergo.ajax.reload()
-                
-            })
-            
-            
-            
-        }, 1)
-        
-    } else {
-            alertMensajeConfirm({
-            title: "¿Desea editar la información de este formulario?",
-            text: "Al guardarla, se podra usar",
-            icon: "question",
-        },async function () { 
-
-            await loaderbtn('boton_guardar_area')
-            await ajaxAwaitFormData({ api: 1, RECO_ID: recsensorial, ID_AREA_ERGO: ID_AREA_ERGO }, 'recoergoareas', 'form_area', 'boton_guardar_area', { callbackAfter: true, callbackBefore: true }, () => {
-        
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Espere un momento',
-                    text: 'Estamos guardando la información',
-                    showConfirmButton: false
-                })
-
-                $('.swal2-popup').addClass('ld ld-breath')
-        
-                
-            }, function (data) {
-                    
-                setTimeout(() => {
-
-                    ID_AREA_ERGO = data.areas.ID_AREA_ERGO
-                    alertMensaje('success', 'Información editada correctamente', 'Información guardada')
-                     $('#modal_area').modal('hide')
-                    document.getElementById('form_area').reset();
-                    Tablarecoareasergo.ajax.reload()
-
-                }, 300);  
-            })
-        }, 1)
-    }
-
-} else {
-    alertToast('Por favor, complete todos los campos del formulario.', 'error', 2000)
-
-}
-    
-});
-
-
-
-
-
-
-function mostrartablarecoareasergo() {
+function mostrarTablarecofichasergo() {
 	try {
-		var ruta = "/Tablarecoareasergo";
+		var ruta = "/Tablarecofichasergo";
 
-		if (Tablarecoareasergo != null) {
-			Tablarecoareasergo.destroy();
+		if (Tablarecofichasergo != null) {
+			Tablarecofichasergo.destroy();
 		}
 
-		Tablarecoareasergo = $('#Tablarecoareasergo').DataTable({
+		Tablarecofichasergo = $('#Tablarecofichasergo').DataTable({
 			"ajax": {
 				"url": ruta,
 				"type": "get",
@@ -127,7 +15,7 @@ function mostrartablarecoareasergo() {
 					ergoid: recsensorial 
 				},
 				"error": function (xhr, error, code) {
-					console.log('error en Tablarecoareasergo');
+					console.log('error en Tablarecofichasergo');
 				}
 			},
 			"columns": [
@@ -138,11 +26,11 @@ function mostrartablarecoareasergo() {
 					}
 				},
 				{
-					"data": "NOMBRE_AREA_ERGO",
+					"data": "NOMBRE_EMPLEADO_FICHA",
 					"defaultContent": "-"
 				},
 				{
-					"data": "DESCRIPCION_AREA_ERGO",
+					"data": "NO_EMPLEADO_FICHA",
 					"defaultContent": "-"
 				},
 				{ 
@@ -175,26 +63,11 @@ function mostrartablarecoareasergo() {
 			}
 		});
 
-		Tablarecoareasergo.on('draw', function () {
+		Tablarecofichasergo.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 
 	} catch (exception) {
-		console.error("Error en Tablarecoareasergo:", exception);
+		console.error("Error en Tablarecofichasergo:", exception);
 	}
 }
-
-
-
-$('#Tablarecoareasergo tbody').on('click', 'td>button.editar', function () {
-    var tr = $(this).closest('tr');
-    var row = Tablarecoareasergo.row(tr);
-
-
-    ID_AREA_ERGO = row.data().ID_AREA_ERGO;
-
-    editarDatoTabla(row.data(), 'form_area', 'modal_area');
-
-    $('#modal_area .modal-title').html(row.data().NOMBRE_AREA_ERGO);
-
-});

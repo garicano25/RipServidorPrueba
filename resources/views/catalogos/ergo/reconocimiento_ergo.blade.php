@@ -2590,7 +2590,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Areás *</label>
-                                <select class="custom-select form-control" id="CATEGORIA_AREAS_ID" name="CATEGORIA_AREAS_ID[]" multiple >
+                                <select class="custom-select form-control" id="CATEGORIA_AREAS_ID" name="CATEGORIA_AREAS_ID[]" multiple>
                                 </select>
                             </div>
                         </div>
@@ -2690,6 +2690,7 @@
 
 
                         <input type="hidden" name="JSON_ACTIVIDADES" id="JSON_ACTIVIDADES">
+                        <input type="hidden" name="JSON_FICHAS" id="JSON_FICHAS">
 
                         <!-- CATEGORÍA -->
                         <div class="col-4">
@@ -2950,7 +2951,7 @@
                                                 <label>
                                                     2. ¿Con qué frecuencia realiza actividades que involucren el manejo manual de cargas (más de una vez al día)?
                                                 </label>
-                                                <select class="form-control" name="P2_FRECUENCIA_CARGA" id="P2_FRECUENCIA_CARGA" required style="pointer-events:none; background-color:#e9ecef;">
+                                                <select class="form-control" name="P2_FRECUENCIA_CARGA" id="P2_FRECUENCIA_CARGA" required>
                                                     <option value="">Seleccione</option>
                                                     <option value="SI">Sí</option>
                                                     <option value="NO">No</option>
@@ -2963,7 +2964,7 @@
                                                 <label>
                                                     3. ¿Tiene que levantar, bajar, transportar, empujar, jalar y/o estibar objetos o materiales como parte de su trabajo?
                                                 </label>
-                                                <select class="form-control" name="P3_MANIPULACION_CARGA" id="P3_MANIPULACION_CARGA" required style="pointer-events:none; background-color:#e9ecef;">
+                                                <select class="form-control" name="P3_MANIPULACION_CARGA" id="P3_MANIPULACION_CARGA" required>
                                                     <option value="">Seleccione</option>
                                                     <option value="SI">Sí</option>
                                                     <option value="NO">No</option>
@@ -3263,7 +3264,6 @@
                         @endif
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
