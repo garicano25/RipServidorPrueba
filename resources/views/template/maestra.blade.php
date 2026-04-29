@@ -561,7 +561,7 @@ use Illuminate\Support\Str;
 
                         @if (preg_match('/\breconocimientoergo\b/', request()->path()))
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Psicólogo']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('reconocimientoergo.index')}}" aria-expanded="false">
                                 <i class="mdi mdi-access-point"></i><span class="hide-menu">Reconocimiento</span>
