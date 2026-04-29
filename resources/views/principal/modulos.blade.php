@@ -50,14 +50,14 @@
                         <div class="d-flex justify-content-end mr-5">
 
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
                             <a class="unauthorized" href="#">
 
                                 @else
                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
                                 <a class="cta" href="/tablero">
 
-                                    @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                                    @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
                                     <a class="cta" href="{{route('cliente.index')}}">
 
                                         @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
@@ -114,7 +114,7 @@
                     <div class="col-7">
                         <div class="d-flex justify-content-start mr-5">
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo','Capturista']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Capturista']))
                             <a class="unauthorized" href="#">
 
                                 @else
@@ -149,7 +149,7 @@
                     <div class="col-8">
                         <div class="d-flex justify-content-end mr-5 mb-4">
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo']))
                             <a class="unauthorized" href="#">
 
                                 @else
@@ -189,14 +189,14 @@
                     <div class="col-6">
                         <div class="d-flex justify-content-start ml-5">
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
                             <a class="unauthorized" href="#">
 
                                 @else
-                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
                                 <a class="cta" href="{{route('proyectos.index')}}">
 
-                                    @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                                    @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
                                     <a class="cta" href="{{route('proyectos.index')}}">
 
                                         @endif
@@ -224,7 +224,7 @@
 
                 <div class="d-flex justify-content-center ml-5">
 
-                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Ergónomo']))
                     <a id="btnErgo" class="cta unauthorized" href="#">
                         @else
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
@@ -277,7 +277,7 @@
                     <div class="col-8">
                         <div class="d-flex justify-content-start ml-5 mb-4">
 
-                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                            @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
                             <a class="unauthorized" href="#">
                                 @else
                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
