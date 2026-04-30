@@ -2763,7 +2763,7 @@
                             <div class="form-group">
                                 <label>Edad *</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="EDAD_EMPLEADO_FICHA" id="EDAD_EMPLEADO_FICHA">
+                                    <input type="text" class="form-control" name="EDAD_EMPLEADO_FICHA" id="EDAD_EMPLEADO_FICHA" readonly>
                                 </div>
                             </div>
                         </div>

@@ -2414,6 +2414,32 @@ $(document).ready(function () {
 
 });
 
+function calcularEdad(fechaNacimiento) {
+    if (!fechaNacimiento) return '';
+
+    const partes = fechaNacimiento.split('-'); 
+
+    if (partes.length !== 3) return '';
+
+    const nacimiento = new Date(partes[0], partes[1] - 1, partes[2]);
+    const hoy = new Date();
+
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mesDiferencia = hoy.getMonth() - nacimiento.getMonth();
+
+    if (mesDiferencia < 0 || (mesDiferencia === 0 && hoy.getDate() < nacimiento.getDate())) {
+        edad--;
+    }
+
+    return edad >= 0 ? edad : '';
+}
+
+$('#FECHA_NACIMIENTO').on('change blur', function () {
+    const fecha = $(this).val();
+    const edad = calcularEdad(fecha);
+
+    $('#EDAD_EMPLEADO_FICHA').val(edad);
+});
 
 
 function cargarCategoriasSelect(callback = null) {
