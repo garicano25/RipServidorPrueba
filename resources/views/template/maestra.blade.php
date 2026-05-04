@@ -195,6 +195,15 @@ use Illuminate\Support\Str;
     @endif
 
 
+    @if(request()->is('recergocatalogo'))
+    <!-- file upload -->
+    <link rel="stylesheet" href="/assets/plugins/dropify/dist/css/dropify.min.css">
+    <!-- form_wizard_steps -->
+    <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
+    </link>
+    {{-- Select search filter --}}
+    <link href="/assets/plugins/select-search/selectize.css" rel="stylesheet" type="text/css" />
+    @endif
 
     @if(request()->is('externo'))
     {{-- datatable --}}
@@ -283,8 +292,8 @@ use Illuminate\Support\Str;
                     @endif
 
 
-
-                    @if (preg_match('/\breconocimientoergo\b/', request()->path()))
+                    @if (request()->is('reconocimientoergo*') || request()->is('recergocatalogo*'))
+                    
                     <div class="navbar-nav" style="left: 35%; position: absolute;">
                         <h1 style="color:#ffff;font-weight: bold;">Factor de Riesgo Ergonómico</h1>
                     </div>
@@ -559,18 +568,29 @@ use Illuminate\Support\Str;
                         @endif
 
 
-                        @if (preg_match('/\breconocimientoergo\b/', request()->path()))
-
+                        @if (request()->is('reconocimientoergo*') || request()->is('recergocatalogo*'))
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Ergónomo']))
+
                         <li>
                             <a class="has-arrow " href="{{route('reconocimientoergo.index')}}" aria-expanded="false">
                                 <i class="mdi mdi-access-point"></i><span class="hide-menu">Reconocimiento</span>
                             </a>
                         </li>
+
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
+                                <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
+                            </a>
+
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{route('recergocatalogo.index')}}">Catálogo Ergo</a></li>
+                            </ul>
+                        </li>
+
+                        @endif
                         @endif
 
 
-                        @endif
                         <!-- 
                         @if (preg_match('/\bpsicosocial\b/', request()->path()))
 
@@ -933,7 +953,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-    <script src="/js_sitio/reconocimientoergo.js?v=5"></script>
+    <script src="/js_sitio/reconocimientoergo.js?v=6"></script>
     <script src="/js_sitio/funcionesgeneralesergo.js"></script>
     @endif
 
@@ -1225,6 +1245,23 @@ use Illuminate\Support\Str;
     <script src="js/custom.min.js"></script>
     @endif
 
+    @if(request()->is('recergocatalogo'))
+    {{-- datatable --}}
+
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/js_sitio/recergocatalogo.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    {{-- Select2 search filter --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- jQuery file upload -->
+    <script src="/js/jasny-bootstrap.js"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/custom.min.js"></script>
+    @endif
 
 
 

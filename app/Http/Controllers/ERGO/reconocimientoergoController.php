@@ -21,7 +21,11 @@ use App\modelos\reconocimientoergo\reconocimientoergoModel;
 use App\modelos\recsensorial\catdepartamentoModel;
 use App\modelos\recsensorial\catmovilfijoModel;
 
+use App\modelos\reconocimientoergo\catergo_regimencontractualModel;
+use App\modelos\reconocimientoergo\catergo_jornada;
+use App\modelos\reconocimientoergo\catergo_turnoModel;
 
+use App\modelos\reconocimientoergo\catergo_definicionesModel;
 
 class reconocimientoergoController extends Controller
 {
@@ -44,7 +48,15 @@ class reconocimientoergoController extends Controller
         $catdepartamento = catdepartamentoModel::where('catdepartamento_activo', 1)->orderBy('catdepartamento_nombre', 'ASC')->get();
         $catmovilfijo = catmovilfijoModel::where('catmovilfijo_activo', 1)->get();
 
-        return view('catalogos.ergo.reconocimiento_ergo', compact('catdepartamento', 'catmovilfijo'));
+
+        $catregimen = catergo_regimencontractualModel::where('ACTIVO', 1)->get();
+        $catjornada = catergo_jornada::where('ACTIVO', 1)->get();
+        $caturno = catergo_turnoModel::where('ACTIVO', 1)->get();
+        $catdefiniciones = catergo_definicionesModel::where('USO_DEFINICIONES', "Reconocimiento")
+            ->orderBy('CONCEPTO_DEFINICION', 'ASC')
+            ->get();
+
+        return view('catalogos.ergo.reconocimiento_ergo', compact('catdepartamento', 'catmovilfijo', 'catregimen', 'catjornada', 'caturno', 'catdefiniciones'));
     }
 
 

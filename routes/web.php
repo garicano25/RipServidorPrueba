@@ -2152,6 +2152,16 @@ Route::get('getCategoriasErgo', ['as' => 'ERGO.getCategoriasErgo', 'uses' => 'ER
 Route::get('Tablarecofichasergo', ['as' => 'ERGO.Tablarecofichasergo', 'uses' => 'ERGO\fichasergoController@Tablarecofichasergo']);
 
 
+////////// CATALOGO ERGO
+
+
+Route::resource('recergocatalogo', 'ERGO\catergoController');
+
+
+Route::get('ergoconsultacatalogo/{num_catalogo}', ['as' => 'ERGO.ergoconsultacatalogo', 'uses' => 'ERGO\catergoController@ergoconsultacatalogo']);
+
+Route::get('ergocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 'ERGO.ergocatalogodesactiva', 'uses' => 'ERGO\catergoController@ergocatalogodesactiva']);
+
 
 Route::get('/clear-cache', function () {
     Artisan::call('config:cache');

@@ -1013,15 +1013,10 @@
                                     <a href="#3_1" class="list-group-item submenu">3.1.- Objetivo general <i class="fa fa-times" id="menureporte_3_1"></i></a>
                                     <a href="#3_2" class="list-group-item submenu">3.2.- Objetivos específicos <i class="fa fa-times" id="menureporte_3_2"></i></a>
                                     <a href="#4" class="list-group-item">4.- Metodología</a>
-                                    <a href="#4_1" class="list-group-item submenu">4.1.- Reconocimiento de los agentes y factores <i class="fa fa-times" id="menureporte_4_1"></i></a>
-                                    <a href="#4_2" class="list-group-item submenu">4.2.- Método de evaluación de los niveles de <i class="fa fa-times" id="menureporte_4_2"></i></a>
-                                    <a href="#4_2_1" class="list-group-item subsubmenu">4.2.1.- Cálculo del índice de áreas <i class="fa fa-times" id="menureporte_4_2_1"></i></a>
-                                    <a href="#4_2_2" class="list-group-item subsubmenu">4.2.2.- Evaluación del factor de reflexión <i class="fa fa-times" id="menureporte_4_2_2"></i></a>
                                     <a href="#5" class="list-group-item">5.- Resultados</a>
                                     <a href="#5_1" class="list-group-item submenu">5.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_5_1"></i></a>
                                     <a href="#5_2" class="list-group-item submenu">5.2.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_5_2"></i></a>
-                                    <a href="#5_3" class="list-group-item submenu">5.3.- Población ocupacionalmente expuesta <i class="fa fa-times" id="menureporte_5_3"></i></a>
-                                    <a href="#5_4" class="list-group-item submenu">5.4.- Actividades del personal expuesto <i class="fa fa-times" id="menureporte_5_4"></i></a>
+
                                     <!-- <a href="#6" class="list-group-item">6.- Evaluación</a>
                                     <a href="#6_1" class="list-group-item submenu">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje) <i class="fa fa-times" id="menureporte_6_1"></i></a>
                                     <a href="#6_2" class="list-group-item submenu">6.2.- Método empleado y criterio de selección <i class="fa fa-times" id="menureporte_6_2"></i></a>
@@ -1280,7 +1275,12 @@
                                                             <label>Año</label>
                                                             <select class="custom-select form-control" id="reporteiluminacion_fecha" name="reporteiluminacion_fecha">
                                                                 <option value="" selected disabled></option>
-
+                                                                <script>
+                                                                    const currentYear = new Date().getFullYear();
+                                                                    for (let i = currentYear; i >= 2017; i--) {
+                                                                        document.write('<option value="' + i + '">' + i + '</option>');
+                                                                    }
+                                                                </script>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1315,34 +1315,57 @@
                                     <h4 class="card-title" id="2">2.- Definiciones</h4>
                                     <div class="row">
                                         <div class="col-12">
-                                            <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                                                <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva definición" id="boton_reporte_nuevadefinicion">
-                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Nueva definición
-                                                </button>
-                                            </ol>
                                             <form enctype="multipart/form-data" method="post" name="form_reporte_listadefiniciones" id="form_reporte_listadefiniciones">
-                                                <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_definiciones">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="130">Concepto</th>
-                                                            <th>Descripción / Fuente</th>
-                                                            <th width="60">Editar</th>
-                                                            <th width="60">Eliminar</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Concepto</td>
-                                                            <td class="justificado">Descipción y fuente</td>
-                                                            <td><button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button></td>
-                                                            <td><button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-2x"></i></button></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <div class="row mb-3">
+                                                    <table class="table-sm" style="width: 96%; table-layout: fixed;">
+                                                        <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_definiciones">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="130">Concepto</th>
+                                                                    <th>Descripción / Fuente</th>
+                                                                    <th width="80">Activo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($catdefiniciones as $dato)
+                                                                <tr>
+                                                                    <td>
+                                                                        {{ $dato->CONCEPTO_DEFINICION }}
+                                                                    </td>
+
+                                                                    <td class="justificado">
+                                                                        {{ $dato->DESCRIPCION_DEFINICION }}
+
+                                                                        @if($dato->FUENTE_DEFINICION)
+                                                                        <br>
+                                                                        <span style="font-style: italic; color: gray;">
+                                                                            Fuente: {{ $dato->FUENTE_DEFINICION }}
+                                                                        </span>
+                                                                        @endif
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="switch">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="recomendacion_checkbox"
+                                                                                    name="DEFINICONES_INFORME[]"
+                                                                                    value="{{ $dato->ID_DEFINICIONES }}"
+                                                                                    onclick="activa_recomendacion(this);"
+                                                                                    {{ $dato->ACTIVO == 1 ? '' : '' }}>
+                                                                                <span class="lever switch-col-light-blue"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <h4 class="card-title" id="3">3.- Objetivos</h4>
+                                    <h4 class="card-title mt-2" id="3">3.- Objetivos</h4>
                                     <h4 class="card-title" id="3_1">3.1.- Objetivo general</h4>
                                     <form method="post" enctype="multipart/form-data" name="form_reporte_objetivogeneral" id="form_reporte_objetivogeneral">
                                         <div class="row">
@@ -1372,98 +1395,52 @@
                                         </div>
                                     </form>
                                     <h4 class="card-title" id="4">4.- Metodología</h4>
-                                    <h4 class="card-title" id="4_1">4.1.- Reconocimiento de los agentes y factores</h4>
+
                                     <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_1" id="form_reporte_metodologia_4_1">
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_metodologia_4_1" name="reporteiluminacion_metodologia_4_1" required></textarea>
+                                                <p class="justificado">La metodología utilizada para la identificación del peligro y riesgo ergonómico se basa en el modelo aplicando la ISO 12995 donde se contemplan los aspectos de la ergonomía física: </p>
+                                                <div class="text-center mb-3">
+                                                    <img src="{{ asset('assets/images/ergo/metodologiaergo1.png') }}"
+                                                        style="max-width: 50%; height: auto;">
                                                 </div>
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <h4 class="card-title" id="4_2">4.2.- Método de evaluación de los niveles de iluminación</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2" id="form_reporte_metodologia_4_2">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reporteiluminacion_metodologia_4_2" name="reporteiluminacion_metodologia_4_2" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2">Guardar metodología punto 4.2 <i class="fa fa-save"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <h4 class="card-title" id="4_2_1">4.2.1.- Cálculo del índice de áreas</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2_1" id="form_reporte_metodologia_4_2_1">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_metodologia_4_2_1" name="reporteiluminacion_metodologia_4_2_1" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="informacion_estatica">
 
+                                                <p style="font-style: italic;">
+                                                    <strong>Nota:</strong> donde sale la palabra control del es control del riesgo.
+                                                </p>
+
+                                                <ul>
+                                                    <li>Ficha 1: levantamiento manual de cargas</li>
+                                                    <li>Ficha 2: transporte manual de cargas</li>
+                                                    <li>Ficha 3: empuje y tracción de cargas</li>
+                                                    <li>Ficha 4: movimientos repetitivos de la extremidad superior</li>
+                                                    <li>Ficha 5: posturas de trabajo estático</li>
+                                                    <li>Ficha 6: posturas forzadas dinámicas</li>
+                                                </ul>
+
+                                                <p style="text-align: justify;">
+                                                    Que para el caso de la re
+                                                    pública Mexicana, está contemplada la NOM-036-1-STPS-2018 en los aspectos de la ficha 1, 2 y 3;
+                                                    para lo cual se busca identificar los peligros de DESÓRDENES MUSCULOESQUELÉTICOS DE COLUMNA LUMBAR (TME),
+                                                    para posteriormente estimar el riesgo y construir un mapa de estimación de riesgos por los aspectos referidos en las fichas ya mencionadas.
+                                                    Posterior a esta fase se debe elaborar un plan estratégico para la prevención de los TME de origen laboral
+                                                    y finalmente un plan de actuación anual.
+                                                </p>
+
+                                                <div class="text-center mt-3">
+                                                    <img src="{{ asset('assets/images/ergo/metodologiaergo2.png') }}"
+                                                        style="max-width: 50%; height: auto;">
                                                 </div>
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2_1">Guardar metodología punto 4.2.1 <i class="fa fa-save"></i></button>
+
                                             </div>
                                         </div>
                                     </form>
-                                    <h4 class="card-title" id="4_2_2">4.2.2.- Evaluación del factor de reflexión</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2_2" id="form_reporte_metodologia_4_2_2">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_metodologia_4_2_2" name="reporteiluminacion_metodologia_4_2_2" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2_2">Guardar metodología punto 4.2.2 <i class="fa fa-save"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <h4 class="card-title" id="4_2_4">4.2.3.- Niveles de iluminación</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2_4" id="form_reporte_metodologia_4_2_4">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_metodologia_4_2_4" name="reporteiluminacion_metodologia_4_2_4" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2_4">Guardar metodología punto 4.2.3 <i class="fa fa-save"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <h4 class="card-title" id="4_2_3">4.2.4.- Niveles máximos permisibles del factor de reflexión</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2_3" id="form_reporte_metodologia_4_2_3">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_metodologia_4_2_3" name="reporteiluminacion_metodologia_4_2_3" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12" style="text-align: right;">
-                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2_3">Guardar metodología punto 4.2.4 <i class="fa fa-save"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <h4 class="card-title" id="5">5.- Reconocimiento</h4>
+
+
+
+
+
+                                    <h4 class="card-title mt-2" id="5">5.- Reconocimiento</h4>
                                     <h4 class="card-title" id="5_1">5.1.- Ubicación de la instalación</h4>
                                     <form method="post" enctype="multipart/form-data" name="form_reporte_ubicacion" id="form_reporte_ubicacion">
                                         <div class="row">
@@ -1477,11 +1454,11 @@
                                             </div>
                                             <div class="col-6">
                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: block;" data-toggle="tooltip" title="Descargar mapa ubicación" id="boton_descargarmapaubicacion"></i>
-                                                <input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteiluminacionubicacionfoto" name="reporteiluminacionubicacionfoto" onchange="redimencionar_mapaubicacion();" required>
+                                                <input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteubicacionfoto" name="reporteubicacionfoto" onchange="redimencionar_mapaubicacion();" required>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-12" style="text-align: right;">
+                                            <div class="col-12 mt-3" style="text-align: right;">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_ubicacion">Guardar ubicación <i class="fa fa-save"></i></button>
                                                 </div>
@@ -1509,1014 +1486,12 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <h4 class="card-title" id="5_3">5.3.- Población ocupacionalmente expuesta</h4>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <p class="justificado">En este apartado se muestra la actividad principal desarrollada en cada una de las áreas, involucrando al personal/categoría adscrito que integran a la <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>:</p>
-                                            <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                                                <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva categoría" id="boton_reporte_nuevacategoria">
-                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Nueva categoría
-                                                </button>
-                                            </ol>
-
-                                            <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                                                <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva área" id="boton_reporte_nuevaarea">
-                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Nueva área
-                                                </button>
-
-                                                <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar" id="boton_reporte_iluminacion_importar_area">
-                                                    <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Importar
-                                                </button>
 
 
-                                            </ol>
-                                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_area">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="60">No.</th>
-                                                        <th width="130">Instalación</th>
-                                                        <th width="130">Área</th>
-                                                        <th width="">Categoría</th>
-                                                        <th width="60">Total</th>
-                                                        <th width="90">Pts eval. IC</th>
-                                                        <th width="90">Pts eval. PT</th>
-                                                        <th width="60">Editar</th>
-                                                        <th width="60">Eliminar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <h4 class="card-title" id="5_4">5.4.- Actividades del personal expuesto</h4>
-                                    <div class="row">
-
-                                    </div>
-                                    <h4 class="card-title" id="5_5">5.5.- Descripción del área </h4>
-                                    <div class="row">
-                                        <div class="col-12">
-
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="informacion_estatica">
-                                                <br><b>N/P:</b> No Proporcionado<br>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-CARGANDO -->
-                    <!-- ============================================================== -->
-                    <div id="modal_cargando" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-sm" style="max-width: 350px!important; margin-top: 250px;">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                </div>
-                                <div class="modal-body" style="text-align: center;">
-                                    <i class='fa fa-spin fa-spinner fa-5x'></i>
-                                    <br><br>Por favor espere <span id="segundos_espera">0</span>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-CARGANDO -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- VISOR-MODAL -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_visor>.modal-dialog {
-                            min-width: 900px !important;
-                        }
-
-                        iframe {
-                            width: 100%;
-                            height: 600px;
-                            border: 0px #fff solid;
-                        }
-                    </style>
-                    <div id="modal_visor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h4 class="modal-title">Documento</h4>
-                                </div>
-                                <div class="modal-body" style="background: #555555;">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <iframe src="/assets/images/cargando.gif" name="visor_documento" id="visor_documento" style=""></iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modalvisor_reporteiluminacion">Cerrar</button>
-                                    {{-- <button type="button" class="btn btn-danger waves-effect waves-light">Guardar</button> --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- VISOR-MODAL -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-DEFINICION -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_reporte_definicion>.modal-dialog {
-                            min-width: 900px !important;
-                        }
-
-                        #modal_reporte_definicion .modal-body .form-group {
-                            margin: 0px 0px 12px 0px !important;
-                            padding: 0px !important;
-                        }
-
-                        #modal_reporte_definicion .modal-body .form-group label {
-                            margin: 0px !important;
-                            padding: 0px 0px 3px 0px !important;
-                        }
-                    </style>
-                    <div id="modal_reporte_definicion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form method="post" enctype="multipart/form-data" name="form_modal_definicion" id="form_modal_definicion">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Definición</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" class="form-control" id="reportedefiniciones_id" name="reportedefiniciones_id" value="0">
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Concepto</label>
-                                                    <input type="text" class="form-control" id="reportedefiniciones_concepto" name="reportedefiniciones_concepto" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Descripción</label>
-                                                    <textarea class="form-control" rows="4" id="reportedefiniciones_descripcion" name="reportedefiniciones_descripcion" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Fuente</label>
-                                                    <input type="text" class="form-control" id="reportedefiniciones_fuente" name="reportedefiniciones_fuente" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modal_definicion">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_definicion">Guardar <i class="fa fa-save"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-DEFINICION -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-CATEGORIA -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_reporte_categoria>.modal-dialog {
-                            min-width: 800px !important;
-                        }
-
-                        #modal_reporte_categoria .modal-body .form-group {
-                            margin: 0px 0px 12px 0px !important;
-                            padding: 0px !important;
-                        }
-
-                        #modal_reporte_categoria .modal-body .form-group label {
-                            margin: 0px !important;
-                            padding: 0px 0px 3px 0px !important;
-                        }
-                    </style>
-                    <div id="modal_reporte_categoria" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form method="post" enctype="multipart/form-data" name="form_modal_categoria" id="form_modal_categoria">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Categoría</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" class="form-control" id="reportecategoria_id" name="reportecategoria_id" value="0">
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Categoría</label>
-                                                    <input type="text" class="form-control" id="reportecategoria_nombre" name="reportecategoria_nombre" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label>Total personal</label>
-                                                    <input type="number" class="form-control" id="reportecategoria_total" name="reportecategoria_total" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label>Horas jornada</label>
-                                                    <input type="number" class="form-control" id="reportecategoria_horas" name="reportecategoria_horas" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_categoria">Guardar <i class="fa fa-save"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-CATEGORIA -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-ÁREA -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_reporte_area>.modal-dialog {
-                            min-width: 90% !important;
-                        }
-
-                        #modal_reporte_area .modal-body .form-group {
-                            margin: 0px 0px 12px 0px !important;
-                            padding: 0px !important;
-                        }
-
-                        #modal_reporte_area .modal-body .form-group label {
-                            margin: 0px !important;
-                            padding: 0px 0px 3px 0px !important;
-                        }
-                    </style>
-                    <div id="modal_reporte_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form method="post" enctype="multipart/form-data" name="form_reporte_area" id="form_reporte_area">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Área</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" class="form-control" id="reportearea_id" name="reportearea_id" value="0">
-                                            </div>
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Datos Generales
-                                                </ol>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="form-group">
-                                                    <label>Instalación</label>
-                                                    <input type="text" class="form-control" id="reportearea_instalacion" name="reportearea_instalacion" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="form-group">
-                                                    <label>Nombre del área</label>
-                                                    <input type="text" class="form-control" id="reportearea_nombre" name="reportearea_nombre" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="form-group">
-                                                    <label>% de operacion en el área</label>
-                                                    <input type="number" min="0" max="100" class="form-control" id="reporteiluminacionarea_porcientooperacion" name="reporteiluminacionarea_porcientooperacion" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="form-group">
-                                                    <label>No. orden del área</label>
-                                                    <input type="number" class="form-control" id="reportearea_orden" name="reportearea_orden" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 p-2 text-center">
-                                                <label class="text-danger mr-4 d-block" style="font-size: 18px;" data-toggle="tooltip" title="" data-original-title="Marque la casilla de NO si el área no fue evaluada en el reconocimiento">¿ Área evaluada en el reconocimiento ?</label>
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="form-check mx-4">
-                                                        <input class="form-check-input" type="radio" name="aplica_iluminacion" id="aplica_iluminacion_si" value="1" required="required" checked>
-                                                        <label class="form-check-label" for="aplica_iluminacion_si">
-                                                            Si
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check mx-4">
-                                                        <input class="form-check-input" type="radio" name="aplica_iluminacion" id="aplica_iluminacion_no" value="0" required="required">
-                                                        <label class="form-check-label" for="aplica_iluminacion_no">
-                                                            No
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Descripción de las instalaciones
-                                                </ol>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label><b>x</b>&nbsp;Largo del área (m) *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_largo" name="reportearea_largo" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label><b>y</b>&nbsp;Ancho del área (m) *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_ancho" name="reportearea_ancho" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label><b>h</b>&nbsp;Alto del área (m) *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_alto" name="reportearea_alto" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Puntos evaluados por IC *</label>
-                                                    <input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_ic" name="reportearea_puntos_ic" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Puntos evaluados por PT *</label>
-                                                    <input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_pt" name="reportearea_puntos_pt" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Criterio *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_criterio" name="reportearea_criterio" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Color de techo</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_colortecho" name="reportearea_colortecho">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Color de paredes</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_paredes" name="reportearea_paredes">
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Color de piso</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_colorpiso" name="reportearea_colorpiso">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Superficie techo</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficietecho" name="reportearea_superficietecho" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Superficie paredes</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficieparedes" name="reportearea_superficieparedes" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Superficie piso</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficiepiso" name="reportearea_superficiepiso" required>
-                                                </div>
-                                            </div>
-                                            {{-- --}}
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Descripción de las lámparas
-                                                </ol>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Tipo de lámparas *</label>
-                                                    <select class="custom-select form-control infoAdicionalArea" id="reportearea_sistemailuminacion" name="reportearea_sistemailuminacion" required>
-                                                        <option value=""></option>
-                                                        <option value="NA">No aplica</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Potencia de las lámparas *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_potenciaslamparas" name="reportearea_potenciaslamparas" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>N° de lámparas *</label>
-                                                    <input type="number	" class="form-control infoAdicionalArea" id="reportearea_numlamparas" name="reportearea_numlamparas" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>(h) Altura (m) *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Programa de mantenimiento *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_programamantenimiento" name="reportearea_programamantenimiento" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Tipo de iluminación</label>
-                                                    <select class="custom-select form-control infoAdicionalArea" id="reportearea_tipoiluminacion" name="reportearea_tipoiluminacion" required>
-                                                        <option value=""></option>
-                                                        <option value="NA">No aplica</option>
-                                                        <option value="Natural">Natural</option>
-                                                        <option value="Artificial">Artificial</option>
-                                                        <option value="Natural y artificial">Natural y artificial</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Descripción de trabajo que requiere iluminación localizada *</label>
-                                                    <input type="text" class="form-control infoAdicionalArea" id="reportearea_descripcionilimunacion" name="reportearea_descripcionilimunacion" required>
-                                                </div>
-                                            </div>
-
-
-                                            {{-- <div class="col-3">
-							<div class="form-group">
-								<label>Influencia de luz natural</label>
-								<select class="custom-select form-control" id="reportearea_luznatural" name="reportearea_luznatural" required>
-									<option value=""></option>
-									<option value="NA">No aplica</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-3">
-							<div class="form-group">
-								<label>Iluminación localizada</label>
-								<select class="custom-select form-control" id="reportearea_iluminacionlocalizada" name="reportearea_iluminacionlocalizada" required>
-									<option value=""></option>
-									<option value="NA">No aplica</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</select>
-							</div>
-						</div> --}}
-
-
-
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Categorías en el área
-                                                </ol>
-                                                <div style="margin: -25px 0px 0px 0px!important; padding: 0px!important;">
-                                                    <table class="table-hover tabla_info_centrado" width="100%" id="tabla_areacategorias">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="60">Activo</th>
-                                                                <th width="180">Categoría</th>
-                                                                <th width="80">Total</th>
-                                                                <th width="80">GEH</th>
-                                                                <th width="180">Actividades</th>
-                                                                <th width="80">Niveles Mínimos de Iluminación </th>
-                                                                <th width="180">Tarea visual</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_area">Guardar <i class="fa fa-save"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-ÁREA -->
-                    <!-- ============================================================== -->
-
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-ÁREA -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_reporte_iluminacionpunto>.modal-dialog {
-                            min-width: 90% !important;
-                        }
-
-                        #modal_reporte_iluminacionpunto .modal-body .form-group {
-                            margin: 0px 0px 12px 0px !important;
-                            padding: 0px !important;
-                        }
-
-                        #modal_reporte_iluminacionpunto .modal-body .form-group label {
-                            margin: 0px !important;
-                            padding: 0px 0px 3px 0px !important;
-                        }
-                    </style>
-                    <div id="modal_reporte_iluminacionpunto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form method="post" enctype="multipart/form-data" name="form_reporte_iluminacionpunto" id="form_reporte_iluminacionpunto">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Área</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                {!! csrf_field() !!}
-                                                <input type="hidden" class="form-control" id="reporteiluminacionpunto_id" name="reporteiluminacionpunto_id" value="0">
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label>No. Punto</label>
-                                                    <input type="number" class="form-control" id="reporteiluminacionpuntos_nopunto" name="reporteiluminacionpuntos_nopunto" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-5">
-                                                <div class="form-group">
-                                                    <label>Área</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacionpuntos_area_id" name="reporteiluminacionpuntos_area_id" onchange="mostrar_categoriasarea(this.value, 0);" required>
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-5">
-                                                <div class="form-group">
-                                                    <label>Categoría</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacionpuntos_categoria_id" name="reporteiluminacionpuntos_categoria_id" required>
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label>No. de POE</label>
-                                                    <input type="number" class="form-control" id="reporteiluminacionpuntos_nopoe" name="reporteiluminacionpuntos_nopoe" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Nombre</label>
-                                                    <input type="text" class="form-control" id="reporteiluminacionpuntos_nombre" name="reporteiluminacionpuntos_nombre" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label>Ficha</label>
-                                                    <input type="text" class="form-control" id="reporteiluminacionpuntos_ficha" name="reporteiluminacionpuntos_ficha" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Ubicación</label>
-                                                    <input type="text" class="form-control" id="reporteiluminacionpuntos_concepto" name="reporteiluminacionpuntos_concepto" required>
-
-                                                    <!-- <select class="custom-select form-control" id="reporteiluminacionpuntos_concepto" name="reporteiluminacionpuntos_concepto" required>
-									<option value=""></option>
-									<option value="Índice de Área (IC)">Índice de Área (IC)</option>
-									<option value="Puesto de Trabajo">Puesto de Trabajo</option>
-								</select> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Fecha y hora de medición
-                                                </ol>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Fecha evaluación</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="reporteiluminacionpuntos_fechaeval" name="reporteiluminacionpuntos_fechaeval" required>
-                                                        <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #0d47a1;">Horario periodo 1</label>
-                                                    {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reporteiluminacionpuntos_horario1" name="reporteiluminacionpuntos_horario1" required> --}}
-                                                    <input type="time" class="form-control" id="reporteiluminacionpuntos_horario1" name="reporteiluminacionpuntos_horario1" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #78281F;">Horario periodo 2</label>
-                                                    {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reporteiluminacionpuntos_horario2" name="reporteiluminacionpuntos_horario2" required> --}}
-                                                    <input type="time" class="form-control" id="reporteiluminacionpuntos_horario2" name="reporteiluminacionpuntos_horario2">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #00695c;">Horario periodo 3</label>
-                                                    {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reporteiluminacionpuntos_horario3" name="reporteiluminacionpuntos_horario3" required> --}}
-                                                    <input type="time" class="form-control" id="reporteiluminacionpuntos_horario3" name="reporteiluminacionpuntos_horario3">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                &nbsp;
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Resultados
-                                                </ol>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Nivel </label>
-                                                    <input type="number" step="any" class="form-control limite_lux" id="reporteiluminacionpuntos_lux" name="reporteiluminacionpuntos_lux" required onchange="calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <div style="position: absolute; margin-top: 28px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 50px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed1menor" name="reporteiluminacionpuntos_luxmed1menor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed1menor"><b>&nbsp;</b></label>
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed1mayor" name="reporteiluminacionpuntos_luxmed1mayor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed1mayor"><b>&nbsp;</b></label>
-                                                    </div>
-
-                                                    <label style="color: #0d47a1;">Periodo 1 NI (Lux)</label>
-                                                    <div style="width: 100%; padding-left: 45px;">
-                                                        <input type="number" step="any" class="form-control resultado_lux" id="reporteiluminacionpuntos_luxmed1" name="reporteiluminacionpuntos_luxmed1" required onchange="calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <div style="position: absolute; margin-top: 28px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 50px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed2menor" name="reporteiluminacionpuntos_luxmed2menor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed2menor"><b>&nbsp;</b></label>
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed2mayor" name="reporteiluminacionpuntos_luxmed2mayor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed2mayor"><b>&nbsp;</b></label>
-                                                    </div>
-
-                                                    <label style="color: #78281F;">Periodo 2 NI (Lux)</label>
-                                                    <div style="width: 100%; padding-left: 45px;">
-                                                        <input type="number" step="any" class="form-control resultado_lux" id="reporteiluminacionpuntos_luxmed2" name="reporteiluminacionpuntos_luxmed2" required onchange="calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <div style="position: absolute; margin-top: 28px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 50px;">
-                                                        <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed3menor" name="reporteiluminacionpuntos_luxmed3menor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed3menor"><b>&nbsp;</b></label>
-                                                    </div>
-                                                    <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                                        <input type="checkbox" class="filled-in chk-col-brown" id="reporteiluminacionpuntos_luxmed3mayor" name="reporteiluminacionpuntos_luxmed3mayor" />
-                                                        <label for="reporteiluminacionpuntos_luxmed3mayor"><b>&nbsp;</b></label>
-                                                    </div>
-
-                                                    <label style="color: #00695c;">Periodo 3 NI (Lux)</label>
-                                                    <div style="width: 100%; padding-left: 45px;">
-                                                        <input type="number" step="any" class="form-control resultado_lux" id="reporteiluminacionpuntos_luxmed3" name="reporteiluminacionpuntos_luxmed3" required onchange="calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_lux">
-                                                {{-- <b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b> --}}
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                                    Resultados del nivel de reflexión
-                                                </ol>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Factor de reflexión en paredes (P)</label>
-                                                    <input type="number" step="any" class="form-control limite_frp" id="reporteiluminacionpuntos_frp" name="reporteiluminacionpuntos_frp" value="60" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #0d47a1;">Periodo 1 FR (P) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frp" id="reporteiluminacionpuntos_frpmed1" name="reporteiluminacionpuntos_frpmed1" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #78281F;">Periodo 2 FR (P) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frp" id="reporteiluminacionpuntos_frpmed2" name="reporteiluminacionpuntos_frpmed2" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #00695c;">Periodo 3 FR (P) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frp" id="reporteiluminacionpuntos_frpmed3" name="reporteiluminacionpuntos_frpmed3" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frp">
-                                                {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <label>Factor de reflexión en plano trabajo (PT)</label>
-                                                    <input type="number" step="any" class="form-control limite_frpt" id="reporteiluminacionpuntos_frpt" name="reporteiluminacionpuntos_frpt" value="50" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #0d47a1;">Periodo 1 FR (PT) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frpt" id="reporteiluminacionpuntos_frptmed1" name="reporteiluminacionpuntos_frptmed1" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #78281F;">Periodo 2 FR (PT) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frpt" id="reporteiluminacionpuntos_frptmed2" name="reporteiluminacionpuntos_frptmed2" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <label style="color: #00695c;">Periodo 3 FR (PT) (%)</label>
-                                                    <input type="number" step="any" class="form-control resultado_frpt" id="reporteiluminacionpuntos_frptmed3" name="reporteiluminacionpuntos_frptmed3" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frpt">
-                                                {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_iluminacionpunto">Guardar <i class="fa fa-save"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-ÁREA -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-IMPORTAR-PUNTOS -->
-                    <!-- ============================================================== -->
-                    <!-- Modal Excel equipos -->
-                    <div id="modal_excel_puntos" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form enctype="multipart/form-data" method="post" name="formExcelPuntos" id="formExcelPuntos">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Cargar puntos de iluminación por medio de un Excel</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            {!! csrf_field() !!}
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label> Documento Excel *</label>
-                                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                                        <div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_puntos">
-                                                            <i class="fa fa-file fileinput-exists"></i>
-                                                            <span class="fileinput-filename"></span>
-                                                        </div>
-                                                        <span class="input-group-addon btn btn-secondary btn-file">
-                                                            <span class="fileinput-new">Seleccione</span>
-                                                            <span class="fileinput-exists">Cambiar</span>
-                                                            <input type="file" accept=".xls,.xlsx" name="excelPuntos" id="excelPuntos" required>
-                                                        </span>
-                                                        <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mx-2" id="alertaVerificacion2" style="display:none">
-                                            <p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el archivo Excel contenga fechas en los formatos válidos: '2024-01-01', '01-01-2024', '2024/01/01', '01/01/2024' (no se admiten fechas con texto) y que la hora de medición este en formato de 24Hrs. </p>
-                                        </div>
-                                        <div class="row mt-3" id="divCargaPuntos" style="display: none;">
-
-                                            <div class="col-12 text-center">
-                                                <h2>Cargando lista de puntos espere un momento...</h2>
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <i class='fa fa-spin fa-spinner fa-5x'></i>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarExcelPuntos">
-                                            Cargar puntos <i class="fa fa-upload" aria-hidden="true"></i>
-                                        </button>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-IMPORTAR-PUNTOS -->
-                    <!-- ============================================================== -->
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-IMPORTAR-AREAS -->
-                    <!-- ============================================================== -->
-                    <!-- Modal Excel áreas -->
-
-                    <div id="modal_excel_areas" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form enctype="multipart/form-data" method="post" name="formExcelArea" id="formExcelArea">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h4 class="modal-title">Cargar áreas por medio de un Excel</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            {!! csrf_field() !!}
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label> Documento Excel *</label>
-                                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                                        <div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_areas">
-                                                            <i class="fa fa-file fileinput-exists"></i>
-                                                            <span class="fileinput-filename"></span>
-                                                        </div>
-                                                        <span class="input-group-addon btn btn-secondary btn-file">
-                                                            <span class="fileinput-new">Seleccione</span>
-                                                            <span class="fileinput-exists">Cambiar</span>
-                                                            <input type="file" accept=".xls,.xlsx" name="excelArea" id="excelArea" required>
-                                                        </span>
-                                                        <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mx-2" id="alertaVerificacion1" style="display:none">
-                                            <p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el archivo Excel contenga los formatos válidos </p>
-                                        </div>
-                                        <div class="row mt-3" id="divCargaArea" style="display: none;">
-
-                                            <div class="col-12 text-center">
-                                                <h2>Cargando lista de puntos espere un momento...</h2>
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <i class='fa fa-spin fa-spinner fa-5x'></i>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarExcelArea">
-                                            Cargar puntos <i class="fa fa-upload" aria-hidden="true"></i>
-                                        </button>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-IMPORTAR-AREAS -->
-                    <!-- ============================================================== -->
-
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
-                    <!-- ============================================================== -->
-                    <style type="text/css" media="screen">
-                        #modal_reporte_cancelacionobservacion>.modal-dialog {
-                            min-width: 800px !important;
-                        }
-
-                        #modal_reporte_cancelacionobservacion .modal-body .form-group {
-                            margin: 0px 0px 12px 0px !important;
-                            padding: 0px !important;
-                        }
-
-                        #modal_reporte_cancelacionobservacion .modal-body .form-group label {
-                            margin: 0px !important;
-                            padding: 0px 0px 3px 0px !important;
-                        }
-                    </style>
-                    <div id="modal_reporte_cancelacionobservacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <form method="post" enctype="multipart/form-data" name="form_modal_cancelacionobservacion" id="form_modal_cancelacionobservacion">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                        <h4 class="modal-title">Informe revisión</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    {!! csrf_field() !!}
-                                                    <input type="hidden" class="form-control" id="reporterevisiones_id" name="reporterevisiones_id" value="0">
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Observacion de cancelación</label>
-                                                    <textarea class="form-control" rows="6" id="reporte_canceladoobservacion" name="reporte_canceladoobservacion" required></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncancelar_modal_cancelacionobservacion">Cerrar</button>
-                                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="botonguardar_modal_cancelacionobservacion">Guardar observación y cancelar revisión <i class="fa fa-save"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
-                    <!-- ============================================================== -->
 
 
 
@@ -2788,21 +1763,38 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Régimen Contractual </label>
-                                <input type="text" class="form-control" name="REGIMEN_CONTRACTUAL_FICHA" id="REGIMEN_CONTRACTUAL_FICHA">
+
+                                <select class="custom-select form-control" id="REGIMEN_CONTRACTUAL_FICHA" name="REGIMEN_CONTRACTUAL_FICHA">
+                                    <option value=""></option>
+                                    @foreach($catregimen as $dato)
+                                    <option value="{{$dato->ID_REGIMEN_CONTRACTUAL}}">{{$dato->NOMBRE_REGIMEN_CONTRACTUAL}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Jornada </label>
-                                <input type="text" class="form-control" name="JORNADA_EMPLEADO_FICHA" id="JORNADA_EMPLEADO_FICHA">
+                                <select class="custom-select form-control" id="JORNADA_EMPLEADO_FICHA" name="JORNADA_EMPLEADO_FICHA">
+                                    <option value=""></option>
+                                    @foreach($catjornada as $dato)
+                                    <option value="{{$dato->ID_JORNADA}}">{{$dato->NOMBRE_JORNADA}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Turno </label>
-                                <input type="text" class="form-control" name="TURNO_EMPLEADO_FICHA" id="TURNO_EMPLEADO_FICHA">
+
+                                <select class="custom-select form-control" id="TURNO_EMPLEADO_FICHA" name="TURNO_EMPLEADO_FICHA">
+                                    <option value=""></option>
+                                    @foreach($caturno as $dato)
+                                    <option value="{{$dato->ID_TURNO}}">{{$dato->NOMBRE_TURNO}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 

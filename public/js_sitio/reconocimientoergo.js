@@ -150,6 +150,54 @@ $('.link_menuprincipal').click(function () {
 			$("#tab_2").css('display', 'none');
 
 			$("#steps_menu_tab1").click();
+
+
+
+			$('#PORTADA').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove': 'Quitar',
+					'error': 'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+
+			$('#PORTADA').val('');
+			$('#PORTADA').dropify().data('dropify').resetPreview();
+			$('#PORTADA').dropify().data('dropify').clearElement();
+			
+
+
+			$('#reporteubicacionfoto').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove': 'Quitar',
+					'error': 'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+
+			$('#reporteubicacionfoto').val('');
+			$('#reporteubicacionfoto').dropify().data('dropify').resetPreview();
+			$('#reporteubicacionfoto').dropify().data('dropify').clearElement();
+			
+
 		break;
 		default:
 			break;
