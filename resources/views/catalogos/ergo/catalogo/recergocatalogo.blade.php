@@ -399,6 +399,8 @@
                                     <option value=""></option>
                                     <option value="Reconocimiento">Reconocimiento</option>
                                     <option value="Informe">Informe</option>
+                                    <option value="Ambos">Ambos</option>
+
                                 </select>
                             </div>
                         </div>
@@ -464,6 +466,8 @@
                                     <option value=""></option>
                                     <option value="Reconocimiento">Reconocimiento</option>
                                     <option value="Informe">Informe</option>
+                                    <option value="Ambos">Ambos</option>
+
                                 </select>
                             </div>
                         </div>
