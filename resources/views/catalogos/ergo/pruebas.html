@@ -70,54 +70,6 @@
     </script>
 
 
-<!-- PLOTLY -->
-
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-<div id="chart" style="width:400px;height:250px;"></div>
-
-<script>
-    var data = [{
-        type: "indicator",
-        mode: "gauge+number",
-        value: 40,
-        gauge: {
-            shape: "angular",
-            axis: { range: [0, 100] },
-            steps: [
-                { range: [0, 50], color: "green" },
-                { range: [50, 100], color: "red" }
-            ]
-        }
-    }];
-
-    Plotly.newPlot('chart', data);
-</script>
-
-
-<!-- HIGHCHARTS -->
-
-   <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    
-    <div id="container"></div>
-    
-    <script>
-        Highcharts.chart('container', {
-            chart: { type: 'gauge' },
-            pane: { startAngle: -90, endAngle: 90 },
-            yAxis: {
-                min: 0,
-                max: 100,
-                plotBands: [
-                    { from: 0, to: 50, color: 'green' },
-                    { from: 50, to: 100, color: 'red' }
-                ]
-            },
-            series: [{ data: [40] }]
-        });
-    </script>
 
 
 </body>
