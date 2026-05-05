@@ -52,7 +52,7 @@ class reconocimientoergoController extends Controller
         $catregimen = catergo_regimencontractualModel::where('ACTIVO', 1)->get();
         $catjornada = catergo_jornada::where('ACTIVO', 1)->get();
         $caturno = catergo_turnoModel::where('ACTIVO', 1)->get();
-        $catdefiniciones = catergo_definicionesModel::where('USO_DEFINICIONES', "Reconocimiento")
+        $catdefiniciones = catergo_definicionesModel::whereIn('USO_DEFINICIONES', ['Reconocimiento', 'Ambos'])
             ->orderBy('CONCEPTO_DEFINICION', 'ASC')
             ->get();
 
@@ -180,8 +180,7 @@ class reconocimientoergoController extends Controller
     public function tablareconocimientoergo()
     {
         try {
-            // Obtener solo los campos de la tabla principal sin cargar relaciones
-            $recsensorial = reconocimientoergoModel::all(); // Obtiene todos los registros de la tabla principal
+            $recsensorial = reconocimientoergoModel::all(); 
 
             // Formatear las filas
             $numero_registro = 0;
@@ -746,6 +745,33 @@ class reconocimientoergoController extends Controller
         }
     }
 
+
+    /////// INFORME ERGO /////////
+
+
+    public function getGraficaErgo($reco_id)
+    {
+        $datos = DB::table('recoergo_fichastecnicas as f')
+            ->join('recoergocategorias as c', 'f.CATEGORIA_ID_FICHA', '=', 'c.ID_CATEGORIA_ERGO')
+            ->select(
+                'f.CATEGORIA_ID_FICHA',
+                'c.NOMBRE_CATEGORIA_ERGO',
+                DB::raw("
+                CASE 
+                    WHEN SUM(CASE WHEN f.P1_CARGA_MAYOR_3KG = 'SI' THEN 1 ELSE 0 END) > 0 
+                    THEN 'SI' 
+                    ELSE 'NO' 
+                END as RESULTADO
+            ")
+            )
+            ->where('f.RECO_ID', $reco_id)
+            ->where('f.ACTIVO', 1)
+            ->groupBy('f.CATEGORIA_ID_FICHA', 'c.NOMBRE_CATEGORIA_ERGO')
+            ->orderBy('c.NOMBRE_CATEGORIA_ERGO', 'ASC')
+            ->get();
+
+        return response()->json($datos);
+    }
 
 
     }
