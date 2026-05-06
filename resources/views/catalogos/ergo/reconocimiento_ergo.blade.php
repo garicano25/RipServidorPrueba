@@ -1017,9 +1017,9 @@
                                     <a href="#5_1" class="list-group-item submenu">5.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_5_1"></i></a>
                                     <a href="#5_2" class="list-group-item submenu">5.2.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_5_2"></i></a>
 
-                                    <!-- <a href="#6" class="list-group-item">6.- Evaluación</a>
-                                    <a href="#6_1" class="list-group-item submenu">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje) <i class="fa fa-times" id="menureporte_6_1"></i></a>
-                                    <a href="#6_2" class="list-group-item submenu">6.2.- Método empleado y criterio de selección <i class="fa fa-times" id="menureporte_6_2"></i></a>
+                                    <a href="#6" class="list-group-item">6.- Evaluación</a>
+                                    <a href="#6_1" class="list-group-item submenu">6.1.- Preguntas NOM-036-1-STPS-2018 <i class="fa fa-times" id="menureporte_6_1"></i></a>
+                                    <!-- <a href="#6_2" class="list-group-item submenu">6.2.- Método empleado y criterio de selección <i class="fa fa-times" id="menureporte_6_2"></i></a>
                                     <a href="#6_2_1" class="list-group-item subsubmenu">6.2.1.- Índice de área <i class="fa fa-times" id="menureporte_6_2_1"></i></a>
                                     <a href="#6_2_2" class="list-group-item subsubmenu">6.2.2.- Puesto de trabajo <i class="fa fa-times" id="menureporte_6_2_2"></i></a>
                                     <a href="#7" class="list-group-item">7.- Resultados</a>
@@ -1487,7 +1487,13 @@
                                         </div>
                                     </form>
 
-
+                                    <h4 class="card-title mt-2" id="5">6.- Evaluación</h4>
+                                    <h4 class="card-title" id="5_1">6.1.- Preguntas NOM-036-1-STPS-2018</h4>
+                                    <form method="post" enctype="multipart/form-data" name="form_preguntas-nom-036" id="form_preguntas-nom-036">
+                                        <div class="row" style="display:flex; justify-content:center;">
+                                            <div id="contenedorGraficas"></div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

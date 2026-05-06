@@ -144,6 +144,7 @@ $('.link_menuprincipal').click(function () {
 
 			$("#steps_menu_tab1").click();
 			break;
+		
 		case "tab_menu3":
 			$("#tab_3").css('display', 'block');
 			$("#tab_1").css('display', 'none');
@@ -151,6 +152,7 @@ $('.link_menuprincipal').click(function () {
 
 			$("#steps_menu_tab1").click();
 
+    		cargarGraficas();
 
 
 			$('#PORTADA').dropify({
@@ -1400,7 +1402,6 @@ function tabla_reconocimientosensorial() {
 	}
 }
 
-
 function cargarFoliosProyecto(proyecto_folio) {
 
 	$('#proyecto_folio').html('');
@@ -1690,8 +1691,6 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 	});
 }
 
-
-
 ////// CATEGORIA /////////////////
 
 
@@ -1735,7 +1734,6 @@ $("#boton_nueva_categoria").click(function (e) {
 
 
 });
-
 
 let selectAreas;
 
@@ -2424,8 +2422,6 @@ $("#boton_nueva_ficha").click(function (e) {
 
 	selectAreasFichas.clear();
 });
-
-
 
 $('#modal_fichas').on('hidden.bs.modal', function (e) {
 
@@ -4225,8 +4221,6 @@ $(document).ready(function(){
 
 });
 
-
-
 function generarJSONActividades() {
 
     let data = [];
@@ -4303,7 +4297,6 @@ function calcularResultadoFicha(ficha, preguntas) {
 
     return "VERDE";
 }
-
 
 $("#boton_guardar_fichastecnicas").click(function (e) {
     e.preventDefault();
@@ -4407,7 +4400,6 @@ $("#boton_guardar_fichastecnicas").click(function (e) {
     
 });
 
-
 function mostrarTablarecofichasergo() {
 	try {
 		var ruta = "/Tablarecofichasergo";
@@ -4481,8 +4473,6 @@ function mostrarTablarecofichasergo() {
 		console.error("Error en Tablarecofichasergo:", exception);
 	}
 }
-
-
 
 function pintarActividades(json) {
 
@@ -4671,7 +4661,6 @@ $('#Tablarecofichasergo tbody').on('click', 'td>button.editar', function () {
 
 });
 
-
 function limpiarTodasLasFichas() {
 
     $('[id^="ficha_"]').each(function () {
@@ -4680,7 +4669,6 @@ function limpiarTodasLasFichas() {
 
     $('[id^="resultadoFicha"]').html('');
 }
-
 
 function abrirSeccionesSegunJSON(json) {
 
@@ -4719,8 +4707,6 @@ function abrirSeccionesSegunJSON(json) {
     if (abrir7) $('#contenido7').show();
 }
 
-
-
 function pintarFichasBase(json) {
 
     let data = typeof json === "string" ? JSON.parse(json) : json;
@@ -4755,7 +4741,6 @@ function pintarFichasDependientes(json) {
     });
 }
 
-
 function activarLogicaFichas() {
 
     evaluarFicha_1_1();
@@ -4773,4 +4758,106 @@ function activarLogicaFichas() {
 
     evaluarFicha_4_1();
     evaluarFicha_4_2();
+}
+
+
+
+///////////// INFORME DE RECONOCIMIENTO  /////////////
+
+
+
+
+function cargarGraficas() {
+
+    $.get('/getGraficaErgo/' + recsensorial, function (data) {
+        generarGraficas(data);
+    });
+
+}
+
+
+
+function generarGraficas(data) {
+
+    $('#contenedorGraficas').empty();
+
+    data.forEach(function (item, index) {
+
+        let id = 'chart_' + index;
+
+       $('#contenedorGraficas').append(`
+			<div style="position:relative; width:500px; height:300px; margin:20px auto;">
+				
+				<div id="${id}" style="width:100%;height:100%;"></div>
+
+				<svg width="500" height="300" style="position:absolute; top:0; left:0; pointer-events:none;">
+					<path id="curveTop_${id}" d="M80 200 A170 170 0 0 1 420 200" fill="none" />
+
+					<text font-size="16" font-weight="bold" fill="#2C2A29">
+						<textPath href="#curveTop_${id}" startOffset="40%" text-anchor="middle">
+							Sí
+						</textPath>
+					</text>
+
+					<text font-size="16" font-weight="bold" fill="#2C2A29">
+						<textPath href="#curveTop_${id}" startOffset="59%" text-anchor="middle">
+							No
+						</textPath>
+					</text>
+				</svg>
+
+			</div>
+		`);
+
+        crearGrafica(id, item.RESULTADO, item.NOMBRE_CATEGORIA_ERGO);
+
+    });
+
+}
+
+function crearGrafica(id, resultado, nombreCategoria) {
+
+    var chart = echarts.init(document.getElementById(id));
+
+    let valor = resultado === 'SI' ? 75 : 25; 
+
+    chart.setOption({
+        series: [{
+            type: 'gauge',
+            startAngle: 180,
+            endAngle: 0,
+            min: 0,
+            max: 100,
+
+            axisLine: {
+                lineStyle: {
+                    width: 20,
+                    color: [
+                        [0.5, 'green'],
+                        [1, 'red']
+                    ]
+                }
+            },
+
+            pointer: {
+                itemStyle: {
+                    color: 'black' 
+                }
+            },
+
+            axisTick: { show: false },
+            splitLine: { show: false },
+            axisLabel: { show: false },
+
+            detail: {
+                formatter: nombreCategoria,
+                fontSize: 16,
+                offsetCenter: [0, '60%'], 
+                color: '#000',
+                width: 300
+            },
+
+            data: [{ value: valor }]
+        }]
+    });
 }

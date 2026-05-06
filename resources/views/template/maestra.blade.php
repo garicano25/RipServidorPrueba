@@ -293,7 +293,7 @@ use Illuminate\Support\Str;
 
 
                     @if (request()->is('reconocimientoergo*') || request()->is('recergocatalogo*'))
-                    
+
                     <div class="navbar-nav" style="left: 35%; position: absolute;">
                         <h1 style="color:#ffff;font-weight: bold;">Factor de Riesgo Ergonómico</h1>
                     </div>
@@ -955,6 +955,8 @@ use Illuminate\Support\Str;
 
     <script src="/js_sitio/reconocimientoergo.js?v=6"></script>
     <script src="/js_sitio/funcionesgeneralesergo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
     @endif
 
     @if(request()->is('clientecatalogo'))

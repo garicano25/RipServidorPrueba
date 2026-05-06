@@ -2131,6 +2131,10 @@ Route::get('mostraplanoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostr
 Route::get('mostrafotoinstalacionergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostrafotoinstalacionergo']);
 Route::get('mostrarmapariesgoergo/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'ERGO\reconocimientoergoController@mostrarmapariesgoergo']);
 
+//// INFORME
+
+Route::get('getGraficaErgo/{reco_id}', ['as' => 'getGraficaErgo', 'uses' => 'ERGO\reconocimientoergoController@getGraficaErgo']);
+
 
 
 /////////// CATEGORIA  ///////////
