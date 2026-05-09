@@ -1910,9 +1910,9 @@
                         <!-- FECHA NACIMIENTO -->
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Fecha de nacimiento *</label>
+                                <label>Fecha de nacimiento </label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO" required>
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO" >
                                     <span class="input-group-addon"><i class="icon-calender"></i></span>
                                 </div>
                             </div>
@@ -1920,7 +1920,7 @@
 
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Edad *</label>
+                                <label>Edad </label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="EDAD_EMPLEADO_FICHA" id="EDAD_EMPLEADO_FICHA" readonly>
                                 </div>
