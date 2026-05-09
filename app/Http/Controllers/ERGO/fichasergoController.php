@@ -32,18 +32,41 @@ class fichasergoController extends Controller
     public function Tablarecofichasergo(Request $request)
     {
         try {
+
             $ergo = $request->get('ergoid');
 
-            $tabla = recoergofichastecnicasModel::where('RECO_ID', $ergo)->get();
-
+            $tabla = recoergofichastecnicasModel::select(
+                'recoergo_fichastecnicas.*',
+                'recoergocategorias.NOMBRE_CATEGORIA_ERGO as NOMBRE_CATEGORIA'
+            )
+                ->leftJoin(
+                    'recoergocategorias',
+                    'recoergo_fichastecnicas.CATEGORIA_ID_FICHA',
+                    '=',
+                    'recoergocategorias.ID_CATEGORIA_ERGO'
+                )
+                ->where('recoergo_fichastecnicas.RECO_ID', $ergo)
+                ->get();
 
             foreach ($tabla as $value) {
+
                 if ($value->ACTIVO == 0) {
-                    $value->BTN_EDITAR = '<button type="button" class="btn btn-primary btn-custom rounded-pill EDITAR" ><i class="bi bi-eye"></i></button>';
-                    $value->BTN_VISUALIZAR = '<button type="button" class="btn btn-primary btn-custom rounded-pill VISUALIZAR"><i class="bi bi-eye"></i></button>';
+
+                    $value->BTN_EDITAR = '
+                    <button type="button" class="btn btn-primary btn-custom rounded-pill EDITAR">
+                        <i class="bi bi-eye"></i>
+                    </button>';
+
+                    $value->BTN_VISUALIZAR = '
+                    <button type="button" class="btn btn-primary btn-custom rounded-pill VISUALIZAR">
+                        <i class="bi bi-eye"></i>
+                    </button>';
                 } else {
 
-                    $value->BTN_EDITAR = '<button type="button" class="btn btn-warning btn-circle editar"><i class="fa fa-pencil"></i></button>';
+                    $value->BTN_EDITAR = '
+                    <button type="button" class="btn btn-warning btn-circle editar">
+                        <i class="fa fa-pencil"></i>
+                    </button>';
                 }
             }
 
@@ -52,14 +75,13 @@ class fichasergoController extends Controller
                 'msj' => 'Información consultada correctamente'
             ]);
         } catch (Exception $e) {
+
             return response()->json([
                 'msj' => 'Error ' . $e->getMessage(),
                 'data' => 0
             ]);
         }
     }
-
-
 
     public function getCategoriasErgo(Request $request)
     {

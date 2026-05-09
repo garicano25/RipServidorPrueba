@@ -4475,6 +4475,10 @@ function mostrarTablarecofichasergo() {
 					}
 				},
 				{
+					"data": "NOMBRE_CATEGORIA",
+					"defaultContent": "-"
+				},
+				{
 					"data": "NOMBRE_EMPLEADO_FICHA",
 					"defaultContent": "-"
 				},

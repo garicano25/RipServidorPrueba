@@ -67,10 +67,12 @@
     #Tablarecoareasergo thead th {
         font-size: 15px !important;
     }
+
     #Tablarecocategoriasergo tbody td,
     #Tablarecocategoriasergo thead th {
         font-size: 15px !important;
     }
+
     #Tablarecofichasergo tbody td,
     #Tablarecofichasergo thead th {
         font-size: 15px !important;
@@ -781,6 +783,7 @@ CONTENIDO RECONOCIMIENTO PSICOSOCIAL -->
                                                                     <thead>
                                                                         <tr>
                                                                             <th style="width: 60px!important;">No.</th>
+                                                                            <th>Categoría</th>
                                                                             <th>Nombre del empleado </th>
                                                                             <th>Ficha / No empleado</th>
                                                                             <th style="width: 80px!important;">Editar</th>
