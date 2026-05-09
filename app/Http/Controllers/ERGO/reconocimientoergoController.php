@@ -863,14 +863,15 @@ class reconocimientoergoController extends Controller
             $niveles = DB::select('
 
     SELECT 
-        CAST("Instalación" AS CHAR) AS ETIQUETA,
-        CAST(p.proyecto_clienteinstalacion AS CHAR) AS OPCION,
+        "Instalación" AS ETIQUETA,
+        p.proyecto_clienteinstalacion AS OPCION,
         0 NIVEL
 
     FROM reconocimientoergo re
 
     LEFT JOIN proyecto p 
-        ON p.proyecto_folio = re.proyecto_folio
+        ON p.proyecto_folio COLLATE utf8mb3_general_ci =
+           re.proyecto_folio COLLATE utf8mb3_general_ci
 
     WHERE re.id = ?
 
@@ -878,16 +879,17 @@ class reconocimientoergoController extends Controller
 
     SELECT
 
-        CAST(IFNULL(ce.NOMBRE_ETIQUETA, "NO") AS CHAR) AS ETIQUETA,
+        IFNULL(ce.NOMBRE_ETIQUETA, "NO") AS ETIQUETA,
 
-        CAST(IFNULL(co.NOMBRE_OPCIONES, "NO") AS CHAR) AS OPCION,
+        IFNULL(co.NOMBRE_OPCIONES, "NO") AS OPCION,
 
         IFNULL(ep.NIVEL, 0) NIVEL
 
     FROM reconocimientoergo re
 
     LEFT JOIN proyecto p 
-        ON p.proyecto_folio = re.proyecto_folio
+        ON p.proyecto_folio COLLATE utf8mb3_general_ci =
+           re.proyecto_folio COLLATE utf8mb3_general_ci
 
     LEFT JOIN estructuraProyectos ep 
         ON p.id = ep.PROYECTO_ID
@@ -903,16 +905,17 @@ class reconocimientoergoController extends Controller
     UNION
 
     SELECT 
-        CAST("Folio" AS CHAR) AS ETIQUETA,
+        "Folio" AS ETIQUETA,
 
-        CAST(p.proyecto_folio AS CHAR) AS OPCION,
+        p.proyecto_folio AS OPCION,
 
         0 NIVEL
 
     FROM reconocimientoergo re
 
     LEFT JOIN proyecto p 
-        ON p.proyecto_folio = re.proyecto_folio
+        ON p.proyecto_folio COLLATE utf8mb3_general_ci =
+           re.proyecto_folio COLLATE utf8mb3_general_ci
 
     WHERE re.id = ?
 
@@ -920,16 +923,17 @@ class reconocimientoergoController extends Controller
 
     SELECT
 
-        CAST("Razón social" AS CHAR) AS ETIQUETA,
+        "Razón social" AS ETIQUETA,
 
-        CAST(p.proyecto_clienterazonsocial AS CHAR) AS OPCION,
+        p.proyecto_clienterazonsocial AS OPCION,
 
         0 NIVEL
 
     FROM reconocimientoergo re
 
     LEFT JOIN proyecto p 
-        ON p.proyecto_folio = re.proyecto_folio
+        ON p.proyecto_folio COLLATE utf8mb3_general_ci =
+           re.proyecto_folio COLLATE utf8mb3_general_ci
 
     WHERE re.id = ?
 
@@ -937,16 +941,17 @@ class reconocimientoergoController extends Controller
 
     SELECT 
 
-        CAST("Nombre comercial" AS CHAR) AS ETIQUETA,
+        "Nombre comercial" AS ETIQUETA,
 
-        CAST(c.cliente_NombreComercial AS CHAR) AS OPCION,
+        c.cliente_NombreComercial AS OPCION,
 
         0 NIVEL
 
     FROM reconocimientoergo re
 
     LEFT JOIN proyecto p 
-        ON p.proyecto_folio = re.proyecto_folio
+        ON p.proyecto_folio COLLATE utf8mb3_general_ci =
+           re.proyecto_folio COLLATE utf8mb3_general_ci
 
     LEFT JOIN cliente c 
         ON p.cliente_id = c.id
