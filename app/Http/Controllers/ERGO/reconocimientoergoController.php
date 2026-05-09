@@ -862,98 +862,106 @@ class reconocimientoergoController extends Controller
 
             $niveles = DB::select('
 
-                        SELECT 
-                            "Instalación" COLLATE utf8mb3_general_ci AS ETIQUETA,
-                            p.proyecto_clienteinstalacion COLLATE utf8mb3_general_ci AS OPCION,
-                            0 NIVEL
-                        FROM reconocimientoergo re
-                        LEFT JOIN proyecto p 
-                            ON p.proyecto_folio = re.proyecto_folio
-                        WHERE re.id = ?
+    SELECT 
+        "Instalación" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
+        p.proyecto_clienteinstalacion COLLATE utf8mb4_unicode_ci AS OPCION,
+        0 NIVEL
 
-                        UNION
+    FROM reconocimientoergo re
 
-                        SELECT
-                            IFNULL(
-                                ce.NOMBRE_ETIQUETA COLLATE utf8mb3_general_ci,
-                                "NO"
-                            ) AS ETIQUETA,
+    LEFT JOIN proyecto p 
+        ON p.proyecto_folio = re.proyecto_folio
 
-                            IFNULL(
-                                co.NOMBRE_OPCIONES COLLATE utf8mb3_general_ci,
-                                "NO"
-                            ) AS OPCION,
+    WHERE re.id = ?
 
-                            IFNULL(ep.NIVEL, 0) NIVEL
+    UNION
 
-                        FROM reconocimientoergo re
+    SELECT
 
-                        LEFT JOIN proyecto p 
-                            ON p.proyecto_folio = re.proyecto_folio
+        IFNULL(
+            ce.NOMBRE_ETIQUETA COLLATE utf8mb4_unicode_ci,
+            "NO"
+        ) AS ETIQUETA,
 
-                        LEFT JOIN estructuraProyectos ep 
-                            ON p.id = ep.PROYECTO_ID
+        IFNULL(
+            co.NOMBRE_OPCIONES COLLATE utf8mb4_unicode_ci,
+            "NO"
+        ) AS OPCION,
 
-                        LEFT JOIN cat_etiquetas ce 
-                            ON ep.ETIQUETA_ID = ce.ID_ETIQUETA
+        IFNULL(ep.NIVEL, 0) NIVEL
 
-                        LEFT JOIN catetiquetas_opciones co 
-                            ON ep.OPCION_ID = co.ID_OPCIONES_ETIQUETAS
+    FROM reconocimientoergo re
 
-                        WHERE re.id = ?
+    LEFT JOIN proyecto p 
+        ON p.proyecto_folio = re.proyecto_folio
 
-                        UNION
+    LEFT JOIN estructuraProyectos ep 
+        ON p.id = ep.PROYECTO_ID
 
-                        SELECT 
-                            "Folio" COLLATE utf8mb3_general_ci AS ETIQUETA,
-                            p.proyecto_folio COLLATE utf8mb3_general_ci AS OPCION,
-                            0 NIVEL
+    LEFT JOIN cat_etiquetas ce 
+        ON ep.ETIQUETA_ID = ce.ID_ETIQUETA
 
-                        FROM reconocimientoergo re
+    LEFT JOIN catetiquetas_opciones co 
+        ON ep.OPCION_ID = co.ID_OPCIONES_ETIQUETAS
 
-                        LEFT JOIN proyecto p 
-                            ON p.proyecto_folio = re.proyecto_folio
+    WHERE re.id = ?
 
-                        WHERE re.id = ?
+    UNION
 
-                        UNION
+    SELECT 
+        "Folio" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
 
-                        SELECT
-                            "Razón social" COLLATE utf8mb3_general_ci AS ETIQUETA,
+        p.proyecto_folio COLLATE utf8mb4_unicode_ci AS OPCION,
 
-                            p.proyecto_clienterazonsocial COLLATE utf8mb3_general_ci AS OPCION,
+        0 NIVEL
 
-                            0 NIVEL
+    FROM reconocimientoergo re
 
-                        FROM reconocimientoergo re
+    LEFT JOIN proyecto p 
+        ON p.proyecto_folio = re.proyecto_folio
 
-                        LEFT JOIN proyecto p 
-                            ON p.proyecto_folio = re.proyecto_folio
+    WHERE re.id = ?
 
-                        WHERE re.id = ?
+    UNION
 
-                        UNION
+    SELECT
 
-                        SELECT 
-                            "Nombre comercial" COLLATE utf8mb3_general_ci AS ETIQUETA,
+        "Razón social" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
 
-                            c.cliente_NombreComercial COLLATE utf8mb3_general_ci AS OPCION,
+        p.proyecto_clienterazonsocial COLLATE utf8mb4_unicode_ci AS OPCION,
 
-                            0 NIVEL
+        0 NIVEL
 
-                        FROM reconocimientoergo re
+    FROM reconocimientoergo re
 
-                        LEFT JOIN proyecto p 
-                            ON p.proyecto_folio = re.proyecto_folio
+    LEFT JOIN proyecto p 
+        ON p.proyecto_folio = re.proyecto_folio
 
-                        LEFT JOIN cliente c 
-                            ON p.cliente_id = c.id
+    WHERE re.id = ?
 
-                        WHERE re.id = ?
+    UNION
 
-                        ORDER BY NIVEL
+    SELECT 
 
-                    ', [$ID, $ID, $ID, $ID, $ID]);
+        "Nombre comercial" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
+
+        c.cliente_NombreComercial COLLATE utf8mb4_unicode_ci AS OPCION,
+
+        0 NIVEL
+
+    FROM reconocimientoergo re
+
+    LEFT JOIN proyecto p 
+        ON p.proyecto_folio = re.proyecto_folio
+
+    LEFT JOIN cliente c 
+        ON p.cliente_id = c.id
+
+    WHERE re.id = ?
+
+    ORDER BY NIVEL
+
+', [$ID, $ID, $ID, $ID, $ID]);
 
 
 
