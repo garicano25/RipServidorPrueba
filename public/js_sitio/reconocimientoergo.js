@@ -4814,6 +4814,8 @@ function activarLogicaFichas() {
 
 
 
+
+
 function cargarGraficas() {
 
     $.get('/getGraficaErgo/' + recsensorial, function (data) {
@@ -4832,82 +4834,200 @@ function generarGraficas(data) {
 
         let id = 'chart_' + index;
 
-       $('#contenedorGraficas').append(`
-			<div style="position:relative; width:500px; height:300px; margin:20px auto;">
-				
-				<div id="${id}" style="width:100%;height:100%;"></div>
+        $('#contenedorGraficas').append(`
 
-				<svg width="500" height="300" style="position:absolute; top:0; left:0; pointer-events:none;">
-					<path id="curveTop_${id}" d="M80 200 A170 170 0 0 1 420 200" fill="none" />
+            <div style="position:relative; width:500px; height:300px; margin:20px auto;">
 
-					<text font-size="16" font-weight="bold" fill="#2C2A29">
-						<textPath href="#curveTop_${id}" startOffset="40%" text-anchor="middle">
-							Sí
-						</textPath>
-					</text>
+                <div id="${id}" style="width:100%; height:100%;"></div>
 
-					<text font-size="16" font-weight="bold" fill="#2C2A29">
-						<textPath href="#curveTop_${id}" startOffset="59%" text-anchor="middle">
-							No
-						</textPath>
-					</text>
-				</svg>
+            </div>
 
-			</div>
-		`);
+        `);
 
-        crearGrafica(id, item.RESULTADO, item.NOMBRE_CATEGORIA_ERGO);
+        crearGrafica(
+            id,
+            item.RESULTADO,
+            item.NOMBRE_CATEGORIA_ERGO
+        );
 
     });
 
 }
+
+
 
 function crearGrafica(id, resultado, nombreCategoria) {
 
-    var chart = echarts.init(document.getElementById(id));
+    var chart = echarts.init(
+        document.getElementById(id)
+    );
 
-    let valor = resultado === 'SI' ? 75 : 25; 
+    let valor = resultado === 'SI'
+        ? 75
+        : 25;
 
     chart.setOption({
-        series: [{
-            type: 'gauge',
-            startAngle: 180,
-            endAngle: 0,
-            min: 0,
-            max: 100,
 
-            axisLine: {
-                lineStyle: {
-                    width: 20,
-                    color: [
-                        [0.5, 'green'],
-                        [1, 'red']
-                    ]
+        //-----------------------------------
+        // TEXTOS SUPERIORES
+        //-----------------------------------
+
+        graphic: [
+
+            {
+                type: 'text',
+
+                left: '22%',
+
+                top: '12%',
+
+                style: {
+
+                    text: 'Sí',
+
+                    fill: '#2C2A29',
+
+                    fontSize: 18,
+
+                    fontWeight: 'bold'
                 }
             },
 
-            pointer: {
-                itemStyle: {
-                    color: 'black' 
+            {
+                type: 'text',
+
+                left: '72%',
+
+                top: '12%',
+
+                style: {
+
+                    text: 'No',
+
+                    fill: '#2C2A29',
+
+                    fontSize: 18,
+
+                    fontWeight: 'bold'
                 }
-            },
+            }
 
-            axisTick: { show: false },
-            splitLine: { show: false },
-            axisLabel: { show: false },
+        ],
 
-            detail: {
-                formatter: nombreCategoria,
-                fontSize: 16,
-                offsetCenter: [0, '60%'], 
-                color: '#000',
-                width: 300
-            },
+        //-----------------------------------
+        // GRAFICA
+        //-----------------------------------
 
-            data: [{ value: valor }]
-        }]
+        series: [
+
+            {
+
+                type: 'gauge',
+
+                startAngle: 180,
+
+                endAngle: 0,
+
+                min: 0,
+
+                max: 100,
+
+                radius: '90%',
+
+                center: ['50%', '65%'],
+
+                //-----------------------------------
+                // COLORES
+                //-----------------------------------
+
+                axisLine: {
+
+                    lineStyle: {
+
+                        width: 20,
+
+                        color: [
+
+                            [0.5, 'green'],
+
+                            [1, 'red']
+                        ]
+                    }
+                },
+
+                //-----------------------------------
+                // PUNTERO
+                //-----------------------------------
+
+                pointer: {
+
+                    itemStyle: {
+
+                        color: 'black'
+                    }
+                },
+
+                //-----------------------------------
+                // OCULTAR
+                //-----------------------------------
+
+                axisTick: {
+                    show: false
+                },
+
+                splitLine: {
+                    show: false
+                },
+
+                axisLabel: {
+                    show: false
+                },
+
+                anchor: {
+                    show: false
+                },
+
+                title: {
+                    show: false
+                },
+
+                //-----------------------------------
+                // TEXTO INFERIOR
+                //-----------------------------------
+
+                detail: {
+
+                    formatter: nombreCategoria,
+
+                    fontSize: 18,
+
+                    fontWeight: 'bold',
+
+                    offsetCenter: [0, '60%'],
+
+                    color: '#000',
+
+                    width: 300
+                },
+
+                //-----------------------------------
+                // VALOR
+                //-----------------------------------
+
+                data: [
+
+                    {
+                        value: valor
+                    }
+
+                ]
+            }
+        ]
     });
 }
+
+
+
 
 /////////////// PORTADA  //////////////
 
@@ -7041,17 +7161,160 @@ function validarEdicionRecoErgo()
 }
 
 
+// function descargarRevisionRecoErgo(
+//     RECO_ID
+// ) {
+
+//     window.open(
+
+//         '/descargarRevisionRecoErgo/' +
+//         RECO_ID,
+
+//         '_blank'
+
+//     );
+
+// }
+
+
+
+
 function descargarRevisionRecoErgo(
     RECO_ID
 ) {
 
-    window.open(
+    //---------------------------------------
+    // ARREGLO GRAFICAS
+    //---------------------------------------
 
-        '/descargarRevisionRecoErgo/' +
-        RECO_ID,
+    let graficas = [];
 
-        '_blank'
+
+
+    //---------------------------------------
+    // RECORRER GRAFICAS
+    //---------------------------------------
+
+    $('#contenedorGraficas > div').each(function () {
+
+        let chartDiv =
+            $(this).find('[id^="chart_"]')[0];
+
+
+
+        if (chartDiv) {
+
+            let instancia =
+                echarts.getInstanceByDom(
+                    chartDiv
+                );
+
+
+
+            if (instancia) {
+
+                graficas.push({
+
+                    imagen:
+                        instancia.getDataURL({
+
+                            type: 'png',
+
+                            pixelRatio: 2,
+
+                            backgroundColor: '#FFFFFF'
+
+                        })
+
+                });
+
+            }
+
+        }
+
+    });
+
+
+
+
+    //---------------------------------------
+    // FORM TEMPORAL
+    //---------------------------------------
+
+    let form = $('<form>', {
+
+        action:
+            '/descargarRevisionRecoErgo/' +
+            RECO_ID,
+
+        method:
+            'POST',
+
+        target:
+            '_blank'
+
+    });
+
+
+
+
+    //---------------------------------------
+    // TOKEN
+    //---------------------------------------
+
+    form.append(
+
+        $('<input>', {
+
+            type: 'hidden',
+
+            name: '_token',
+
+            value:
+                $('meta[name="csrf-token"]')
+                .attr('content')
+
+        })
 
     );
 
+
+
+
+    //---------------------------------------
+    // GRAFICAS
+    //---------------------------------------
+
+    form.append(
+
+        $('<input>', {
+
+            type: 'hidden',
+
+            name: 'GRAFICAS',
+
+            value:
+                JSON.stringify(graficas)
+
+        })
+
+    );
+
+
+
+
+    //---------------------------------------
+    // ENVIAR
+    //---------------------------------------
+
+    $('body').append(form);
+
+    form.submit();
+
+    form.remove();
+
 }
+
+
+
+

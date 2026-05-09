@@ -16,6 +16,9 @@ use Artisan;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Element\TextRun;
+use PhpOffice\PhpWord\Shared\Html;
+
 
 
 
@@ -2476,8 +2479,10 @@ class reconocimientoergoController extends Controller
 
 
     public function descargarRevisionRecoErgo(
+        Request $request,
         $RECO_ID
     ) {
+
 
         try {
 
@@ -2554,7 +2559,7 @@ class reconocimientoergoController extends Controller
                 'proyecto_portada',
 
                 'Evaluación del Factor de Riesgo Ergonómico
-NOM-036-1-STPS-2018 ' .
+        NOM-036-1-STPS-2018 ' .
                     $numeroContrato
 
             );
@@ -2950,167 +2955,167 @@ NOM-036-1-STPS-2018 ' .
 
 
             //---------------------------------------
-// DEFINICIONES
-//---------------------------------------
+            // DEFINICIONES
+            //---------------------------------------
 
-$definiciones = DB::table('definicionesinformeergo as di')
+            $definiciones = DB::table('definicionesinformeergo as di')
 
-    ->join(
-        'catergo_definiciones as cd',
-        'cd.ID_DEFINICIONES',
-        '=',
-        'di.CATALOGO_DEFINICIONES_ID'
-    )
+                ->join(
+                    'catergo_definiciones as cd',
+                    'cd.ID_DEFINICIONES',
+                    '=',
+                    'di.CATALOGO_DEFINICIONES_ID'
+                )
 
-    ->where(
-        'di.RECO_ID',
-        $RECO_ID
-    )
+                ->where(
+                    'di.RECO_ID',
+                    $RECO_ID
+                )
 
-    ->orderBy(
-        'cd.CONCEPTO_DEFINICION',
-        'ASC'
-    )
+                ->orderBy(
+                    'cd.CONCEPTO_DEFINICION',
+                    'ASC'
+                )
 
-    ->select(
-        'cd.CONCEPTO_DEFINICION',
-        'cd.DESCRIPCION_DEFINICION',
-        'cd.FUENTE_DEFINICION'
-    )
+                ->select(
+                    'cd.CONCEPTO_DEFINICION',
+                    'cd.DESCRIPCION_DEFINICION',
+                    'cd.FUENTE_DEFINICION'
+                )
 
-    ->get();
-
-
-
-
-//---------------------------------------
-// TEXO DEFINICIONES
-//---------------------------------------
-
-$textoDefiniciones = '';
-
-
-
-//---------------------------------------
-// FUENTES SIN REPETIR
-//---------------------------------------
-
-$fuentes = [];
-
-
-
-foreach ($definiciones as $key => $value) {
-
-    //---------------------------------------
-    // DEFINICION
-    //---------------------------------------
-
-    $textoDefiniciones .=
-
-        '<w:p>
-
-            <w:r>
-                <w:rPr>
-                    <w:b/>
-                </w:rPr>
-
-                <w:t>' .
-
-                    htmlspecialchars(
-                        $value->CONCEPTO_DEFINICION
-                    ) .
-
-                ':</w:t>
-
-            </w:r>
-
-            <w:r>
-
-                <w:t xml:space="preserve">
-
-                    ' .
-
-                    htmlspecialchars(
-                        $value->DESCRIPCION_DEFINICION
-                    ) .
-
-                '
-
-                </w:t>
-
-            </w:r>
-
-        </w:p>';
-
-
-
-    //---------------------------------------
-    // FUENTES
-    //---------------------------------------
-
-    if (
-        $value->FUENTE_DEFINICION
-        &&
-        !in_array(
-            $value->FUENTE_DEFINICION,
-            $fuentes
-        )
-    ) {
-
-        $fuentes[] =
-            $value->FUENTE_DEFINICION;
-    }
-}
+                ->get();
 
 
 
 
-//---------------------------------------
-// SI NO HAY DEFINICIONES
-//---------------------------------------
+            //---------------------------------------
+            // TEXO DEFINICIONES
+            //---------------------------------------
 
-if ($textoDefiniciones == '') {
-
-    $textoDefiniciones =
-        'No cargado';
-}
+            $textoDefiniciones = '';
 
 
 
+            //---------------------------------------
+            // FUENTES SIN REPETIR
+            //---------------------------------------
 
-//---------------------------------------
-// TEXTO FUENTES
-//---------------------------------------
-
-$textoFuentes =
-
-    count($fuentes)
-
-    ? implode(
-        '</w:t><w:br/><w:t>',
-        $fuentes
-    )
-
-    : 'No cargado';
+            $fuentes = [];
 
 
 
+            foreach ($definiciones as $key => $value) {
 
-//---------------------------------------
-// MARCADORES WORD
-//---------------------------------------
+                //---------------------------------------
+                // DEFINICION
+                //---------------------------------------
 
-$plantillaword->setValue(
-    'DEFINICIONES',
-    $textoDefiniciones
-);
+                $textoDefiniciones .=
+
+                    '<w:p>
+
+                        <w:r>
+                            <w:rPr>
+                                <w:b/>
+                            </w:rPr>
+
+                            <w:t>' .
+
+                                htmlspecialchars(
+                                    $value->CONCEPTO_DEFINICION
+                                ) .
+
+                            ':</w:t>
+
+                        </w:r>
+
+                        <w:r>
+
+                            <w:t xml:space="preserve">
+
+                                ' .
+
+                                htmlspecialchars(
+                                    $value->DESCRIPCION_DEFINICION
+                                ) .
+
+                            '
+
+                            </w:t>
+
+                        </w:r>
+
+                    </w:p>';
 
 
 
-$plantillaword->setValue(
-    'DEFINICIONES_FUENTES',
-    $textoFuentes
-);
+                //---------------------------------------
+                // FUENTES
+                //---------------------------------------
+
+                if (
+                    $value->FUENTE_DEFINICION
+                    &&
+                    !in_array(
+                        $value->FUENTE_DEFINICION,
+                        $fuentes
+                    )
+                ) {
+
+                    $fuentes[] =
+                        $value->FUENTE_DEFINICION;
+                }
+            }
+
+
+
+
+            //---------------------------------------
+            // SI NO HAY DEFINICIONES
+            //---------------------------------------
+
+            if ($textoDefiniciones == '') {
+
+                $textoDefiniciones =
+                    'No cargado';
+            }
+
+
+
+
+            //---------------------------------------
+            // TEXTO FUENTES
+            //---------------------------------------
+
+            $textoFuentes =
+
+                count($fuentes)
+
+                ? implode(
+                    '</w:t><w:br/><w:t>',
+                    $fuentes
+                )
+
+                : 'No cargado';
+
+
+
+
+            //---------------------------------------
+            // MARCADORES WORD
+            //---------------------------------------
+
+            $plantillaword->setValue(
+                'DEFINICIONES',
+                $textoDefiniciones
+            );
+
+
+
+            $plantillaword->setValue(
+                'DEFINICIONES_FUENTES',
+                $textoFuentes
+            );
 
 
 
@@ -4078,6 +4083,129 @@ $plantillaword->setComplexBlock(
                     )
 
             );
+
+
+
+
+
+
+
+
+
+            //================================================================================
+            // ${TABLA_6_1} GRAFICAS
+            //================================================================================
+
+            if ($request->has('GRAFICAS')) {
+
+                //---------------------------------------
+                // DECODIFICAR
+                //---------------------------------------
+
+                $graficas = json_decode(
+                    $request->GRAFICAS,
+                    true
+                );
+
+                //---------------------------------------
+                // VALIDAR
+                //---------------------------------------
+
+                if ($graficas && count($graficas) > 0) {
+
+                    //---------------------------------------
+                    // CLONAR FILAS
+                    //---------------------------------------
+
+                    $plantillaword->cloneRow(
+                        'GRAFICA',
+                        count($graficas)
+                    );
+
+                    //---------------------------------------
+                    // RECORRER
+                    //---------------------------------------
+
+                    foreach ($graficas as $index => $grafica) {
+
+                        $numero = $index + 1;
+
+                        //---------------------------------------
+                        // VALIDAR
+                        //---------------------------------------
+
+                        if (!isset($grafica['imagen'])) {
+
+                            $plantillaword->setValue(
+                                'GRAFICA#' . $numero,
+                                'SIN IMAGEN'
+                            );
+
+                            continue;
+                        }
+
+                        //---------------------------------------
+                        // LIMPIAR BASE64
+                        //---------------------------------------
+
+                        $base64 = preg_replace(
+                            '#^data:image/\w+;base64,#i',
+                            '',
+                            $grafica['imagen']
+                        );
+
+                        $base64 = str_replace(
+                            ' ',
+                            '+',
+                            $base64
+                        );
+
+                        //---------------------------------------
+                        // DECODIFICAR
+                        //---------------------------------------
+
+                        $imageData = base64_decode($base64);
+
+                        //---------------------------------------
+                        // CREAR TEMPORAL
+                        //---------------------------------------
+
+                        $ruta = storage_path(
+                            'app/grafica_' . uniqid() . '.png'
+                        );
+
+                        file_put_contents(
+                            $ruta,
+                            $imageData
+                        );
+
+                        //---------------------------------------
+                        // INSERTAR IMAGEN
+                        //---------------------------------------
+
+                        $plantillaword->setImageValue(
+
+                            'GRAFICA#' . $numero,
+
+                            [
+                                'path' => $ruta,
+                                'width' => 500,
+                                'height' => 300,
+                                'ratio' => true
+                            ]
+                        );
+                    }
+                } else {
+
+                    $plantillaword->setValue(
+                        'GRAFICA',
+                        'NO HAY GRAFICAS'
+                    );
+                }
+            }
+
+
+            
             //---------------------------------------
             // GUARDAR WORD
             //---------------------------------------

@@ -2366,13 +2366,9 @@ Route::get(
 //// descargar 
 
 
-Route::get(
+Route::post(
     'descargarRevisionRecoErgo/{RECO_ID}',
-    [
-        'as' => 'descargarRevisionRecoErgo',
-        'uses' =>
-        'ERGO\reconocimientoergoController@descargarRevisionRecoErgo'
-    ]
+    'ERGO\reconocimientoergoController@descargarRevisionRecoErgo'
 );
 
 /////////// CATEGORIA  ///////////

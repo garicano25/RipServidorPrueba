@@ -62,9 +62,33 @@
 
 
 
+<style>
+    <style>
+
+    /* TABLA ÁREAS */
+    #Tablarecoareasergo tbody td,
+    #Tablarecoareasergo thead th {
+        font-size: 22px !important;
+    }
+
+    /* TABLA CATEGORÍAS */
+    #Tablarecocategoriasergo tbody td,
+    #Tablarecocategoriasergo thead th {
+        font-size: 22px !important;
+    }
+
+    /* TABLA FICHAS */
+    #Tablarecofichasergo tbody td,
+    #Tablarecofichasergo thead th {
+        font-size: 22px !important;
+    }
+</style>
+</style>
 
 
-<!-- CONTENIDO RECONOCIMIENTO PSICOSOCIAL -->
+<!--
+
+CONTENIDO RECONOCIMIENTO PSICOSOCIAL -->
 
 <style>
     /* Estilo para el select */
@@ -1654,7 +1678,7 @@
                                                     <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
                                                 </button>
                                             </ol>
-                                            
+
                                             <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_revisiones">
                                                 <thead>
                                                     <tr>
@@ -1912,7 +1936,7 @@
                             <div class="form-group">
                                 <label>Fecha de nacimiento </label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO" >
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO">
                                     <span class="input-group-addon"><i class="icon-calender"></i></span>
                                 </div>
                             </div>
