@@ -863,8 +863,8 @@ class reconocimientoergoController extends Controller
             $niveles = DB::select('
 
     SELECT 
-        "Instalación" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
-        p.proyecto_clienteinstalacion COLLATE utf8mb4_unicode_ci AS OPCION,
+        CAST("Instalación" AS CHAR) AS ETIQUETA,
+        CAST(p.proyecto_clienteinstalacion AS CHAR) AS OPCION,
         0 NIVEL
 
     FROM reconocimientoergo re
@@ -878,15 +878,9 @@ class reconocimientoergoController extends Controller
 
     SELECT
 
-        IFNULL(
-            ce.NOMBRE_ETIQUETA COLLATE utf8mb4_unicode_ci,
-            "NO"
-        ) AS ETIQUETA,
+        CAST(IFNULL(ce.NOMBRE_ETIQUETA, "NO") AS CHAR) AS ETIQUETA,
 
-        IFNULL(
-            co.NOMBRE_OPCIONES COLLATE utf8mb4_unicode_ci,
-            "NO"
-        ) AS OPCION,
+        CAST(IFNULL(co.NOMBRE_OPCIONES, "NO") AS CHAR) AS OPCION,
 
         IFNULL(ep.NIVEL, 0) NIVEL
 
@@ -909,9 +903,9 @@ class reconocimientoergoController extends Controller
     UNION
 
     SELECT 
-        "Folio" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
+        CAST("Folio" AS CHAR) AS ETIQUETA,
 
-        p.proyecto_folio COLLATE utf8mb4_unicode_ci AS OPCION,
+        CAST(p.proyecto_folio AS CHAR) AS OPCION,
 
         0 NIVEL
 
@@ -926,9 +920,9 @@ class reconocimientoergoController extends Controller
 
     SELECT
 
-        "Razón social" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
+        CAST("Razón social" AS CHAR) AS ETIQUETA,
 
-        p.proyecto_clienterazonsocial COLLATE utf8mb4_unicode_ci AS OPCION,
+        CAST(p.proyecto_clienterazonsocial AS CHAR) AS OPCION,
 
         0 NIVEL
 
@@ -943,9 +937,9 @@ class reconocimientoergoController extends Controller
 
     SELECT 
 
-        "Nombre comercial" COLLATE utf8mb4_unicode_ci AS ETIQUETA,
+        CAST("Nombre comercial" AS CHAR) AS ETIQUETA,
 
-        c.cliente_NombreComercial COLLATE utf8mb4_unicode_ci AS OPCION,
+        CAST(c.cliente_NombreComercial AS CHAR) AS OPCION,
 
         0 NIVEL
 
@@ -962,7 +956,6 @@ class reconocimientoergoController extends Controller
     ORDER BY NIVEL
 
 ', [$ID, $ID, $ID, $ID, $ID]);
-
 
 
             foreach ($niveles as $key => $value) {
