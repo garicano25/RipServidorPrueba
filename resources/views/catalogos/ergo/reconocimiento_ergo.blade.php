@@ -63,26 +63,18 @@
 
 
 <style>
-    <style>
-
-    /* TABLA ÁREAS */
     #Tablarecoareasergo tbody td,
     #Tablarecoareasergo thead th {
-        font-size: 22px !important;
+        font-size: 15px !important;
     }
-
-    /* TABLA CATEGORÍAS */
     #Tablarecocategoriasergo tbody td,
     #Tablarecocategoriasergo thead th {
-        font-size: 22px !important;
+        font-size: 15px !important;
     }
-
-    /* TABLA FICHAS */
     #Tablarecofichasergo tbody td,
     #Tablarecofichasergo thead th {
-        font-size: 22px !important;
+        font-size: 15px !important;
     }
-</style>
 </style>
 
 
