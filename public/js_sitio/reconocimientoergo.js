@@ -17,7 +17,9 @@ var HIGIENE = 1;
 var Tablarecocategoriasergo = null;
 var Tablarecoareasergo = null;
 var Tablarecofichasergo = null;
-
+var tabla_reporte_categoria = null;
+var tabla_reporte_area = null;
+var tabla_reporte_revisiones  = null 
 
 ID_CATEGORIA_ERGO = 0;
 ID_AREA_ERGO = 0;
@@ -152,10 +154,21 @@ $('.link_menuprincipal').click(function () {
 
 			$("#steps_menu_tab1").click();
 
-    		cargarGraficas();
+			cargarDatosGeneralesInformeReco();
+			cargarDatosInformesRecoErgo();
+			cargarDefinicionesInformeErgo();
+			cargarGraficas();
+			tablaReporteCategoriasErgo();
+			tablaReporteAreasErgo();
+			cargarRecomendacionesInformeErgo();
+
+			  tablaVersionesRecoErgo();
+
+			validarEdicionRecoErgo();
+			
 
 
-			$('#PORTADA').dropify({
+		$('#RUTA_IMAGEN_PORTADA').dropify({
 				messages: {
 					'default': 'Arrastre la imagen aquí o haga click',
 					'replace': 'Arrastre la imagen o haga clic para reemplazar',
@@ -172,13 +185,9 @@ $('.link_menuprincipal').click(function () {
 				}
 			});
 
-			$('#PORTADA').val('');
-			$('#PORTADA').dropify().data('dropify').resetPreview();
-			$('#PORTADA').dropify().data('dropify').clearElement();
-			
 
 
-			$('#reporteubicacionfoto').dropify({
+			$('#RUTA_IMAGEN_UBICACION').dropify({
 				messages: {
 					'default': 'Arrastre la imagen aquí o haga click',
 					'replace': 'Arrastre la imagen o haga clic para reemplazar',
@@ -195,12 +204,50 @@ $('.link_menuprincipal').click(function () {
 				}
 			});
 
-			$('#reporteubicacionfoto').val('');
-			$('#reporteubicacionfoto').dropify().data('dropify').resetPreview();
-			$('#reporteubicacionfoto').dropify().data('dropify').clearElement();
+
+
+			$('#INFORME_RESPONSABLE1DOCUMENTO').dropify({
+							messages: {
+								'default': 'Arrastre la imagen aquí o haga click',
+								'replace': 'Arrastre la imagen o haga clic para reemplazar',
+								'remove': 'Quitar',
+								'error': 'Ooops, ha ocurrido un error.'
+							},
+							error: {
+								'fileSize': 'Demasiado grande ({{ value }} max).',
+								'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+								'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+								'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+								'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+								'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+							}
+			});
+
+		$('#INFORME_RESPONSABLE2DOCUMENTO').dropify({
+						messages: {
+							'default': 'Arrastre la imagen aquí o haga click',
+							'replace': 'Arrastre la imagen o haga clic para reemplazar',
+							'remove': 'Quitar',
+							'error': 'Ooops, ha ocurrido un error.'
+						},
+						error: {
+							'fileSize': 'Demasiado grande ({{ value }} max).',
+							'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+							'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+							'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+							'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+							'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+						}
+					});
+
+
+
+
 			
 
-		break;
+			break;
+		
+
 		default:
 			break;
 	}
@@ -3091,15 +3138,15 @@ NOTA: Señale con una "X", cuando la condición verificada está presente (colum
 
 ${fila14("r1","a.","¿La distancia vertical es superior a 175 cm o está por debajo del nivel del suelo?")}
 ${fila14("r2","b.","¿El desplazamiento vertical es superior a 175 cm?")}
-${fila14("r3","c.","¿La distancia horizontal es superior a 63 cm fuera del alcance máximo?")}
+${fila14("r3","c.","¿La distancia horizontal es superior a 63 cm fuera del alcance máximo (brazo completamente estirado hacia delante)?")}
 ${fila14("r4","d.","¿El ángulo de asimetría es superior a 135°?")}
-${fila14("r5","e.","¿Se realizan más de 15 levantamientos/min en duración corta?")}
-${fila14("r6","f.","¿Se realizan más de 12 levantamientos/min en duración media?")}
-${fila14("r7","g.","¿Se realizan más de 8 levantamientos/min en duración larga?")}
-${fila14("r8","h.","¿Mujeres (18-45 años) y carga > 20 kg?")}
-${fila14("r9","i.","¿Mujeres (<18 o >45 años) y carga > 15 kg?")}
-${fila14("r10","j.","¿Hombres (18-45 años) y carga > 25 kg?")}
-${fila14("r11","k.","¿Hombres (<18 o >45 años) y carga > 20 kg?")}
+${fila14("r5","e.","¿Se realizan más de 15 levantamientos/min en duración corta? (La tarea  de manipulación manual no dura más de 60 min consecutivos y viene seguida de tareas ligeras para la espalda de duración miníma de 60 min)")}
+${fila14("r6","f.","¿Se realizan más de 12 levantamientos/min en duración media? (La tarea de manipulación manual no dura más de 120 min consecutivos  y viene seguida de tareas ligeras para la espalda de duración miníma de 30 min )")}
+${fila14("r7","g.","¿Se realizan más de 8 levantamientos/min en duración larga? (La tarea de manipulación manual que no es de duración corta ni media )")}
+${fila14("r8","h.","¿La tarea se puede realizar por mujeres (entre 18 y 45 años) y la carga pesa más de 20 kg?")}
+${fila14("r9","i.","¿La tarea se puede realizar por mujeres (menores de 18 y mayores de 45 años) y  la carga pesa más de 15 kg?")}
+${fila14("r10","j.","¿La tarea  la realizan únicamente hombres (entre 18 y 45 años) y la carga pesa más de 25 kg?")}
+${fila14("r11","k.","¿La tarea la realizan únicamente hombre (menores de 18 y mayores de 45 años) y la carga pesa más de 20 kg?")}
 
 </table>
 
@@ -3358,9 +3405,9 @@ NOTA: Señale con una "X", cuando la condición verificada está presente (colum
 
 <table class="table table-bordered mb-0">
 
-${fila23("r23_1","a.","¿La fuerza requerida en el empuje o tracción es “Muy intensa” o superior (Escala de Borg ≥ 8)? O ¿la fuerza para iniciar el movimiento es ≥ 360 N en hombres o ≥ 240 N en mujeres? O ¿la fuerza para mantener el movimiento es ≥ 250 N en hombres o ≥ 150 N en mujeres?")}
+${fila23("r23_1","a.","¿La fuerza requerida en el empuje o tracción es “Muy intensa” o superior (Escala de Borg mayor o igual a 8)? <br>  O <br>  ¿la fuerza requerida  en el empuje  o tracción para iniciar el movimiento es 360 N o más para hombres, o de 240 N más para mujeres? <br> O  <br> ¿la fuerza requerida para  el empuje o tracción para mantener el movimiento es de 250 N o más para hombres o de 150 N o más mujeres?")}
 
-${fila23("r23_2","b.","¿La fuerza de empuje o tracción se aplica a una altura superior a 150 cm o menor a 60 cm?")}
+${fila23("r23_2","b.","¿La fuerza de empuje o tracción se aplica a una altura de agarre superior a 150 cm o menor a 60 cm?")}
 
 ${fila23("r23_3","c.","¿La acción de empuje o tracción se realiza con el tronco flexionado o en torsión?")}
 
@@ -3403,7 +3450,7 @@ NOTA: Señale con una "X", cuando la condición verificada está presente (colum
 <tr>
 <td width="40" class="texto-pregunta">a.</td>
 <td class="texto-pregunta">
-¿Las extremidades superiores están inactivas por más del 50% del tiempo total del trabajo repetitivo (se considera como tiempo de inactividad cuando el trabajador camina con las manos vacías, o lee, o hace control visual, etc.)?
+¿Las extremidades superiores están inactivas por más del 50% del tiempo total del trabajo repetitivo (se considera como tiempo de inactividad de la extremidad superior cuando el trabajador camina con las manos vacías, o lee, o hace control visual, o espera que la máquina concluya el trabajo, etc.)?
 </td>
 
 <td class="text-center">
@@ -3423,7 +3470,7 @@ NOTA: Señale con una "X", cuando la condición verificada está presente (colum
 
 <tr>
 <td class="texto-pregunta">b.</td>
-<td class="texto-pregunta">¿Ninguno de los brazos trabaja con el codo casi a la altura del hombro por más del 10% del tiempo?</td>
+<td class="texto-pregunta">¿Ninguno de los brazos trabaja con el codo casi a la altura del hombro por más del 10% del tiempo de trabajo repetitivo?</td>
 
 <td class="text-center">
 <div class="form-check">
@@ -3443,7 +3490,7 @@ NOTA: Señale con una "X", cuando la condición verificada está presente (colum
 <tr>
 <td class="texto-pregunta">c.</td>
 <td class="texto-pregunta">
-¿La fuerza necesaria para realizar el trabajo es menor a moderada (ligera)?<br><br>
+¿La fuerza necesaria para realizar el trabajo es menor a moderada (es ligera)?<br><br>
 O bien,<br><br>
 ¿Si la fuerza es moderada, no supera el 25% del tiempo de trabajo repetitivo?
 </td>
@@ -3503,7 +3550,7 @@ O bien,<br><br>
 
 <tr>
 <td class="texto-pregunta">f.</td>
-<td class="texto-pregunta">¿La tarea de trabajo repetitivo se realiza durante menos de 8 horas al día?</td>
+<td class="texto-pregunta">¿La (s) tarea (s) de trabajo repetitivo se realiza durante menos de 8 horas al día?</td>
 
 <td class="text-center">
 <div class="form-check">
@@ -3561,13 +3608,13 @@ ${fila32("r32_1","a.","¿Las acciones técnicas de una extremidad son tan rápid
 
 ${fila32("r32_2","b.","¿Un brazo o ambos trabajan con el codo casi a la altura del hombro por la mitad o más del tiempo de trabajo repetitivo?")}
 
-${fila32("r32_3","c.","¿Se realizan picos de fuerza (fuerza intensa o más en escala Borg) durante el 5% o más del tiempo?")}
+${fila32("r32_3","c.","¿Se realizan picos de fuerza (Fuerza intensa o más en la de escala Borg) durante el 5% o más del tiempo de trabajo repetitivo?")}
 
-${fila32("r32_4","d.","¿Se requiere el agarre de precisión con los dedos durante más del 80% del tiempo?")}
+${fila32("r32_4","d.","¿Se requiere el agarre de objetos con los dedos (agarre de precisión) durante más del 80% del tiempo de trabajo repetitivo ?")}
 
-${fila32("r32_5","e.","En turnos de 6 horas o más, ¿solo hay una pausa o ninguna?")}
+${fila32("r32_5","e.","En turnos de 6 horas o más, ¿sólo tiene una pausa o ninguna?")}
 
-${fila32("r32_6","f.","¿El trabajo repetitivo es superior a 8 horas en el turno?")}
+${fila32("r32_6","f.","¿El tiempo de trabajo repetitivo es superior a 8 horas en el turno?")}
 
 </table>
 
@@ -3620,8 +3667,8 @@ ${fila41("p3","c.","¿La cabeza está recta, o si está inclinada lateralmente e
 
 ${fila41("p4","d.","¿El brazo está sin apoyo y la flexión no supera el ángulo de 20°?")}
 ${fila41("p5","e.","¿El brazo está con apoyo y la flexión no supera el ángulo de 60°?")}
-${fila41("p6","f.","¿El codo realiza movimientos no extremos (flexo-extensión o prono-supinación)?")}
-${fila41("p7","g.","¿La muñeca está en posición neutra (sin desviaciones extremas)?")}
+${fila41("p6","f.","¿El codo realiza flexo-extensiones o prono-supinacinaciones no extremas (pequeñas)?")}
+${fila41("p7","g.","¿La muñeca está en posición neutra o no realiza desviaciones extremas (flexión,extensión,desviación radial o ulnar)?")}
 
 <tr class="bg-light text-center">
 <td colspan="2" class="texto-pregunta"><b>Extremidad Inferior</b></td>
@@ -3630,9 +3677,9 @@ ${fila41("p7","g.","¿La muñeca está en posición neutra (sin desviaciones ext
 </tr>
 
 ${fila41("p8","h.","¿Las flexiones extremas de rodilla están ausentes?")}
-${fila41("p9","i.","¿Las dorsiflexiones y flexiones plantares extremas están ausentes?")}
+${fila41("p9","i.","¿Las dorsiflexiones y flexiones plantares de tobillo extremas están ausentes?")}
 ${fila41("p10","j.","¿Las posturas de rodillas y cuclillas están ausentes?")}
-${fila41("p11","k.","Si está sentado, ¿el ángulo de rodilla está entre 90° y 135°?")}
+${fila41("p11","k.","Si la postura es sentado, ¿el ángulo de rodilla está entre 90° y 135°?")}
 
 </table>
 
@@ -4860,4 +4907,2151 @@ function crearGrafica(id, resultado, nombreCategoria) {
             data: [{ value: valor }]
         }]
     });
+}
+
+/////////////// PORTADA  //////////////
+
+
+function cargarDatosInformesRecoErgo()
+{
+
+    $.get('/obtenerDatosInformesRecoergo/' + recsensorial, function(response)
+    {
+
+        //-----------------------------------------
+        // LLENAR SELECTS
+        //-----------------------------------------
+
+        $('#NIVEL1').html(response.checks);
+        $('#NIVEL2').html(response.checks);
+        $('#NIVEL3').html(response.checks);
+        $('#NIVEL4').html(response.checks);
+        $('#NIVEL5').html(response.checks);
+
+        $('#OPCION_PORTADA1').html(response.opciones);
+        $('#OPCION_PORTADA2').html(response.opciones);
+        $('#OPCION_PORTADA3').html(response.opciones);
+        $('#OPCION_PORTADA4').html(response.opciones);
+        $('#OPCION_PORTADA5').html(response.opciones);
+        $('#OPCION_PORTADA6').html(response.opciones);
+
+
+        //-----------------------------------------
+        // SI EXISTE INFORMACION
+        //-----------------------------------------
+
+        if(response.data != 'No se encontraron datos')
+        {
+
+            let data = response.data[0];
+
+
+            //-----------------------------------------
+            // ASIGNAR VALORES
+            //-----------------------------------------
+
+            $('#NIVEL1').val(data.NIVEL1).trigger('change');
+            $('#NIVEL2').val(data.NIVEL2).trigger('change');
+            $('#NIVEL3').val(data.NIVEL3).trigger('change');
+            $('#NIVEL4').val(data.NIVEL4).trigger('change');
+            $('#NIVEL5').val(data.NIVEL5).trigger('change');
+
+
+            $('#OPCION_PORTADA1').val(data.OPCION_PORTADA1).trigger('change');
+            $('#OPCION_PORTADA2').val(data.OPCION_PORTADA2).trigger('change');
+            $('#OPCION_PORTADA3').val(data.OPCION_PORTADA3).trigger('change');
+            $('#OPCION_PORTADA4').val(data.OPCION_PORTADA4).trigger('change');
+            $('#OPCION_PORTADA5').val(data.OPCION_PORTADA5).trigger('change');
+            $('#OPCION_PORTADA6').val(data.OPCION_PORTADA6).trigger('change');
+
+
+            //-----------------------------------------
+            // MES Y AÑO
+            //-----------------------------------------
+
+            $('#INFORME_MES').val(data.INFORME_MES);
+            $('#INFORME_ANIO').val(data.INFORME_ANIO);
+
+
+
+            //-----------------------------------------
+            // IMAGEN PORTADA
+            //-----------------------------------------
+
+            if(data.RUTA_IMAGEN_PORTADA)
+            {
+
+                var archivo = data.RUTA_IMAGEN_PORTADA;
+
+                var extension = archivo.substring(
+                    archivo.lastIndexOf(".")
+                );
+
+
+
+                var imagenUrl =
+                    '/mostrarportadarecoergo/0/' +
+                    recsensorial +
+                    extension;
+
+
+
+                //-----------------------------------------
+                // DROPIFY
+                //-----------------------------------------
+
+                if ($('#RUTA_IMAGEN_PORTADA').data('dropify')) {
+
+                    $('#RUTA_IMAGEN_PORTADA')
+                        .dropify()
+                        .data('dropify')
+                        .destroy();
+
+
+                    $('#RUTA_IMAGEN_PORTADA')
+                        .dropify()
+                        .data('dropify')
+                        .settings.defaultFile = imagenUrl;
+
+
+                    $('#RUTA_IMAGEN_PORTADA')
+                        .dropify()
+                        .data('dropify')
+                        .init();
+
+                }
+                else {
+
+                    $('#RUTA_IMAGEN_PORTADA')
+                        .attr('data-default-file', imagenUrl);
+
+
+                    $('#RUTA_IMAGEN_PORTADA').dropify({
+
+                        messages: {
+                            'default': 'Arrastre la imagen aquí o haga click',
+                            'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                            'remove': 'Quitar',
+                            'error': 'Ooops, ha ocurrido un error.'
+                        },
+
+                        error: {
+                            'fileSize': 'Demasiado grande ({{ value }} max).',
+                            'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                            'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                            'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                            'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                            'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                        }
+
+                    });
+                }
+
+
+
+                //-----------------------------------------
+                // NO REQUERIDO
+                //-----------------------------------------
+
+                $('#RUTA_IMAGEN_PORTADA')
+                    .attr('required', false);
+
+            }
+
+        }
+
+    }).fail(function(xhr)
+    {
+
+        console.log(xhr.responseText);
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudieron cargar los datos del informe'
+        });
+
+    });
+
+}
+
+
+$("#form_informe_portada").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+    $.ajax({
+        url: '/guardarPortadaRecoErgo',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_portada").prop('disabled', true);
+
+            $("#botonguardar_reporte_portada").html(
+                'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+            );
+
+        },
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+
+            cargarDatosInformesRecoErgo();
+
+        },
+
+        error: function(xhr)
+        {
+
+            console.log(xhr.responseText);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al guardar'
+            });
+
+        },
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_portada").prop('disabled', false);
+
+            $("#botonguardar_reporte_portada").html(
+                'Guardar portadas <i class="fa fa-save"></i>'
+            );
+
+        }
+
+    });
+
+});
+
+
+/// DATOS GENERALES
+
+function cargarDatosGeneralesInformeReco()
+{
+
+    $.get(
+
+        '/obtenerDatosGeneralesInformeReco/' + recsensorial,
+
+        function(response)
+        {
+
+        
+
+            if(response.msj){
+
+                return;
+            }
+
+
+
+            $('#SELECT_INTRODUCCION')
+                .val(response.SELECT_INTRODUCCION)
+                .trigger('change');
+
+            $('#INFORME_INTRODUCCION')
+                .val(response.INFORME_INTRODUCCION);
+
+            $('#INFORME_OBJETIVOGENERALES')
+                .val(response.INFORME_OBJETIVOGENERALES);
+
+            $('#INFORME_OBJETIVOSESPECIFICOS')
+                .val(response.INFORME_OBJETIVOSESPECIFICOS);
+
+            $('#INFORME_UBICACIONINSTALACION')
+                .val(response.INFORME_UBICACIONINSTALACION);
+
+			$('#INFORME_PROCESOINSTALACION')
+				.val(response.INFORME_PROCESOINSTALACION);
+
+			$('#INFORME_ACTIVIDADPRINCIPAL')
+				.val(response.INFORME_ACTIVIDADPRINCIPAL);
+
+			$('#SELECT_CONCLUSION')
+				.val(response.SELECT_CONCLUSION)
+				.trigger('change');
+
+			$('#INFORME_CONCLUSION')
+				.val(response.INFORME_CONCLUSION);
+			
+			$('#INFORME_RESPONSABLE1')
+				.val(response.INFORME_RESPONSABLE1);
+
+
+			$('#INFORME_RESPONSABLE1CARGO')
+				.val(response.INFORME_RESPONSABLE1CARGO);
+
+
+
+			$('#INFORME_RESPONSABLE2')
+				.val(response.INFORME_RESPONSABLE2);
+
+
+
+		$('#INFORME_RESPONSABLE2CARGO')
+			.val(response.INFORME_RESPONSABLE2CARGO);
+					//-----------------------------------
+            // IMAGEN UBICACION
+            //-----------------------------------
+
+
+
+			   if(response.RUTA_IMAGEN_UBICACION)
+            {
+
+                var archivo = response.RUTA_IMAGEN_UBICACION;
+
+                var extension = archivo.substring(
+                    archivo.lastIndexOf(".")
+                );
+
+
+
+                var imagenUrl =
+                    '/mostrarubicacionrecoergo/0/' +
+                    recsensorial +
+                    extension;
+
+
+
+                //-----------------------------------------
+                // DROPIFY
+                //-----------------------------------------
+
+                if ($('#RUTA_IMAGEN_UBICACION').data('dropify')) {
+
+                    $('#RUTA_IMAGEN_UBICACION')
+                        .dropify()
+                        .data('dropify')
+                        .destroy();
+
+
+                    $('#RUTA_IMAGEN_UBICACION')
+                        .dropify()
+                        .data('dropify')
+                        .settings.defaultFile = imagenUrl;
+
+
+                    $('#RUTA_IMAGEN_UBICACION')
+                        .dropify()
+                        .data('dropify')
+                        .init();
+
+                }
+                else {
+
+                    $('#RUTA_IMAGEN_UBICACION')
+                        .attr('data-default-file', imagenUrl);
+
+
+                    $('#RUTA_IMAGEN_UBICACION').dropify({
+
+                        messages: {
+                            'default': 'Arrastre la imagen aquí o haga click',
+                            'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                            'remove': 'Quitar',
+                            'error': 'Ooops, ha ocurrido un error.'
+                        },
+
+                        error: {
+                            'fileSize': 'Demasiado grande ({{ value }} max).',
+                            'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                            'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                            'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                            'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                            'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                        }
+
+                    });
+                }
+
+
+
+                //-----------------------------------------
+                // NO REQUERIDO
+                //-----------------------------------------
+
+                $('#RUTA_IMAGEN_UBICACION')
+                    .attr('required', false);
+
+			}
+			
+
+
+
+//-----------------------------------
+// RESPONSABLE 1
+//-----------------------------------
+
+$('#INFORME_RESPONSABLE1')
+    .val(response.INFORME_RESPONSABLE1);
+
+
+$('#INFORME_RESPONSABLE1CARGO')
+    .val(response.INFORME_RESPONSABLE1CARGO);
+
+
+
+if(response.INFORME_RESPONSABLE1DOCUMENTO)
+{
+
+    var archivo =
+        response.INFORME_RESPONSABLE1DOCUMENTO;
+
+
+
+    var extension = archivo.substring(
+        archivo.lastIndexOf(".")
+    );
+
+
+
+    var imagenUrl =
+        '/mostrarresponsable1recoergo/0/' +
+        recsensorial +
+        extension;
+
+
+
+    //-----------------------------------------
+    // DROPIFY
+    //-----------------------------------------
+
+    if ($('#INFORME_RESPONSABLE1DOCUMENTO')
+        .data('dropify')) {
+
+        $('#INFORME_RESPONSABLE1DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .destroy();
+
+
+
+        $('#INFORME_RESPONSABLE1DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .settings.defaultFile = imagenUrl;
+
+
+
+        $('#INFORME_RESPONSABLE1DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .init();
+
+    }
+    else {
+
+        $('#INFORME_RESPONSABLE1DOCUMENTO')
+            .attr('data-default-file', imagenUrl);
+
+
+
+        $('#INFORME_RESPONSABLE1DOCUMENTO')
+            .dropify({
+
+            messages: {
+                'default': 'Arrastre la imagen aquí o haga click',
+                'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                'remove': 'Quitar',
+                'error': 'Ooops, ha ocurrido un error.'
+            },
+
+            error: {
+                'fileSize': 'Demasiado grande ({{ value }} max).',
+                'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+            }
+
+        });
+
+    }
+
+
+
+    //-----------------------------------------
+    // NO REQUERIDO
+    //-----------------------------------------
+
+    $('#INFORME_RESPONSABLE1DOCUMENTO')
+        .attr('required', false);
+
+
+
+    //-----------------------------------------
+    // BOTON DESCARGA
+    //-----------------------------------------
+
+    $("#boton_descargarresponsabledoc1")
+        .css('display', 'block');
+
+}
+else {
+
+    $("#boton_descargarresponsabledoc1")
+        .css('display', 'none');
+
+}
+
+
+
+//-----------------------------------
+// RESPONSABLE 2
+//-----------------------------------
+
+$('#INFORME_RESPONSABLE2')
+    .val(response.INFORME_RESPONSABLE2);
+
+
+$('#INFORME_RESPONSABLE2CARGO')
+    .val(response.INFORME_RESPONSABLE2CARGO);
+
+
+
+if(response.INFORME_RESPONSABLE2DOCUMENTO)
+{
+
+    var archivo =
+        response.INFORME_RESPONSABLE2DOCUMENTO;
+
+
+
+    var extension = archivo.substring(
+        archivo.lastIndexOf(".")
+    );
+
+
+
+    var imagenUrl =
+        '/mostrarresponsable2recoergo/0/' +
+        recsensorial +
+        extension;
+
+
+
+    //-----------------------------------------
+    // DROPIFY
+    //-----------------------------------------
+
+    if ($('#INFORME_RESPONSABLE2DOCUMENTO')
+        .data('dropify')) {
+
+        $('#INFORME_RESPONSABLE2DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .destroy();
+
+
+
+        $('#INFORME_RESPONSABLE2DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .settings.defaultFile = imagenUrl;
+
+
+
+        $('#INFORME_RESPONSABLE2DOCUMENTO')
+            .dropify()
+            .data('dropify')
+            .init();
+
+    }
+    else {
+
+        $('#INFORME_RESPONSABLE2DOCUMENTO')
+            .attr('data-default-file', imagenUrl);
+
+
+
+        $('#INFORME_RESPONSABLE2DOCUMENTO')
+            .dropify({
+
+            messages: {
+                'default': 'Arrastre la imagen aquí o haga click',
+                'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                'remove': 'Quitar',
+                'error': 'Ooops, ha ocurrido un error.'
+            },
+
+            error: {
+                'fileSize': 'Demasiado grande ({{ value }} max).',
+                'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+            }
+
+        });
+
+    }
+
+
+
+    //-----------------------------------------
+    // NO REQUERIDO
+    //-----------------------------------------
+
+    $('#INFORME_RESPONSABLE2DOCUMENTO')
+        .attr('required', false);
+
+
+
+    //-----------------------------------------
+    // BOTON DESCARGA
+    //-----------------------------------------
+
+    $("#boton_descargarresponsabledoc2")
+        .css('display', 'block');
+
+}
+else {
+
+    $("#boton_descargarresponsabledoc2")
+        .css('display', 'none');
+
+}
+
+        }
+
+    );
+
+}
+
+
+
+/////////////// INTRODUCCION  //////////////
+
+
+
+
+
+$('#SELECT_INTRODUCCION').on('change', function () {
+
+    var selectedOption = $(this).find('option:selected');
+
+    var introduccion = selectedOption.data('introduccion');
+
+    $('#INFORME_INTRODUCCION').val(introduccion);
+
+});
+
+
+
+$("#form_informe_introduccion").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+
+
+    $.ajax({
+
+        url: '/guardarIntroduccionRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        contentType: false,
+
+        processData: false,
+
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_introduccion")
+                .prop('disabled', true);
+
+            $("#botonguardar_reporte_introduccion")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        error: function(xhr)
+        {
+
+            console.log(xhr.responseText);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al guardar'
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_introduccion")
+                .prop('disabled', false);
+
+            $("#botonguardar_reporte_introduccion")
+                .html(
+                    'Guardar introducción <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+});
+
+
+/////////////// DEFINICIONES  //////////////
+
+
+$("#form_informe_listadefiniciones").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+
+
+    $.ajax({
+
+        url: '/guardarDefinicionesInformeErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        contentType: false,
+
+        processData: false,
+
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_definiciones")
+                .prop('disabled', true);
+
+            $("#botonguardar_reporte_definiciones")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        error: function(xhr)
+        {
+
+            console.log(xhr.responseText);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al guardar'
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_definiciones")
+                .prop('disabled', false);
+
+            $("#botonguardar_reporte_definiciones")
+                .html(
+                    'Guardar definiciones <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+});
+
+
+function cargarDefinicionesInformeErgo()
+{
+
+    $.get(
+        '/obtenerDefinicionesInformeErgo/' + recsensorial,
+
+        function(response)
+        {
+
+           
+            $('input[name="DEFINICONES_INFORME[]"]')
+                .prop('checked', false);
+
+
+            response.forEach(function(item)
+            {
+
+                $('input[name="DEFINICONES_INFORME[]"][value="' +
+                    item.CATALOGO_DEFINICIONES_ID +
+                    '"]')
+
+                    .prop('checked', true);
+
+            });
+
+        }
+    );
+
+}
+
+
+/////////////// OBJETIVOS GENERALES Y ESPECIFICOS   //////////////
+
+
+
+$("#form_informe_objetivogeneral").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+
+
+    $.ajax({
+
+        url: '/guardarObjetivoGeneralRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        contentType: false,
+
+        processData: false,
+
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_objetivogeneral")
+                .prop('disabled', true);
+
+            $("#botonguardar_reporte_objetivogeneral")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_objetivogeneral")
+                .prop('disabled', false);
+
+            $("#botonguardar_reporte_objetivogeneral")
+                .html(
+                    'Guardar objetivo general <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+});
+
+
+
+$("#form_informe_objetivoespecifico").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+
+
+    $.ajax({
+
+        url: '/guardarObjetivoEspecificoRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        contentType: false,
+
+        processData: false,
+
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_objetivoespecifico")
+                .prop('disabled', true);
+
+            $("#botonguardar_reporte_objetivoespecifico")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_objetivoespecifico")
+                .prop('disabled', false);
+
+            $("#botonguardar_reporte_objetivoespecifico")
+                .html(
+                    'Guardar objetivos específicos <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+});
+
+
+//////// RECONOCIMIENTO //////
+
+
+
+$("#form_informe_ubicacion").on("submit", function(e)
+{
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    formData.append('RECO_ID', recsensorial);
+
+
+
+    $.ajax({
+
+        url: '/guardarUbicacionRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        contentType: false,
+
+        processData: false,
+
+        cache: false,
+
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_ubicacion")
+                .prop('disabled', true);
+
+            $("#botonguardar_reporte_ubicacion")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_ubicacion")
+                .prop('disabled', false);
+
+            $("#botonguardar_reporte_ubicacion")
+                .html(
+                    'Guardar ubicación <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+});
+
+///////////////  Descripción del proceso en la instalación////////////////
+
+
+
+$("#form_reporte_procesoinstalacion").on(
+    "submit",
+    function(e)
+{
+
+    e.preventDefault();
+
+
+
+    let formData = new FormData(this);
+
+
+
+    formData.append(
+        'RECO_ID',
+        recsensorial
+    );
+
+
+
+    $.ajax({
+
+        url: '/guardarProcesoInstalacionRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        cache: false,
+
+        contentType: false,
+
+        processData: false,
+
+        headers: {
+            'X-CSRF-TOKEN':
+                $('meta[name="csrf-token"]')
+                .attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_procesoinstalacion")
+                .prop('disabled', true);
+
+
+            $("#botonguardar_reporte_procesoinstalacion")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_procesoinstalacion")
+                .prop('disabled', false);
+
+
+            $("#botonguardar_reporte_procesoinstalacion")
+                .html(
+                    'Guardar proceso instalación <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+	});
+
+
+///////////  Población ocupacionalmente expuesta
+
+
+
+function tablaReporteCategoriasErgo()
+{
+
+    try {
+
+        let ruta =
+            "/tablaReporteCategoriasErgo";
+
+
+
+        if(tabla_reporte_categoria != null)
+        {
+            tabla_reporte_categoria.destroy();
+        }
+
+
+
+        tabla_reporte_categoria =
+            $('#tabla_reporte_categoria').DataTable({
+
+            ajax: {
+                url: ruta,
+                type: "get",
+                cache: false,
+                data: {
+                    ergoid: recsensorial
+                },
+                error: function(xhr)
+                {
+                    console.log(xhr.responseText);
+                }
+            },
+
+
+
+            columns: [
+
+                
+
+                {
+                    data: "NOMBRE_CATEGORIA_ERGO",
+                    defaultContent: "-"
+                }
+
+            ],
+
+
+
+            lengthMenu: [
+                [20, 50, 100, -1],
+                [20, 50, 100, "Todos"]
+            ],
+
+
+
+            searching: false,
+            paging: false,
+            ordering: false,
+            info: false,
+            responsive: true,
+
+
+
+            language: {
+                emptyTable:
+                    "No hay datos disponibles"
+            }
+
+        });
+
+    }
+    catch(exception) {
+
+        console.error(exception);
+
+    }
+
+}
+
+
+
+function tablaReporteAreasErgo()
+{
+
+    try {
+
+        let ruta =
+            "/tablaReporteAreasErgo";
+
+
+
+        if(tabla_reporte_area != null)
+        {
+            tabla_reporte_area.destroy();
+        }
+
+
+
+		tabla_reporte_area =
+			$('#tabla_reporte_area').DataTable({
+
+			ajax: {
+				url: ruta,
+				type: "get",
+				cache: false,
+				data: {
+					ergoid: recsensorial
+				}
+			},
+
+
+
+			columns: [
+
+				{
+					data: "AREA"
+				},
+
+				{
+					data: "CATEGORIA"
+				}
+
+			],
+
+
+
+			rowsGroup: [0],
+
+			order: [[0, "asc"]],
+
+			ordering: true,
+
+			paging: false,
+
+			searching: false,
+
+			info: false,
+
+			responsive: true
+
+});
+
+    }
+    catch(exception) {
+
+        console.error(exception);
+
+    }
+
+}
+
+//// CONCLUSIONES
+
+
+
+
+$('#SELECT_CONCLUSION').on('change', function () {
+
+    var selectedOption = $(this).find('option:selected');
+
+    var conclusion = selectedOption.data('conclusion');
+
+    $('#INFORME_CONCLUSION').val(conclusion);
+
+});
+
+
+
+$("#form_informe_conclusiones").on(
+    "submit",
+    function(e)
+{
+
+    e.preventDefault();
+
+
+
+    let formData = new FormData(this);
+
+
+
+    formData.append(
+        'RECO_ID',
+        recsensorial
+    );
+
+
+
+    $.ajax({
+
+        url: '/guardarConclusionRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        cache: false,
+
+        contentType: false,
+
+        processData: false,
+
+        headers: {
+            'X-CSRF-TOKEN':
+                $('meta[name="csrf-token"]')
+                .attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_conclusion")
+                .prop('disabled', true);
+
+
+            $("#botonguardar_reporte_conclusion")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_conclusion")
+                .prop('disabled', false);
+
+
+            $("#botonguardar_reporte_conclusion")
+                .html(
+                    'Guardar conclusión <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+	});
+
+///// RECOMENDACIONES
+
+
+$("#form_informe_listarecomendaciones").on(
+    "submit",
+    function(e)
+{
+
+    e.preventDefault();
+
+
+
+    let formData = new FormData(this);
+
+
+
+    formData.append(
+        'RECO_ID',
+        recsensorial
+    );
+
+
+
+    $.ajax({
+
+        url:
+            '/guardarRecomendacionesInformeErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        cache: false,
+
+        contentType: false,
+
+        processData: false,
+
+
+
+        headers: {
+            'X-CSRF-TOKEN':
+                $('meta[name="csrf-token"]')
+                .attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_recomendaciones")
+                .prop('disabled', true);
+
+
+            $("#botonguardar_reporte_recomendaciones")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_recomendaciones")
+                .prop('disabled', false);
+
+
+            $("#botonguardar_reporte_recomendaciones")
+                .html(
+                    'Guardar recomendaciones <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+	});
+
+
+
+	function cargarRecomendacionesInformeErgo()
+{
+
+    //---------------------------------------
+    // LIMPIAR TODOS
+    //---------------------------------------
+
+    $('input[name="DESCRIPCION_RECOMENDACIONES[]"]')
+        .prop('checked', false);
+
+
+
+    $.get(
+
+        '/obtenerRecomendacionesInformeErgo/' +
+        recsensorial,
+
+        function(response)
+        {
+
+            //---------------------------------------
+            // RECORRER DATOS
+            //---------------------------------------
+
+            response.forEach(function(dato)
+            {
+
+                $('input[name="DESCRIPCION_RECOMENDACIONES[]"][value="' +
+                    dato.CATALOGO_RECOMENDACIONES_ID +
+                    '"]')
+
+                .prop('checked', true);
+
+            });
+
+        }
+
+    );
+
+}
+
+
+////////  responsables
+
+
+
+
+$("#form_informe_responsablesinforme").on(
+    "submit",
+    function(e)
+{
+
+    e.preventDefault();
+
+
+
+    let formData = new FormData(this);
+
+
+
+    formData.append(
+        'RECO_ID',
+        recsensorial
+    );
+
+
+
+    $.ajax({
+
+        url:
+            '/guardarResponsablesInformeRecoErgo',
+
+        type: 'POST',
+
+        data: formData,
+
+        cache: false,
+
+        contentType: false,
+
+        processData: false,
+
+
+
+        headers: {
+            'X-CSRF-TOKEN':
+                $('meta[name="csrf-token"]')
+                .attr('content')
+        },
+
+
+
+        beforeSend: function()
+        {
+
+            $("#botonguardar_reporte_responsablesinforme")
+                .prop('disabled', true);
+
+
+            $("#botonguardar_reporte_responsablesinforme")
+                .html(
+                    'Guardando... <i class="fa fa-spinner fa-spin"></i>'
+                );
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Correcto',
+                text: response.msj,
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+        },
+
+
+
+        complete: function()
+        {
+
+            $("#botonguardar_reporte_responsablesinforme")
+                .prop('disabled', false);
+
+
+            $("#botonguardar_reporte_responsablesinforme")
+                .html(
+                    'Guardar responsables del informe <i class="fa fa-save"></i>'
+                );
+
+        }
+
+    });
+
+	});
+
+
+
+/////// versiones
+	
+
+
+function tablaVersionesRecoErgo()
+{
+
+    try {
+
+        let ruta =
+            "/tablaVersionesRecoErgo/" +
+            recsensorial;
+
+
+
+        if(tabla_reporte_revisiones != null)
+        {
+            tabla_reporte_revisiones
+                .destroy();
+        }
+
+
+
+        tabla_reporte_revisiones =
+            $('#tabla_reporte_revisiones')
+            .DataTable({
+
+            ajax: {
+                url: ruta,
+                type: "get",
+                cache: false
+            },
+
+
+
+            columns: [
+
+                {
+                    data: "NUMERO_REVISION"
+                },
+
+                {
+                    data: "FECHA_FINALIZADO"
+                },
+
+                {
+                    data: "FINALIZADO_NOMBRE"
+                },
+
+                {
+                    data: "CHECKBOX_CANCELADO"
+                },
+
+                {
+                    data: "CANCELADO_NOMBRE"
+                },
+
+                {
+                    data: "ESTADO"
+                },
+
+                {
+                    data: "BOTON_DESCARGAR"
+                }
+
+            ],
+
+
+
+            ordering: true,
+
+            processing: true,
+
+            responsive: true,
+
+
+
+            language: {
+
+                emptyTable:
+                    "No hay revisiones"
+
+            }
+
+        });
+
+    }
+    catch(exception) {
+
+        console.error(exception);
+
+    }
+
+}
+
+$("#boton_reporte_nuevarevision")
+.on("click", function()
+{
+
+    $.ajax({
+
+        url:
+            '/crearRevisionRecoErgo',
+
+        type: 'POST',
+
+        data: {
+
+            RECO_ID:
+                recsensorial,
+
+            _token:
+                $('meta[name="csrf-token"]')
+                .attr('content')
+
+        },
+
+
+
+        success: function(response)
+        {
+
+            Swal.fire({
+
+                icon: 'success',
+
+                title: 'Correcto',
+
+                text: response.msj
+
+            });
+
+
+
+            tablaVersionesRecoErgo();
+			validarEdicionRecoErgo()
+        }
+
+    });
+
+});
+
+
+
+function cancelarRevisionRecoErgo(
+    ID_VERSION_RECO_ERGO,
+    checkbox
+) {
+
+    //---------------------------------------
+    // SI DESMARCA
+    //---------------------------------------
+
+    if(!checkbox.checked)
+    {
+        return;
+    }
+
+
+
+    Swal.fire({
+
+        title: 'Cancelar revisión',
+
+        input: 'textarea',
+
+        inputLabel: 'Motivo de cancelación',
+
+        inputPlaceholder:
+            'Escriba el motivo...',
+
+        inputAttributes: {
+            'required': true
+        },
+
+        showCancelButton: true,
+
+        confirmButtonText: 'Cancelar revisión',
+
+        cancelButtonText: 'Cerrar'
+
+    }).then((result) => {
+
+        //---------------------------------------
+        // SI CONFIRMA
+        //---------------------------------------
+
+        if(result.isConfirmed)
+        {
+
+            $.ajax({
+
+                url:
+                    '/cancelarRevisionRecoErgo',
+
+                type: 'POST',
+
+                data: {
+
+                    ID_VERSION_RECO_ERGO:
+                        ID_VERSION_RECO_ERGO,
+
+                    MOTIVO_CANCELACION:
+                        result.value,
+
+                    _token:
+                        $('meta[name="csrf-token"]')
+                        .attr('content')
+
+                },
+
+
+
+                success: function(response)
+                {
+
+                    Swal.fire({
+
+                        icon: 'success',
+
+                        title: 'Correcto',
+
+                        text: response.msj
+
+                    });
+
+
+
+                    //---------------------------------------
+                    // RECARGAR TABLA
+                    //---------------------------------------
+
+                    tablaVersionesRecoErgo();
+
+
+
+                    //---------------------------------------
+                    // VALIDAR BLOQUEOS
+                    //---------------------------------------
+
+                    validarEdicionRecoErgo();
+
+                },
+
+
+
+                error: function(xhr)
+                {
+
+                    console.log(xhr.responseText);
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Error',
+
+                        text:
+                            'No se pudo cancelar'
+
+                    });
+
+                }
+
+            });
+
+        }
+        else {
+
+            //---------------------------------------
+            // DESMARCAR CHECK
+            //---------------------------------------
+
+            checkbox.checked = false;
+
+        }
+
+    });
+
+}
+
+
+
+
+
+
+function validarEdicionRecoErgo()
+{
+
+    $.get(
+
+        '/validarEdicionRecoErgo/' +
+        recsensorial,
+
+        function(response)
+        {
+
+            //---------------------------------------
+            // TODOS LOS BOTONES
+            //---------------------------------------
+
+            let botones = `
+
+                #botonguardar_reporte_introduccion,
+                #botonguardar_reporte_objetivogeneral,
+                #botonguardar_reporte_objetivoespecifico,
+                #botonguardar_reporte_ubicacion,
+                #botonguardar_reporte_procesoinstalacion,
+                #botonguardar_reporte_conclusion,
+                #botonguardar_reporte_definiciones,
+                #botonguardar_reporte_recomendaciones,
+                #botonguardar_reporte_responsablesinforme,
+                #boton_reporte_nuevarevision
+
+            `;
+
+
+
+            //---------------------------------------
+            // SI NO PERMITE GUARDAR
+            //---------------------------------------
+
+            if(response.permite_guardar == 0)
+            {
+
+                //---------------------------------------
+                // DESACTIVAR BOTONES
+                //---------------------------------------
+
+                $(botones)
+                    .prop('disabled', true);
+
+
+
+                //---------------------------------------
+                // INPUTS
+                //---------------------------------------
+
+               $('input, textarea, select')
+				.not('.checkbox_cancelado_revision')
+				.prop('disabled', true);
+
+
+                //---------------------------------------
+                // MENSAJE
+                //---------------------------------------
+
+                Swal.fire({
+
+                    icon: 'warning',
+
+                    title: 'Informe finalizado',
+
+                    text:
+                        'La revisión fue finalizada y ya no puede editarse'
+
+                });
+
+            }
+            else
+            {
+
+                //---------------------------------------
+                // ACTIVAR BOTONES
+                //---------------------------------------
+
+                $(botones)
+                    .prop('disabled', false);
+
+
+
+                //---------------------------------------
+                // INPUTS
+                //---------------------------------------
+
+                $('input, textarea, select')
+                    .prop('disabled', false);
+
+            }
+
+
+
+            //---------------------------------------
+            // SI ESTA CANCELADO
+            //---------------------------------------
+
+            if(response.cancelado == 1)
+            {
+
+                Swal.fire({
+
+                    icon: 'info',
+
+                    title: 'Revisión cancelada',
+
+                    text:
+                        'La última revisión fue cancelada, puede continuar editando'
+
+                });
+
+            }
+
+        }
+
+    );
+
+}
+
+
+function descargarRevisionRecoErgo(
+    RECO_ID
+) {
+
+    window.open(
+
+        '/descargarRevisionRecoErgo/' +
+        RECO_ID,
+
+        '_blank'
+
+    );
+
 }

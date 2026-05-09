@@ -153,6 +153,7 @@ function mostrar_catalogo(num_catalogo)
                                         '<thead>'+
                                             '<tr>'+
                                                 '<th>#</th>' +
+                                                '<th>Nombre</th>'+
                                                 '<th>Introducción</th>'+
                                                 '<th style="width: 90px!important;">Editar</th>'+
                                                 '<th style="width: 90px!important;">Activo</th>'+
@@ -247,6 +248,7 @@ function mostrar_catalogo(num_catalogo)
                                          '<thead>'+
                                             '<tr>'+
                                                 '<th>#</th>' +
+                                                '<th>Nombre</th>'+
                                                 '<th>Conclusión</th>' +
                                                 '<th style="width: 90px!important;">Editar</th>'+
                                                 '<th style="width: 90px!important;">Activo</th>'+
@@ -923,7 +925,9 @@ function tabla_introduccion(num_catalogo)
                             return meta.row + 1;
                         }
                     },
-
+{
+                        "data": "QUIEN_INTRODUCCION"
+                    },
                     {
                         "data": "NOMBRE_INTRODUCCION"
                     },
@@ -985,6 +989,10 @@ function editar_cat_introduccion()
             this.reset();
         });
 
+
+        $("#QUIEN_INTRODUCCION").val(row.data().QUIEN_INTRODUCCION);
+
+        
         $("#ID_INTRODUCCION").val(row.data().ID_INTRODUCCION);
         $("#NOMBRE_INTRODUCCION").val(row.data().NOMBRE_INTRODUCCION);
         $("#catalogo").val(catalogo);
@@ -1423,7 +1431,9 @@ function tabla_conclusion(num_catalogo)
                             return meta.row + 1;
                         }
                     },
-
+                    {
+                        "data": "QUIEN_CONCLUSION"
+                    },
                     {
                         "data": "NOMBRE_CONCLUSION"
                     },
@@ -1486,6 +1496,10 @@ function editar_cat_conclusion()
         });
 
         $("#ID_CONCLUSION").val(row.data().ID_CONCLUSION);
+        $("#QUIEN_CONCLUSION").val(row.data().QUIEN_CONCLUSION);
+
+
+        
         $("#NOMBRE_CONCLUSION").val(row.data().NOMBRE_CONCLUSION);
         $("#catalogo").val(catalogo);
 
@@ -1550,5 +1564,4 @@ function estado_registro(catalogo, registro, checkbox)
         }
     });//Fin ajax
 }
-
 

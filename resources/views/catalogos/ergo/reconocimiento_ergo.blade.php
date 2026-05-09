@@ -1006,23 +1006,30 @@
                         <div class="col-xlg-2 col-lg-3 col-md-5">
                             <div class="stickyside">
                                 <div class="list-group" id="top-menu">
-                                    <a href="#0" class="list-group-item active">Portada <i class="fa fa-times" id="menureporte_0"></i></a>
-                                    <a href="#1" class="list-group-item">1.- Introducción <i class="fa fa-times" id="menureporte_1"></i></a>
-                                    <a href="#2" class="list-group-item">2.- Definiciones <i class="fa fa-times" id="menureporte_2"></i></a>
+                                    <a href="#0" class="list-group-item active">Portada <i class="fa" id="menureporte_0"></i></a>
+                                    <a href="#1" class="list-group-item">1.- Introducción <i class="fa" id="menureporte_1"></i></a>
+                                    <a href="#2" class="list-group-item">2.- Definiciones <i class="fa" id="menureporte_2"></i></a>
                                     <a href="#3" class="list-group-item">3.- Objetivos</a>
-                                    <a href="#3_1" class="list-group-item submenu">3.1.- Objetivo general <i class="fa fa-times" id="menureporte_3_1"></i></a>
-                                    <a href="#3_2" class="list-group-item submenu">3.2.- Objetivos específicos <i class="fa fa-times" id="menureporte_3_2"></i></a>
+                                    <a href="#3_1" class="list-group-item submenu">3.1.- Objetivo general <i class="fa" id="menureporte_3_1"></i></a>
+                                    <a href="#3_2" class="list-group-item submenu">3.2.- Objetivos específicos <i class="fa" id="menureporte_3_2"></i></a>
                                     <a href="#4" class="list-group-item">4.- Metodología</a>
                                     <a href="#5" class="list-group-item">5.- Resultados</a>
-                                    <a href="#5_1" class="list-group-item submenu">5.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_5_1"></i></a>
-                                    <a href="#5_2" class="list-group-item submenu">5.2.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_5_2"></i></a>
+                                    <a href="#5_1" class="list-group-item submenu">5.1.- Ubicación de la instalación <i class="fa" id="menureporte_5_1"></i></a>
+                                    <a href="#5_2" class="list-group-item submenu">5.2.- Descripción del proceso en la instalación <i class="fa " id="menureporte_5_2"></i></a>
+                                    <a href="#5_3" class="list-group-item submenu">5.3.- Población ocupacionalmente expuesta <i class="fa " id="menureporte_5_3"></i></a>
 
                                     <a href="#6" class="list-group-item">6.- Evaluación</a>
-                                    <a href="#6_1" class="list-group-item submenu">6.1.- Preguntas NOM-036-1-STPS-2018 <i class="fa fa-times" id="menureporte_6_1"></i></a>
+                                    <a href="#6_1" class="list-group-item submenu">6.1.- Preguntas NOM-036-1-STPS-2018 <i class="fa " id="menureporte_6_1"></i></a>
+                                    <a href="#7" class="list-group-item">7.- Resultados fichas <i class="fa " id="menureporte_7"></i></a>
+                                    <a href="#8" class="list-group-item">8.- Conclusiones <i class="fa" id="menureporte_8"></i></a>
+                                    <a href="#9" class="list-group-item">9.- Recomendaciones de control <i class="fa" id="menureporte_9"></i></a>
+                                    <a href="#10" class="list-group-item">10.- Responsables del informe <i class="fa" id="menureporte_10"></i></a>
+                                    <a href="#10" class="list-group-item">11.- Generar informe <i class="fa" id="menureporte_11"></i></a>
+
                                     <!-- <a href="#6_2" class="list-group-item submenu">6.2.- Método empleado y criterio de selección <i class="fa fa-times" id="menureporte_6_2"></i></a>
                                     <a href="#6_2_1" class="list-group-item subsubmenu">6.2.1.- Índice de área <i class="fa fa-times" id="menureporte_6_2_1"></i></a>
                                     <a href="#6_2_2" class="list-group-item subsubmenu">6.2.2.- Puesto de trabajo <i class="fa fa-times" id="menureporte_6_2_2"></i></a>
-                                    <a href="#7" class="list-group-item">7.- Resultados</a>
+                                    
                                     <a href="#7_1" class="list-group-item submenu">7.1.- Resultados del nivel de iluminación <i class="fa fa-times" id="menureporte_7_1"></i></a>
                                     <a href="#7_2" class="list-group-item submenu">7.2.- Resultados del nivel de reflexión <i class="fa fa-times" id="menureporte_7_2"></i></a>
                                     <a href="#7_3" class="list-group-item submenu">7.3.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_3"></i></a>
@@ -1047,7 +1054,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title" style="padding: 0px!important;" id="0">Portadas</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_portada" id="form_informe_portada">
                                         <div class="row">
                                             <div class="col-12">
                                                 {!! csrf_field() !!}
@@ -1064,7 +1071,7 @@
                                                                     /*tamaño estatico del campo foto*/
                                                                 }
                                                             </style>
-                                                            <input type="file" accept="image/jpeg,image/x-png" id="PORTADA" name="PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                            <input type="file" accept="image/jpeg,image/x-png" id="RUTA_IMAGEN_PORTADA" name="RUTA_IMAGEN_PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1124,78 +1131,6 @@
                                             <h3 class="mx-4 mt-5 mb-4">Seleccione las opciones que desee mostrar en la Portada Interna del Informe</h3>
 
 
-                                            <div class="col-1 d-none">
-                                                <div class="form-group">
-                                                    <label class="demo-switch-title">Mostrar</label>
-                                                    <div class="switch" style="margin-top: 6px;">
-                                                        <label><input type="checkbox" id="reporteiluminacion_catsubdireccion_activo" name="reporteiluminacion_catsubdireccion_activo" checked><span class="lever switch-col-light-blue"></span></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-11 d-none">
-                                                <div class="form-group">
-                                                    <label>Subdirección</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacion_catsubdireccion_id" name="reporteiluminacion_catsubdireccion_id" disabled>
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-1 d-none">
-                                                <div class="form-group">
-                                                    <label class="demo-switch-title">Mostrar</label>
-                                                    <div class="switch" style="margin-top: 6px;">
-                                                        <label><input type="checkbox" id="reporteiluminacion_catgerencia_activo" name="reporteiluminacion_catgerencia_activo" checked><span class="lever switch-col-light-blue"></span></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-11 d-none">
-                                                <div class="form-group">
-                                                    <label>Gerencia</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacion_catgerencia_id" name="reporteiluminacion_catgerencia_id" disabled>
-                                                        <option value=""></option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-1 d-none">
-                                                <div class="form-group">
-                                                    <label class="demo-switch-title">Mostrar</label>
-                                                    <div class="switch" style="margin-top: 6px;">
-                                                        <label><input type="checkbox" id="reporteiluminacion_catactivo_activo" name="reporteiluminacion_catactivo_activo" checked><span class="lever switch-col-light-blue"></span></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-11 d-none">
-                                                <div class="form-group">
-                                                    <label>Activo</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacion_catactivo_id" name="reporteiluminacion_catactivo_id" disabled>
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 d-none">
-                                                <div class="form-group">
-                                                    <label>Instalación</label>
-                                                    <input type="text" class="form-control" id="reporteiluminacion_instalacion" name="reporteiluminacion_instalacion" onchange="instalacion_nombre(this.value);" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-4 d-none"></div>
-                                            <div class="col-1 d-none">
-                                                <div class="form-group">
-                                                    <label class="demo-switch-title">Mostrar</label>
-                                                    <div class="switch" style="margin-top: 6px;">
-                                                        <label><input type="checkbox" id="reporteiluminacion_catregion_activo" name="reporteiluminacion_catregion_activo" checked><span class="lever switch-col-light-blue"></span></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-3 d-none">
-                                                <div class="form-group">
-                                                    <label>Región</label>
-                                                    <select class="custom-select form-control" id="reporteiluminacion_catregion_id" name="reporteiluminacion_catregion_id" disabled>
-                                                        <option value=""></option>
-                                                    </select>
-                                                </div>
-                                            </div>
 
                                             <div class="row w-100 mt-4">
                                                 <div class="col-8">
@@ -1250,7 +1185,7 @@
                                                     <div class="col-12 text-center mt-4">
                                                         <div class="form-group">
                                                             <label>Mes</label>
-                                                            <select class="custom-select form-control" id="reporteiluminacion_mes" name="reporteiluminacion_mes">
+                                                            <select class="custom-select form-control" id="INFORME_MES" name="INFORME_MES">
                                                                 <option value="" selected disabled></option>
                                                                 <option value="Enero">Enero</option>
                                                                 <option value="Febrero">Febrero</option>
@@ -1273,7 +1208,7 @@
                                                     <div class="col-12 text-center">
                                                         <div class="form-group">
                                                             <label>Año</label>
-                                                            <select class="custom-select form-control" id="reporteiluminacion_fecha" name="reporteiluminacion_fecha">
+                                                            <select class="custom-select form-control" id="INFORME_ANIO" name="INFORME_ANIO">
                                                                 <option value="" selected disabled></option>
                                                                 <script>
                                                                     const currentYear = new Date().getFullYear();
@@ -1293,12 +1228,37 @@
                                         </div>
                                     </form>
                                     <h4 class="card-title" id="1">1.- Introducción</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_introduccion" id="form_reporte_introduccion">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_introduccion" id="form_informe_introduccion">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporteiluminacion_introduccion" name="reporteiluminacion_introduccion" required></textarea>
+
+                                                    <div class="form-group">
+                                                        <label>Seleccionar introducción </label>
+                                                        <select class="custom-select form-control"
+                                                            id="SELECT_INTRODUCCION"
+                                                            name="SELECT_INTRODUCCION">
+
+                                                            <option value=""></option>
+
+                                                            @foreach($catintroduccion as $dato)
+
+                                                            <option
+                                                                value="{{$dato->ID_INTRODUCCION}}"
+                                                                data-introduccion="{{ htmlspecialchars($dato->NOMBRE_INTRODUCCION) }}">
+
+                                                                {{$dato->QUIEN_INTRODUCCION}}
+
+                                                            </option>
+
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+
+
+                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="INFORME_INTRODUCCION" name="INFORME_INTRODUCCION" required></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-12" style="text-align: right;">
@@ -1315,7 +1275,7 @@
                                     <h4 class="card-title" id="2">2.- Definiciones</h4>
                                     <div class="row">
                                         <div class="col-12">
-                                            <form enctype="multipart/form-data" method="post" name="form_reporte_listadefiniciones" id="form_reporte_listadefiniciones">
+                                            <form enctype="multipart/form-data" method="post" name="form_informe_listadefiniciones" id="form_informe_listadefiniciones">
                                                 <div class="row mb-3">
                                                     <table class="table-sm" style="width: 96%; table-layout: fixed;">
                                                         <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_definiciones">
@@ -1362,17 +1322,26 @@
                                                             </tbody>
                                                         </table>
                                                 </div>
+                                                <div class="col-12" style="text-align: right;">
+                                                    <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_definiciones">Guardar definiciones <i class="fa fa-save"></i></button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
                                     <h4 class="card-title mt-2" id="3">3.- Objetivos</h4>
                                     <h4 class="card-title" id="3_1">3.1.- Objetivo general</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_objetivogeneral" id="form_reporte_objetivogeneral">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_objetivogeneral" id="form_informe_objetivogeneral">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporteiluminacion_objetivogeneral" name="reporteiluminacion_objetivogeneral" required></textarea>
+                                                    <textarea
+                                                        class="form-control"
+                                                        style="margin-bottom: 0px;"
+                                                        rows="8"
+                                                        id="INFORME_OBJETIVOGENERALES"
+                                                        name="INFORME_OBJETIVOGENERALES"
+                                                        required>Evaluar los factores de riesgo ergonómicos de las actividades laborales que impliquen postura, movimientos, manipulación manual de cargas y esfuerzos, mediante la observación y aplicación de métodos de carga física para la prevención de trastornos músculo esqueléticos.</textarea>
                                                 </div>
                                             </div>
                                             <div class="col-12" style="text-align: right;">
@@ -1381,12 +1350,24 @@
                                         </div>
                                     </form>
                                     <h4 class="card-title" id="3_2">3.2.- Objetivos específicos</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_objetivoespecifico" id="form_reporte_objetivoespecifico">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_objetivoespecifico" id="form_informe_objetivoespecifico">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     {!! csrf_field() !!}
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reporteiluminacion_objetivoespecifico" name="reporteiluminacion_objetivoespecifico" required></textarea>
+
+                                                    <textarea
+                                                        class="form-control"
+                                                        style="margin-bottom: 0px;"
+                                                        rows="12"
+                                                        id="INFORME_OBJETIVOSESPECIFICOS"
+                                                        name="INFORME_OBJETIVOSESPECIFICOS"
+                                                        required>• Identificar los trabajos prioritarios y tareas con riesgo ergonómico a través de un reconocimiento sensorial y entrevista con los trabajadores.
+
+• Determinar el nivel de riesgo por carga física a la cual se encuentran expuestos los trabajadores.
+
+• Generar recomendaciones derivadas de la identificación de riesgos para mitigar la probabilidad de ocurrencia de Trastornos Músculo Esqueléticos (TME) de origen laboral.</textarea>
+
                                                 </div>
                                             </div>
                                             <div class="col-12" style="text-align: right;">
@@ -1435,26 +1416,22 @@
                                             </div>
                                         </div>
                                     </form>
-
-
-
-
-
                                     <h4 class="card-title mt-2" id="5">5.- Reconocimiento</h4>
                                     <h4 class="card-title" id="5_1">5.1.- Ubicación de la instalación</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_ubicacion" id="form_reporte_ubicacion">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_ubicacion" id="form_informe_ubicacion">
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="row">
                                                     <div class="col-12">
                                                         {!! csrf_field() !!}
-                                                        <textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="reporteiluminacion_ubicacioninstalacion" name="reporteiluminacion_ubicacioninstalacion" required></textarea>
+                                                        <textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="INFORME_UBICACIONINSTALACION" name="INFORME_UBICACIONINSTALACION" required></textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: block;" data-toggle="tooltip" title="Descargar mapa ubicación" id="boton_descargarmapaubicacion"></i>
-                                                <input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteubicacionfoto" name="reporteubicacionfoto" onchange="redimencionar_mapaubicacion();" required>
+
+                                                <input type="file" accept="image/jpeg,image/x-png" id="RUTA_IMAGEN_UBICACION" name="RUTA_IMAGEN_UBICACION" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
                                             </div>
                                         </div>
                                         <div class="row">
@@ -1466,17 +1443,17 @@
                                         </div>
                                     </form>
                                     <h4 class="card-title" id="5_2">5.2.- Descripción del proceso en la instalación</h4>
-                                    <form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_procesoinstalacion" id="form_reporte_procesoinstalacion">
                                         <div class="row">
                                             <div class="col-12">
                                                 {!! csrf_field() !!}
                                                 <div class="form-group">
                                                     <label>Descripción del proceso en la instalación</label>
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporteiluminacion_procesoinstalacion" name="reporteiluminacion_procesoinstalacion" required></textarea>
+                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="INFORME_PROCESOINSTALACION" name="INFORME_PROCESOINSTALACION" required></textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Descripción de la actividad principal de la instalación</label>
-                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="7" id="reporteiluminacion_actividadprincipal" name="reporteiluminacion_actividadprincipal" required></textarea>
+                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="7" id="INFORME_ACTIVIDADPRINCIPAL" name="INFORME_ACTIVIDADPRINCIPAL" required></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-12" style="text-align: right;">
@@ -1486,26 +1463,227 @@
                                             </div>
                                         </div>
                                     </form>
-
-                                    <h4 class="card-title mt-2" id="5">6.- Evaluación</h4>
-                                    <h4 class="card-title" id="5_1">6.1.- Preguntas NOM-036-1-STPS-2018</h4>
+                                    <h4 class="card-title" id="5_3">5.3.- Población ocupacionalmente expuesta</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="justificado">En este apartado se muestra la actividad principal desarrollada en cada una de las áreas, involucrando al personal/categoría
+                                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Categoría</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table><br><br>
+                                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_area">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="130">Área</th>
+                                                        <th width="">Categoría</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <h4 class="card-title mt-2" id="6">6.- Evaluación</h4>
+                                    <h4 class="card-title" id="6_1">6.1.- Preguntas NOM-036-1-STPS-2018</h4>
                                     <form method="post" enctype="multipart/form-data" name="form_preguntas-nom-036" id="form_preguntas-nom-036">
                                         <div class="row" style="display:flex; justify-content:center;">
                                             <div id="contenedorGraficas"></div>
                                         </div>
                                     </form>
+
+
+
+
+                                    <h4 class="card-title" id="8">8.- Conclusiones</h4>
+                                    <form method="post" enctype="multipart/form-data" name="form_informe_conclusiones" id="form_informe_conclusiones">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    {!! csrf_field() !!}
+
+                                                    <div class="form-group">
+                                                        <label>Seleccionar conclusión </label>
+                                                        <select class="custom-select form-control"
+                                                            id="SELECT_CONCLUSION"
+                                                            name="SELECT_CONCLUSION">
+
+                                                            <option value=""></option>
+
+                                                            @foreach($catconclusion as $dato)
+
+                                                            <option
+                                                                value="{{$dato->ID_CONCLUSION}}"
+                                                                data-conclusion="{{ htmlspecialchars($dato->NOMBRE_CONCLUSION) }}">
+
+                                                                {{$dato->QUIEN_CONCLUSION}}
+
+                                                            </option>
+
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+
+
+                                                    <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="INFORME_CONCLUSION" name="INFORME_CONCLUSION" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-12" style="text-align: right;">
+                                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+                                    <h4 class="card-title" id="9">9.- Recomendaciones de control</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form enctype="multipart/form-data" method="post" name="form_informe_listarecomendaciones" id="form_informe_listarecomendaciones">
+                                                <div class="row mb-3">
+                                                    <table class="table-sm" style="width: 96%; table-layout: fixed;">
+                                                        <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Descripción</th>
+                                                                    <th width="80">Activo</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($catrecomendaciones as $dato)
+                                                                <tr>
+
+                                                                    <td class="justificado">
+                                                                        {{ $dato->DESCRIPCION_RECOMENDACIONES }}
+
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <div class="switch">
+                                                                            <label>
+                                                                                <input type="checkbox"
+                                                                                    class="recomendacion_checkbox"
+                                                                                    name="DESCRIPCION_RECOMENDACIONES[]"
+                                                                                    value="{{ $dato->ID_RECOMENDACIONES }}"
+                                                                                    onclick="activa_recomendacion(this);"
+                                                                                    {{ $dato->ACTIVO == 1 ? '' : '' }}>
+                                                                                <span class="lever switch-col-light-blue"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                </div>
+                                                <div class="col-12" style="text-align: right;">
+                                                    <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <h4 class="card-title" id="10">10.- Responsables del informe</h4>
+                                    <form enctype="multipart/form-data" method="post" name="form_informe_responsablesinforme" id="form_informe_responsablesinforme">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Nombre del responsable técnico</label>
+                                                            <input type="text" class="form-control" id="INFORME_RESPONSABLE1" name="INFORME_RESPONSABLE1" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Cargo del responsable técnico</label>
+                                                            <input type="text" class="form-control" id="INFORME_RESPONSABLE1CARGO" name="INFORME_RESPONSABLE1CARGO" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Foto documento del responsable técnico</label>
+                                                            <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc1"></i>
+                                                            <input type="file" accept="image/jpeg,image/x-png" id="INFORME_RESPONSABLE1DOCUMENTO" name="INFORME_RESPONSABLE1DOCUMENTO" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Nombre del administrativo prestador de servicio</label>
+                                                            <input type="text" class="form-control" id="INFORME_RESPONSABLE2" name="INFORME_RESPONSABLE2" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Cargo del administrativo prestador de servicio</label>
+                                                            <input type="text" class="form-control" id="INFORME_RESPONSABLE2CARGO" name="INFORME_RESPONSABLE2CARGO" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label>Foto documento del prestador de servicio</label>
+                                                            <i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc2"></i>
+                                                            <input type="file" accept="image/jpeg,image/x-png" id="INFORME_RESPONSABLE2DOCUMENTO" name="INFORME_RESPONSABLE2DOCUMENTO" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12" style="text-align: right;">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_responsablesinforme">Guardar responsables del informe <i class="fa fa-save"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+                                    <h4 class="card-title" id="11">Generar informe .docx</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+                                                <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
+                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+                                                </button>
+                                            </ol>
+                                            
+                                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_revisiones">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="40">Revisión</th>
+                                                        <th width="60">Concluido</th>
+                                                        <th width="180">Concluido por:</th>
+                                                        <th width="60">Cancelado</th>
+                                                        <th width="180">Cancelado por:</th>
+                                                        <th>Estado</th>
+                                                        <th width="60">Descargar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
-                </div> <!-- /FIN TAB 3 -->
+            </div> <!-- /FIN TAB 3 -->
 
-            </div>
         </div>
     </div>
+</div>
 </div>
 
 

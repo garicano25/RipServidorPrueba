@@ -16,7 +16,7 @@ class clientecontratoModel extends Model
         'CORREO_CONTACTO',
         'TELEFONO_CONTACTO',
         'CELULAR_CONTACTO',
-        'NUMERO_CONTRATO',
+        'NUMERO_CONTRATO', 
         'DESCRIPCION_CONTRATO',
         'MONEDA_MONTO',
         'MONTO',

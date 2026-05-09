@@ -112,6 +112,11 @@ class catergoController extends Controller
                 $lista = catergo_introduccionModel::all();
 
                 foreach ($lista as $key => $value) {
+
+
+                    
+                    $value['QUIEN_INTRODUCCION'] = $value->QUIEN_INTRODUCCION;
+
                     $value['ID_INTRODUCCION'] = $value->ID_INTRODUCCION;
                     $value['NOMBRE_INTRODUCCION'] = $value->NOMBRE_INTRODUCCION;
                     $value['ACTIVO'] = $value->ACTIVO;
@@ -173,6 +178,11 @@ class catergoController extends Controller
                 $lista = catergo_conclusionModel::all();
 
                 foreach ($lista as $key => $value) {
+
+
+                    
+
+                    $value['QUIEN_CONCLUSION'] = $value->QUIEN_CONCLUSION;
                     $value['ID_CONCLUSION'] = $value->ID_CONCLUSION;
                     $value['NOMBRE_CONCLUSION'] = $value->NOMBRE_CONCLUSION;
                     $value['ACTIVO'] = $value->ACTIVO;

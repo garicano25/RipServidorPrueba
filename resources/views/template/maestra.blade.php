@@ -953,7 +953,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-    <script src="/js_sitio/reconocimientoergo.js?v=6"></script>
+    <script src="/js_sitio/reconocimientoergo.js?v=7"></script>
     <script src="/js_sitio/funcionesgeneralesergo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
@@ -1251,7 +1251,7 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recergocatalogo.js"></script>
+    <script src="/js_sitio/recergocatalogo.js?v=1"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>

@@ -353,6 +353,14 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
+                                <label>Nombre introducción *</label>
+                                <input type="text" class="form-control" id="QUIEN_INTRODUCCION" name="QUIEN_INTRODUCCION" required>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="form-group">
                                 <label>Introducción *</label>
                                 <textarea class="form-control" id="NOMBRE_INTRODUCCION" name="NOMBRE_INTRODUCCION" required rows="6"></textarea>
                             </div>
@@ -519,6 +527,13 @@
                         <div class="col-12">
                             <input type="hidden" class="form-control" id="ID_CONCLUSION" name="ID_CONCLUSION" value="0">
                             <input type="hidden" class="form-control" id="catalogo" name="catalogo" value="7">
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Nombre introducción *</label>
+                                <input type="text" class="form-control" id="QUIEN_CONCLUSION" name="QUIEN_CONCLUSION" required>
+                            </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
