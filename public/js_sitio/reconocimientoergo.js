@@ -4862,14 +4862,17 @@ function generarGraficas(data) {
 
 function crearGrafica(id, resultado, nombreCategoria) {
 
+    resultado = resultado.trim().toUpperCase();
+
     var chart = echarts.init(
         document.getElementById(id)
     );
 
     let valor = resultado === 'SI'
-        ? 75
-        : 25;
-
+        ? 25
+        : 75;
+    
+    
     chart.setOption({
 
         //-----------------------------------
