@@ -26,6 +26,8 @@ var proveedores_asignados = 0;
 var proveedores_lista = '';
 // var proveedor_alcances = '';
 var proyectoInterno = 0;
+var proyectoInternocontrato = 0;
+
 
 // Modulo evidencia
 var evidencia_agente_id = 0;
@@ -1036,6 +1038,14 @@ $("#boton_nuevo_proyecto").click(function () {
 	$('#proyectoInternoCheck').prop('disabled', false)
 	$('#proyectoInternoCheck').prop('checked', false)
 	$('#proyectoInterno').val(0)
+	$('#proyectoInternocontrato').val(0)
+	
+
+	
+	$('#proyectoInternoContratoCheck').prop('disabled', false)
+	$('#proyectoInternoContratoCheck').prop('checked', false)
+
+
 
 	// campos hidden
 	$('#proyecto_id').val(0);
@@ -1119,6 +1129,33 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function () {
 	// campos hidden
 	$('#proyecto_id').val(row.data().id);
 	$('#proyectoInterno').val(row.data().proyectoInterno);
+
+
+	
+	$('#proyectoInternocontrato').val(row.data().proyectoInternocontrato);
+
+
+		if (
+			parseInt(
+				row.data().proyectoInternocontrato
+			) == 1
+		) {
+
+			$('#proyectoInternoContratoCheck')
+				.prop('checked', true)
+				.prop('disabled', true);
+
+		}
+		else {
+
+			$('#proyectoInternoContratoCheck')
+				.prop('checked', false)
+				.prop('disabled', false);
+
+		}
+	
+	
+	
 
 	proyecto_id = row.data().id;
 	recsensorial_errorvalidacion = 0;
@@ -1466,6 +1503,8 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 	}
 	//Marcamos el proyecto interno
 	$('#proyectoInternoCheck').prop('checked', true).prop('disabled', true);
+
+
 	$('#proyecto_personaelabora').css('display', 'block').prop('disabled', false);
 	$('#proyecto_contacto').css('display', 'block').prop('disabled', false);
 	$('#PROYECTO_CONTACTO_SELECT').css('display', 'none').prop('disabled', true);
@@ -1481,6 +1520,29 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 	$('#proyecto_id').val(row.data().id);
 	$('#proyectoInterno').val(row.data().proyectoInterno);
 
+
+	$('#proyectoInternocontrato').val(row.data().proyectoInternocontrato);
+
+
+		if (
+			parseInt(
+				row.data().proyectoInternocontrato
+			) == 1
+		) {
+
+			$('#proyectoInternoContratoCheck')
+				.prop('checked', true)
+				.prop('disabled', true);
+
+		}
+		else {
+
+			$('#proyectoInternoContratoCheck')
+				.prop('checked', false)
+				.prop('disabled', false);
+
+		}
+	
 	proyecto_id = row.data().id;
 	recsensorial_errorvalidacion = 0;
 	Menureportes_contador = 0;
@@ -1995,6 +2057,93 @@ function cambiarFolio(element) {
 
 	}
 }
+
+
+
+
+
+function cambiaraproyectointerno(element) {
+
+	if (element.checked || parseInt(element) == 1) {
+
+
+		$('#requiereContrato').val(1);
+
+		$('#proyectoInternocontrato').val(1);
+
+
+		if ($("#contrato_id")[0].selectize) {
+			$('#contrato_id')[0].selectize.enable();
+		}
+		else {
+			$('#contrato_id').prop('disabled', false);
+		}
+
+		$('.servCliente').prop('disabled', false);
+		$('#proyecto_ordenservicio').prop('disabled', false);
+		$('#proyecto_clienterazonsocial').fadeIn(1);
+
+		if ($("#cliente_id")[0].selectize) {
+
+			var selectizeInstance = $('#cliente_id')[0].selectize;
+			selectizeInstance.clear();
+			selectizeInstance.disable();
+			selectizeInstance.$wrapper.fadeOut(1);
+
+		}
+		else {
+
+			$('#cliente_id').val('');
+			$('#cliente_id').prop('disabled', false);
+			$('#cliente_id').fadeOut(1);
+		}
+
+	} else {
+
+		select_cliente(0);
+
+		$('#requiereContrato').val(0);
+		$('#proyectoInternocontrato').val(0);
+
+		if ($("#contrato_id")[0].selectize) {
+			$('#contrato_id')[0].selectize.disable();
+			$('#contrato_id')[0].selectize.clear();
+		}
+		else {
+
+			$('#contrato_id').prop('disabled', true);
+			$('#contrato_id').val('');
+		}
+
+		$('.servCliente').prop('disabled', true);
+		$('.servCliente').each(function () {$(this).prop('checked', false);
+		});
+		$('#proyecto_ordenservicio').prop('disabled', true);
+		$('#proyecto_clienterazonsocial').fadeOut(1);
+
+
+		if ($("#cliente_id")[0].selectize) {
+
+			var selectizeInstance = $('#cliente_id')[0].selectize;
+
+			selectizeInstance.clear();
+			selectizeInstance.enable();
+			selectizeInstance.$wrapper.fadeIn(1);
+
+		}
+		else {
+
+			$('#cliente_id').val('');
+			$('#cliente_id').prop('disabled', false);
+			$('#cliente_id').fadeIn(1);
+
+		}
+
+	}
+
+}
+
+
 
 
 $("#boton_guardar_proyecto").click(function () {

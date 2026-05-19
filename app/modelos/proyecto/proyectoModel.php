@@ -58,7 +58,9 @@ class proyectoModel extends Model
         ,'tipoServicioCliente'
         ,'reconocimiento_psico_id'
         ,'proyecto_clonado'
-        ,'proyecto_representantelegal'
+        ,'proyecto_representantelegal',
+        'proyectoInternocontrato'
+
     ];
 
     //=============== RELACION A TABLAS ===================

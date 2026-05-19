@@ -310,7 +310,7 @@
                                                                                 <input type="hidden" class="form-control" id="proyecto_id" name="proyecto_id">
                                                                                 <input type="hidden" class="form-control" id="proyectoInterno" name="proyectoInterno" value="0">
                                                                                 <input type="hidden" id="requiereContrato" name="requiereContrato" value="1">
-
+                                                                                <input type="hidden" class="form-control" id="proyectoInternocontrato" name="proyectoInternocontrato" value="0">
 
                                                                             </div>
                                                                             <div class="col-3">
@@ -430,6 +430,16 @@
                                                                                         <ol class="breadcrumb m-b-10">
                                                                                             <p style="color: #fff;">Datos del servicio</p>
                                                                                         </ol>
+
+                                                                                        <div class="col-5 d-flex align-items-center">
+                                                                                            <label class="text-danger me-2">¿El proyecto Interno necesita contrato? </label>
+                                                                                            <div class="switch mx-4 rol_lista" data-toggle="tooltip">
+                                                                                                <label>
+                                                                                                    No<input type="checkbox" id="proyectoInternoContratoCheck" value="1" onchange="cambiaraproyectointerno(this)">
+                                                                                                    <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
                                                                                     <div class="col-12">
                                                                                         <div class="form-group">

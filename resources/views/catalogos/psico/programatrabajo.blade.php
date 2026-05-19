@@ -119,42 +119,42 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="multisteps-form__progress" style="padding-top: 0px;">
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Operativo HI','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab2">
                                                 <i class="fa fa-user"></i><br>
                                                 <span>Trabajadores</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab3">
                                                 <i class="fa fa-address-card-o"></i><br>
                                                 <span>Personal</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
                                                 <i class="fa fa-desktop"></i><br>
                                                 <span>Equipos</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
                                                 <i class="fa fa-car"></i><br>
                                                 <span>Vehículos</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
                                                 <i class="fa fa-print"></i><br>
                                                 <span>Ordenes</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras','Psicólogo']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab7">
                                                 <i class="fa fa-list"></i><br>
                                                 <span>Lista de permisos</span>
@@ -167,7 +167,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="multisteps-form__form">
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Operativo HI','Psicólogo']))
                                             <!--STEP 2-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab2">
                                                 <div class="multisteps-form__content">
@@ -193,7 +193,7 @@
                                                                             </tbody>
                                                                         </table>
 
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                                                         <hr>
                                                                         <div class="form-group">
                                                                             <button type="button" style="float: left;" class="btn btn-warning waves-effect waves-light botonnuevo_moduloproyecto" id="boton_proyectotrabajadornuevapartida">
@@ -249,7 +249,7 @@
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
-                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                                                                 <div class="form-group" style="text-align: right;">
                                                                                     <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_proyectosignatarios">
                                                                                         Guardar <i class="fa fa-save"></i>
@@ -331,7 +331,7 @@
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
-                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                                                                 <div class="form-group" style="text-align: right;">
                                                                                     <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_proyectoequipos">
                                                                                         Guardar <i class="fa fa-save"></i>
@@ -411,7 +411,7 @@
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
-                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                                                                 <div class="form-group" style="text-align: right;">
                                                                                     <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_proyectovehiculos">
                                                                                         Guardar <i class="fa fa-save"></i>
@@ -462,14 +462,14 @@
                                                             <div class="card">
                                                                 <!-- Tab Menus -->
                                                                 <ul class="nav nav-tabs customtab" role="tablist">
-                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI' ]))
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo']))
                                                                     <li class="nav-item">
                                                                         <a class="nav-link link_menureportes active" data-toggle="tab" id="reportetab_menu1" role="tab" href="#reportetab_1">
                                                                             <span class="hidden-xs-down">Orden de trabajo</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
-                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén']))
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Psicólogo']))
                                                                     <li class="nav-item">
                                                                         <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu2" role="tab" href="#reportetab_2">
                                                                             <span class="hidden-xs-down">Orden de compra</span>
@@ -481,7 +481,7 @@
                                                                 <!-- Tab Panels -->
                                                                 <div class="tab-content">
                                                                     <div class="tab-pane p-20 active" id="reportetab_1" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_generar_ot">
                                                                                 <span class="btn-label"><i class="fa fa-refresh"></i></span> Generar nueva orden de trabajo
@@ -505,7 +505,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane p-20" id="reportetab_2" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Compras','Psicólogo']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_proveedores_oc">
                                                                                 <span class="btn-label"><i class="fa fa-refresh"></i></span> Generar nueva orden de compra
@@ -548,7 +548,7 @@
                                                                 <ul class="nav nav-tabs customtab" role="tablist">
 
 
-                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo']))
 
                                                                     <li class="nav-item">
                                                                         <a class="nav-link " data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
@@ -556,14 +556,14 @@
                                                                         </a>
                                                                     </li>
                                                                     @endif
-                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI','Psicólogo']))
                                                                     <li class="nav-item">
                                                                         <a class="nav-link " data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
                                                                             <span class="hidden-xs-down">Lista de equipos</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
-                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI','Psicólogo']))
                                                                     <li class="nav-item">
                                                                         <a class="nav-link " data-toggle="tab" id="reportetab_menu5" role="tab" href="#reportetab_5">
                                                                             <span class="hidden-xs-down">Lista de vehículos</span>
@@ -575,7 +575,7 @@
                                                                 <div class="tab-content">
 
                                                                     <div class="tab-pane p-20" id="reportetab_3" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_ls">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de psicólogos
@@ -599,7 +599,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane p-20" id="reportetab_4" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_le">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de equipos
@@ -623,7 +623,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane p-20" id="reportetab_5" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras','Psicólogo']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_lv">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de vehículos
@@ -799,7 +799,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Firmar de autorizado?</label>
                                         <div class="switch">
@@ -829,7 +829,7 @@
                                 </div>
 
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿OT cancelada?</label>
                                         <div class="switch">
@@ -869,7 +869,7 @@
                 </div>
                 <div class="modal-footer" style="text-align: left!important;">
                     <div style="border: 0px #F00 solid; height: 35px; width: 100%; float: left; text-align: left;">
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                         <input type="hidden" class="form-control" id="ordentrabajo_actualizaot" name="ordentrabajo_actualizaot" value="0">
                         <button type="button" class="btn btn-inf botonnuevo_moduloproyecto" data-toggle="tooltip" title="Actualizar los datos de la OT y conservar folio" id="boton_actualizar_ot" onclick="actualiza_datosot();">
                             Actualizar <i class="fa fa-refresh"></i>
@@ -880,7 +880,7 @@
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="modalvisor_ot_boton_cerrar">
                             Cerrar
                         </button>
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                         &nbsp;
                         <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_ot">
                             Guardar cambios <i class="fa fa-save"></i>
@@ -1022,7 +1022,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Firmar de solicitado?</label>
                                         <div class="switch">
@@ -1045,7 +1045,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Firmar de autorizado?</label>
                                         <div class="switch">
@@ -1074,7 +1074,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿OC cancelada?</label>
                                         <div class="switch">
@@ -1109,7 +1109,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Psicólogo']))
                                     <div class="form-group" data-toggle="tooltip" title="Quitar facturado, solo Superusuario y Financiero" id="checkbox_factura">
                                         <label class="demo-switch-title">¿OC Facturada?</label>
                                         <div class="switch">
@@ -1165,7 +1165,7 @@
                 </div>
                 <div class="modal-footer">
                     <div style="border: 0px #F00 solid; height: 35px; width: 100%; float: left; text-align: left;">
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Psicólogo']))
                         <input type="hidden" class="form-control" id="ordencompra_actualizaoc" name="ordencompra_actualizaoc" value="0">
                         <button type="button" class="btn btn-info botonnuevo_moduloproyecto" data-toggle="tooltip" title="Actualizar los datos de la OP y conservar folio" id="boton_actualizar_oc" onclick="actualiza_datosoc();">
                             Actualizar <i class="fa fa-refresh"></i>
@@ -1180,7 +1180,7 @@
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="modalvisor_oc_boton_cerrar">
                             Cerrar
                         </button>
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Psicólogo']))
                         &nbsp;
                         <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_oc">
                             Guardar cambios <i class="fa fa-save"></i>
@@ -1240,7 +1240,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Firmar de autorizado?</label>
                                         <div class="switch">
@@ -1263,7 +1263,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Lista cancelada?</label>
                                         <div class="switch">
@@ -1299,7 +1299,7 @@
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="boton_cerrar_signatarioslista">
                         Cerrar
                     </button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                     &nbsp;
                     <button type="submit" class="btn btn-danger waves-effect botonguardar_moduloproyecto" id="boton_guardar_signatarioslista">
                         Guardar <i class="fa fa-save"></i>
@@ -1361,7 +1361,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Firmar de autorizado?</label>
                                         <div class="switch">
@@ -1384,7 +1384,7 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                                     <div class="form-group">
                                         <label class="demo-switch-title">¿Lista cancelada?</label>
                                         <div class="switch">
@@ -1420,7 +1420,7 @@
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="boton_cerrar_equiposlista">
                         Cerrar
                     </button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto','Psicólogo']))
                     &nbsp;
                     <button type="submit" class="btn btn-danger waves-effect botonguardar_moduloproyecto" id="boton_guardar_equiposlista">
                         Guardar <i class="fa fa-save"></i>

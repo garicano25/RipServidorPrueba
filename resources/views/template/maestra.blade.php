@@ -1182,7 +1182,7 @@ use Illuminate\Support\Str;
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js?v=8.2"></script>
+    <script src="/js_sitio/proyecto.js?v=13"></script>
 
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
